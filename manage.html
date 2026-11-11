@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>内容控制台 · v2</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/base.css?v=67">
+<link rel="stylesheet" href="assets/css/studio.css?v=67">
+</head>
+<body data-page="studio">
+<div class="bg" aria-hidden="true"><span class="bg__aurora"></span><span class="bg__grain"></span></div>
+
+<header class="top">
+  <div class="top__brand">
+    <span class="top__mark">🐑</span>
+    <span class="top__title">内容控制台</span>
+    <span class="top__ver">v2</span>
+  </div>
+
+  <nav class="top__tabs" id="tabs" aria-label="页面">
+    <button type="button" data-page-tab="site">全站</button>
+    <button type="button" data-page-tab="home" class="is-on">首页</button>
+    <button type="button" data-page-tab="links">资源库</button>
+    <button type="button" data-page-tab="gallery">影像</button>
+    <button type="button" data-page-tab="legal">法务</button>
+    <button type="button" data-page-tab="404">404</button>
+  </nav>
+
+  <div class="top__actions">
+    <!-- 订阅/退订只写本机 data/sources.json，不会自动推远端。这个标记存在
+         localStorage 里，跨刷新保留；只有发布确实把 sources.json 带上去才清。 -->
+    <button class="state-flag" type="button" id="sources-flag" hidden
+            title="订阅或退订只改了本机文件，点这里去发布"></button>
+    <span class="state" id="state">已载入</span>
+    <button class="tbtn" type="button" id="undo" title="撤销上一步" disabled>撤销</button>
+    <button class="tbtn" type="button" id="reset" title="回到文件里的版本">重置</button>
+    <label class="tbtn" for="import">导入</label>
+    <input type="file" id="import" accept=".js,.json" hidden>
+    <button class="tbtn" type="button" id="type-open" title="按类别统一调字号 / 行距 / 段后 / 宽度 / 对齐 / 换行 / 粗细，一行改完全站同类">排版</button>
+    <button class="tbtn" type="button" id="export">导出 content.js</button>
+    <button class="tbtn" type="button" id="save">保存到文件</button>
+    <button class="tbtn" type="button" id="sync" title="从 GitHub 拉取最新文案并写入本机文件">本机同步</button>
+    <button class="tbtn tbtn--primary" type="button" id="publish">发布</button>
+  </div>
+</header>
+
+<main class="main">
+  <aside class="tree" id="tree" aria-label="内容目录"></aside>
+
+  <section class="formpane" id="formpane" aria-label="编辑区"></section>
+
+  <section class="preview" aria-label="实时预览">
+    <div class="preview__bar">
+      <span class="preview__page" id="preview-page">首页</span>
+      <div class="devices" id="devices" role="group" aria-label="预览尺寸">
+        <button type="button" data-w="1440" class="is-on">桌面</button>
+        <button type="button" data-w="834">平板</button>
+        <button type="button" data-w="390">手机</button>
+      </div>
+      <span class="preview__hint" id="preview-hint">实时</span>
+      <button class="tbtn tbtn--sm" type="button" id="pick" title="单击一段文字 = 调这一段（字号 / 行距 / 段后 / 颜色 / 粗细 / 宽度 / 对齐 / 换行，可同步到同类全部）；拖选其中一小段 = 只调那一小段">点选改样式</button>
+      <button class="tbtn tbtn--sm" type="button" id="locate" title="在预览中定位到当前区块">定位</button>
+      <button class="tbtn tbtn--sm" type="button" id="pub-view" aria-pressed="false" title="按发布后的样子看：只用 data/content.js，忽略本地草稿。用来核对「预览改了、发布却没生效」">发布态</button>
+      <a class="tbtn tbtn--sm" href="index.html" target="_blank" rel="noopener">新窗口打开</a>
+    </div>
+    <div class="preview__stage" id="stage">
+      <div class="preview__frame" id="frame">
+        <iframe id="preview" src="index.html" title="站点预览"></iframe>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="ty" id="type" hidden>
+  <div class="ty__box" role="dialog" aria-modal="true" aria-labelledby="ty-title">
+    <header class="ty__head">
+      <h2 id="ty-title">排版总览</h2>
+      <p>按「类别」统一调字号、行距、段后、最大宽度、对齐与换行。一行改完，全站同一类文字一起变 —— 包括之前单独调过的那些块。</p>
+    </header>
+    <div class="ty__cols" aria-hidden="true">
+      <span>类别</span><span>处数</span><span>字号</span><span>行距</span><span>段后</span><span title="最大宽度（px）：同类文字右边界对齐用；窄容器里的块不会被撑宽">最宽</span><span title="文字框内的水平对齐">对齐</span><span title="不折行会保留手动换的行，只阻止行内自动折行">换行</span><span>粗细</span><span></span>
+    </div>
+    <div class="ty__rows" id="ty-rows"></div>
+    <footer class="ty__foot">
+      <button class="tbtn tbtn--sm" type="button" id="ty-guides" aria-pressed="false" title="在预览里标出每个文字块的边界，并画出最常见的左右边界线">版式参考线</button>
+      <span class="ty__hint" id="ty-hint">数据来自当前预览页 · 字号 / 宽度不一致会标红 · 手动换行始终保留</span>
+      <button class="tbtn" type="button" id="ty-close">完成</button>
+    </footer>
+  </div>
+</div>
+
+<div class="pub" id="pub" hidden>
+  <div class="pub__box" role="dialog" aria-modal="true" aria-labelledby="pub-title">
+    <h2 id="pub-title">发布到 GitHub</h2>
+    <p class="pub__meta">
+      <span>yangtongxueruc/personal-site</span>
+      <span>main</span>
+      <span id="pub-ver">v4 → v5</span>
+    </p>
+    <div class="pub__chan" id="pub-chan">
+      <span class="pub__chan-txt" id="pub-chan-txt">正在检测发布通道 …</span>
+      <button class="tbtn tbtn--sm" type="button" id="pub-recheck">重新检测</button>
+    </div>
+    <label class="pub__label" for="pub-token">Personal Access Token</label>
+    <input class="inp" id="pub-token" type="password" placeholder="github_pat_…" autocomplete="off" spellcheck="false">
+    <p class="pub__hint">只存在这个标签页的会话里，不上传、不写进仓库；关掉标签页即失效，下次发布需重新填。若提示连不上 GitHub，在终端运行 <code>python3 v2/publish_server.py</code> 后点「重新检测」。</p>
+    <p class="pub__step" id="pub-step"></p>
+    <p class="pub__err" id="pub-err"></p>
+    <div class="pub__actions">
+      <button class="tbtn" type="button" id="pub-forget">清除已保存</button>
+      <button class="tbtn" type="button" id="pub-cancel">取消</button>
+      <button class="tbtn tbtn--primary" type="button" id="pub-go">发布</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="pub" id="wx" hidden>
+  <div class="pub__box" role="dialog" aria-modal="true" aria-labelledby="wx-title">
+    <h2 id="wx-title">添加公众号文章</h2>
+    <p class="pub__hint">贴 <code>mp.weixin.qq.com/s/…</code> 形式的短链。解析走本机服务，写入 <code>data/links.json</code> 的存档尾部 —— 已有的往期条目不会被覆盖，下次自动抓取也不会冲掉它。</p>
+    <label class="pub__label" for="wx-url">文章链接</label>
+    <input class="inp" id="wx-url" type="url" placeholder="https://mp.weixin.qq.com/s/…" autocomplete="off" spellcheck="false">
+    <p class="pub__step" id="wx-step"></p>
+    <p class="pub__err" id="wx-err"></p>
+    <div class="pub__actions">
+      <button class="tbtn" type="button" id="wx-cancel">关闭</button>
+      <button class="tbtn tbtn--primary" type="button" id="wx-go">解析</button>
+    </div>
+  </div>
+</div>
+
+
+<script src="data/content.js?v=67"></script>
+<script src="data/schema.js?v=67"></script>
+<script src="assets/js/studio.js?v=67"></script>
+</body>
+</html>

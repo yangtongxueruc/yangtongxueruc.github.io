@@ -6,6 +6,8 @@ Disallow: /v1/
 Disallow: /*/v1/
 Disallow: /studio.html
 Disallow: /*/studio.html
+Disallow: /manage.html
+Disallow: /*/manage.html
 Disallow: /scripts/
 Disallow: /*/scripts/
 Disallow: /data/sources.json
