@@ -685,7 +685,7 @@
     return s;
   };
 
-  /* 最新动态（数据来自 ../data/links.json；../data/links.js 是 fetch 失败时的回退，
+  /* 最新动态（数据来自 data/links.json；data/links.js 是 fetch 失败时的回退，
      两者都由 scripts/fetch_links.py 生成，v1/v2 共用同一份存档） */
   renderers.feed = function (d) {
     var s = el("section", "block", { id: "feed" });
@@ -1267,7 +1267,7 @@
     var done = false;
     function finish(data) { if (done) return; done = true; cb(data); }
     if (window.fetch) {
-      fetch("../data/links.json", { cache: "no-store" })
+      fetch("data/links.json", { cache: "no-store" })
         .then(function (r) { if (!r.ok) throw new Error("http " + r.status); return r.json(); })
         .then(finish)
         .catch(function () { finish(window.SITE_FEED || null); });

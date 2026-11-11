@@ -1,25 +1,68 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
-<meta http-equiv="refresh" content="0; url=v2/index.html">
-<title>首页 · 正在跳转</title>
-<link rel="icon" href="v2/assets/favicon.svg" type="image/svg+xml">
-<style>
-  html,body{margin:0;height:100%}
-  body{display:flex;align-items:center;justify-content:center;background:#07080a;color:#e7eaee;
-        font:14px/1.8 system-ui,-apple-system,"PingFang SC",sans-serif;text-align:center;padding:24px}
-  a{color:#7bd7e3;text-underline-offset:4px}
-  p{margin:6px 0;color:#8a9099}
-</style>
-<script>location.replace("v2/index.html");</script>
+<title>​</title>
+<meta name="description" content="2027 届量化与工程方向校园招聘。在招岗位、量化资源库、校招流程与常见问题。">
+<meta name="theme-color" content="#000000">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- 托管方（GitHub Pages）不能加 HTTP 头，只能用 meta 版的 CSP。
+     目标是挡住「页面被注入一段外链脚本」这条最危险的路：script-src 只允许
+     同源，外站脚本即使被塞进 DOM 也加载不了。
+     必须保留 'unsafe-inline' —— 页头那段主题预置脚本是内联的，属性里也有
+     内联 style；换成 hash 会把维护成本抬得比收益高。
+     img-src 要带 data:，人像是内嵌的 data URI。 -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta property="og:type" content="website">
+<meta property="og:title" content="校园招聘 · 量化与工程方向">
+<meta property="og:description" content="2027 届量化与工程方向校园招聘。">
+<meta property="og:image" content="assets/img/photo-01.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<script>
+  document.documentElement.classList.add("js");
+  (function () {
+    try {
+      var m = localStorage.getItem("v2:theme") || "dark";
+      var r = m === "system"
+        ? (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")
+        : m;
+      document.documentElement.setAttribute("data-theme", r);
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="assets/css/base.css?v=67">
+<link rel="stylesheet" href="assets/css/pages.css?v=67">
+<link rel="stylesheet" href="assets/css/home.css?v=67">
+<!-- 首屏可选项（由内容控制台字段驱动） -->
+<link rel="stylesheet" href="assets/css/options.css?v=67">
+<!-- 全页排版精修（含手机端修正，必须压在最后） -->
+<link rel="stylesheet" href="assets/css/refine.css?v=67">
+<!-- 首屏流动点阵背景（canvas 由 hero-dots.js 插入） -->
+<link rel="stylesheet" href="assets/css/hero-dots.css?v=67">
 </head>
-<body>
-  <main>
-    <p>正在前往首页…</p>
-    <p><a href="v2/index.html">没有自动跳转？点这里 →</a></p>
-  </main>
+<body data-page="home">
+
+<div class="bg" aria-hidden="true">
+  <span class="bg__aurora"></span>
+  <span class="bg__grid"></span>
+  <span class="bg__grain"></span>
+</div>
+<div class="cursor" aria-hidden="true"><i class="cursor__dot"></i><b class="cursor__ring"></b></div>
+<div class="veil" aria-hidden="true"><span class="veil__mark">🐑</span></div>
+
+<a class="skip-link" href="#main">跳到主要内容</a>
+<header id="nav-root"></header>
+
+<noscript><div class="noscript">本站内容由脚本渲染，请开启 JavaScript 后刷新；如需联系，请在开启脚本后查看页面底部的邮箱。</div></noscript>
+<main id="main"></main>
+
+<footer class="footer" id="footer-root"></footer>
+<nav class="tabbar" id="tab-root" aria-label="页面导航"></nav>
+
+<script src="data/content.js?v=67"></script>
+<script src="assets/js/render.js?v=67"></script>
+<script src="assets/js/hero-dots.js?v=67"></script>
 </body>
 </html>

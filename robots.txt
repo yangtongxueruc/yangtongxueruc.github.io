@@ -4,8 +4,8 @@ User-agent: *
 Allow: /
 Disallow: /v1/
 Disallow: /*/v1/
-Disallow: /v2/studio.html
-Disallow: /*/v2/studio.html
+Disallow: /studio.html
+Disallow: /*/studio.html
 Disallow: /scripts/
 Disallow: /*/scripts/
 Disallow: /data/sources.json

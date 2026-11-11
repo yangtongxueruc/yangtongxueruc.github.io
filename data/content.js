@@ -876,126 +876,126 @@ window.V2_CONTENT = {
           "type": "frames",
           "items": [
             {
-              "src": "../assets/img/photo-03.jpg",
+              "src": "assets/img/photo-03.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/photo-05.jpg",
+              "src": "assets/img/photo-05.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261104140933-360-2-261110-184407.jpg",
+              "src": "assets/img/gallery/20261104140933-360-2-261110-184407.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": "C++ / Python / 分布式 / ML / DL"
             },
             {
-              "src": "../assets/img/gallery/photo-261110-184527.jpg",
+              "src": "assets/img/gallery/photo-261110-184527.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/pexels-mantasink-1106476-261110-184544.jpg",
+              "src": "assets/img/gallery/pexels-mantasink-1106476-261110-184544.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110185312-380-2-261110-191140.jpg",
+              "src": "assets/img/gallery/20261110185312-380-2-261110-191140.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110185312-379-2-261110-191140.jpg",
+              "src": "assets/img/gallery/20261110185312-379-2-261110-191140.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110185313-381-2-261110-191140.jpg",
+              "src": "assets/img/gallery/20261110185313-381-2-261110-191140.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110185420-382-2-261110-191140.jpg",
+              "src": "assets/img/gallery/20261110185420-382-2-261110-191140.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110185421-383-2-261110-191140.jpg",
+              "src": "assets/img/gallery/20261110185421-383-2-261110-191140.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110185421-384-2-261110-191140.jpg",
+              "src": "assets/img/gallery/20261110185421-384-2-261110-191140.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110185422-385-2-261110-191141.jpg",
+              "src": "assets/img/gallery/20261110185422-385-2-261110-191141.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110185423-386-2-261110-191141.jpg",
+              "src": "assets/img/gallery/20261110185423-386-2-261110-191141.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110201106-390-2-261110-201143.jpg",
+              "src": "assets/img/gallery/20261110201106-390-2-261110-201143.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110201106-391-2-261110-201143.jpg",
+              "src": "assets/img/gallery/20261110201106-391-2-261110-201143.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110201103-387-2-261110-201143.jpg",
+              "src": "assets/img/gallery/20261110201103-387-2-261110-201143.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110201104-388-2-261110-201143.jpg",
+              "src": "assets/img/gallery/20261110201104-388-2-261110-201143.jpg",
               "title": "",
               "place": "",
               "caption": "",
               "alt": ""
             },
             {
-              "src": "../assets/img/gallery/20261110201105-389-2-261110-201143.jpg",
+              "src": "assets/img/gallery/20261110201105-389-2-261110-201143.jpg",
               "title": "",
               "place": "",
               "caption": "",
