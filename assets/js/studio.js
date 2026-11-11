@@ -586,9 +586,12 @@
       uploadPhotoFile(file).then(function (d) {
         commit(abs, d.path);
         markUpload(d.repo);
+        /* 云端是"图片已进仓库、内容还没引用"；本机是"落到磁盘、发布时一起推"。
+           两种情况都得点发布才上线，只是说法不一样，别让人以为云端白传了。 */
         show(d.path, "已上传 " + file.name,
           Math.round(file.size / 1024) + " KB → " + Math.round(d.bytes / 1024)
-          + " KB · " + d.picW + "×" + d.picH + " · 点「发布」后上线");
+          + " KB · " + d.picW + "×" + d.picH
+          + (CLOUD ? " · 已存入仓库 · 点「发布」后显示在网站上" : " · 点「发布」后上线"));
       }).catch(function (e) {
         say((e && e.message) || "上传失败", true, false);
       });
@@ -1270,6 +1273,7 @@
        也不用 innerHTML 拼接用户输入，origin 上只有本站自己的静态文件。
        本机模式仍然只放 sessionStorage —— 那里有本地服务兜底，不需要持久。 */
     var TOKEN_PERSIST_KEY = "v2:token:persist";
+    var TOKEN_TIP_KEY = "v2:token:tipped";
 
     function savedToken() {
       try {
@@ -2680,7 +2684,16 @@
   async function cloudAlign(hasDraft) {
     var token = savedToken();
     if (!token) {
+      /* 没有 Token 时连图片都传不了（云端上传要写仓库），所以第一次进云端
+         模式直接把发布面板打开 —— Token 就填在那儿。只提示一次，之后不再弹。 */
       setState("云端模式 · 填一次 Token 即可发布", true);
+      var tipped = null;
+      try { tipped = sessionStorage.getItem(TOKEN_TIP_KEY); } catch (e) {}
+      if (!tipped) {
+        try { sessionStorage.setItem(TOKEN_TIP_KEY, "1"); } catch (e) {}
+        openPub();
+        pubStep("先把 Token 粘到这一栏（这台设备会记住），填完可以直接关掉去改内容。");
+      }
       return;
     }
     try {
