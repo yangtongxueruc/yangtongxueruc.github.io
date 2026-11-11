@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-11-11T18:33:15+08:00",
-  "generated_at_human": "2026-11-11 18:33",
+  "generated_at": "2026-11-11T22:20:30+08:00",
+  "generated_at_human": "2026-11-11 22:20",
   "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
   "stats": {
     "sources_total": 5,
     "sources_ok": 5,
     "sources_failed": 0,
     "failed_sources": [],
-    "items": 66,
-    "items_added": 2,
+    "items": 67,
+    "items_added": 1,
     "archive_max": 3000
   },
   "sources": [
@@ -21,7 +21,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 1184,
+      "ms": 1197,
       "http": 200
     },
     {
@@ -33,7 +33,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 208,
+      "ms": 214,
       "http": 200
     },
     {
@@ -45,7 +45,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 553,
+      "ms": 815,
       "http": 200
     },
     {
@@ -57,7 +57,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 250,
+      "ms": 257,
       "http": 200
     },
     {
@@ -69,7 +69,7 @@
       "ok": true,
       "count": 20,
       "error": null,
-      "ms": 1109,
+      "ms": 889,
       "http": 200
     }
   ],
@@ -120,19 +120,46 @@
       "kind": "算法竞赛"
     },
     {
+      "title": "Lumiwealth/lumibot",
+      "url": "https://github.com/Lumiwealth/lumibot",
+      "date": "2026-11-11T22:20:22+08:00",
+      "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源"
+    },
+    {
+      "title": "questdb/questdb",
+      "url": "https://github.com/questdb/questdb",
+      "date": "2026-11-11T22:20:05+08:00",
+      "summary": "QuestDB is a high performance, open-source, time-series database",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源"
+    },
+    {
+      "title": "HiThink-Tech/Financial-API",
+      "url": "https://github.com/HiThink-Tech/Financial-API",
+      "date": "2026-11-11T21:41:41+08:00",
+      "summary": "同花顺官方 A股金融数据服务，提供股票实时行情、历史行情、财务报表、指数、板块、涨停等数据，适用于 AI Agent、量化研究和应用开发，支持 API、MCP、CLI 和 Python。Official Tonghuashun (HiThink) A-share financial data service pr…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源"
+    },
+    {
       "title": "alpacahq/alpaca-py",
       "url": "https://github.com/alpacahq/alpaca-py",
-      "date": "2026-11-11T18:30:03+08:00",
+      "date": "2026-11-11T21:07:58+08:00",
       "summary": "The Official Python SDK for Alpaca API",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源"
     },
     {
-      "title": "Lumiwealth/lumibot",
-      "url": "https://github.com/Lumiwealth/lumibot",
-      "date": "2026-11-11T18:16:41+08:00",
-      "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+      "title": "JerBouma/FinanceToolkit",
+      "url": "https://github.com/JerBouma/FinanceToolkit",
+      "date": "2026-11-11T18:39:20+08:00",
+      "summary": "Transparent and Efficient Financial Analysis",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源"
@@ -151,24 +178,6 @@
       "url": "https://github.com/HKUDS/Vibe-Trading",
       "date": "2026-11-11T17:40:22+08:00",
       "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源"
-    },
-    {
-      "title": "JerBouma/FinanceToolkit",
-      "url": "https://github.com/JerBouma/FinanceToolkit",
-      "date": "2026-11-11T17:13:24+08:00",
-      "summary": "Transparent and Efficient Financial Analysis",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源"
-    },
-    {
-      "title": "questdb/questdb",
-      "url": "https://github.com/questdb/questdb",
-      "date": "2026-11-11T13:54:15+08:00",
-      "summary": "QuestDB is a high performance, open-source, time-series database",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源"
@@ -680,5 +689,5 @@
       "kind": "公众号"
     }
   ],
-  "signature": "47dd2c8227dec3c9bb5015a719908eff"
+  "signature": "e53e3948a185efe5ba3bbe6adfdd8ea8"
 }
