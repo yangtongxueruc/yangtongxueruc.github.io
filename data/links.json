@@ -312,11 +312,12 @@
       "title": "OpenAI：如何在 ChatGPT 中构建金融 Agent",
       "url": "https://mp.weixin.qq.com/s/fw_WEc4ufGERP7xF2leiaQ",
       "date": "2026-11-10T08:15:00+08:00",
-      "summary": "",
+      "summary": "演讲来源：AI Engineer 演讲嘉宾： Stefano Fabbri、Oliver Steffmann，应用 AI 工程团队 Stefano Fabbri 和 Oliver Steffmann 来自 OpenAI 应用 AI 工程团队",
       "source": "wechat-manual",
       "source_name": "狄奥尼索斯之歌",
       "kind": "公众号",
-      "manual": true
+      "manual": true,
+      "mid": "2247484893"
     },
     {
       "title": "Making sense of rule 605",
@@ -689,5 +690,5 @@
       "kind": "公众号"
     }
   ],
-  "signature": "e53e3948a185efe5ba3bbe6adfdd8ea8"
+  "signature": "2ab769057587e2f175f245fd2159a239"
 }
