@@ -1486,6 +1486,111 @@
     return b64decode(data.content);
   }
 
+  /* 读文件的同时把 sha 带出来。Contents API 写回必须带 sha：不带等于
+     「我不管现在是什么，直接盖掉」，两个人同时改就会静默丢一份。
+     加个随机查询串是为了绕过 GitHub 给 contents 接口的分钟级缓存 ——
+     不绕的话，刚写完立刻读回来还是旧的，轮询永远看不到结果。 */
+  async function ghReadText(token, path) {
+    var data = await gh(token, "GET",
+      "/repos/" + GH.repo + "/contents/" + path
+      + "?ref=" + GH.branch + "&_=" + Date.now());
+    return { text: b64decode(data.content), sha: data.sha };
+  }
+
+  async function ghWriteText(token, path, text, message, sha) {
+    return gh(token, "PUT", "/repos/" + GH.repo + "/contents/" + path, {
+      message: message,
+      content: b64encode(text),
+      branch: GH.branch,
+      sha: sha
+    });
+  }
+
+  /* ---------------- 待办队列（云端） ----------------
+     浏览器没有服务端身份，抓不了 mp.weixin.qq.com（响应没有 CORS 头，
+     换任何令牌都没用）。所以「加一篇文章 / 订阅一个合集」在网页上只能
+     写成一条意图，放进 data/inbox.json；真正去抓的是 GitHub Actions
+     （scripts/inbox.py），它有出网能力，也已经验证过能通微信短链。
+     这条队列是两边唯一的接口，格式必须和 inbox.py 读的一致。 */
+  var INBOX_PATH = "data/inbox.json";
+  var INBOX_KEEP = 30;
+
+  function inboxTask(kind, url, extra) {
+    var t = {
+      id: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      kind: kind,
+      url: url,
+      status: "pending",
+      at: new Date().toISOString(),
+      result: "",
+      error: ""
+    };
+    if (extra) {
+      for (var k in extra) {
+        if (Object.prototype.hasOwnProperty.call(extra, k)) t[k] = extra[k];
+      }
+    }
+    return t;
+  }
+
+  /* 合集分享链接里一定有 album_id，文章链接一定没有 —— 纯字符串判断，
+     不需要联网。用户粘什么就按什么处理，不用先问他这是哪一种。 */
+  function wechatKindOf(url) {
+    return /[?&#]album_id=\d{6,}/.test(url) ? "album" : "article";
+  }
+
+  async function submitInbox(token, task) {
+    var lastErr = null;
+    for (var attempt = 0; attempt < 3; attempt++) {
+      var f = await ghReadText(token, INBOX_PATH);
+      var doc;
+      try { doc = JSON.parse(f.text); } catch (e) { doc = {}; }
+      var tasks = (doc.tasks || []).slice();
+      tasks.push(task);
+      // 待处理的全留，已完结的只留最近 30 条：这份文件每加一条就要整份重写，
+      // 无限增长会让每次提交越来越慢，而回看价值只在最近几条。
+      var pending = tasks.filter(function (t) { return t.status === "pending"; });
+      var done = tasks.filter(function (t) { return t.status !== "pending"; });
+      doc.tasks = pending.concat(done.slice(-INBOX_KEEP));
+      doc.updated_at = new Date().toISOString();
+      try {
+        await ghWriteText(token, INBOX_PATH, JSON.stringify(doc, null, 2) + "\n",
+          (task.kind === "album" ? "inbox: 订阅合集" : "inbox: 加一篇文章")
+          + "（" + task.url.slice(0, 60) + "）", f.sha);
+        return;
+      } catch (e) {
+        // 409 只是「期间有人改过这个文件」，重读一次再写就行，不该弹给用户看
+        lastErr = e;
+      }
+    }
+    throw lastErr || new Error("写入待办队列失败");
+  }
+
+  async function readInbox(token) {
+    try {
+      var f = await ghReadText(token, INBOX_PATH);
+      return JSON.parse(f.text);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /* 等后台把这条任务处理完。间隔是递进的：Actions 排队 + checkout 通常
+     20-40 秒，一开始就密集轮询只是白花请求。总共约 90 秒，超过就交给
+     「稍后回来看」—— 结果会留在队列文件里，不会被丢掉。 */
+  var INBOX_POLL = [4000, 5000, 7000, 9000, 11000, 13000, 15000, 15000];
+
+  async function waitInbox(token, id, onTick) {
+    for (var i = 0; i < INBOX_POLL.length; i++) {
+      await new Promise(function (r) { setTimeout(r, INBOX_POLL[i]); });
+      if (onTick) onTick(i);
+      var doc = await readInbox(token);
+      var hit = ((doc && doc.tasks) || []).filter(function (t) { return t.id === id; })[0];
+      if (hit && hit.status !== "pending") return hit;
+    }
+    return null;
+  }
+
   /* 发布只写回 GitHub 仓库，不会自动改本机磁盘。
      本地发布服务在跑时，把 content.js 与 6 个页面的 ?v=N 写回本机。
      这一步与「发布走哪条通道」无关：直连发布同样要尝试同步，
@@ -2312,7 +2417,8 @@
       parsed = null;
       step.textContent = "";
       err.textContent = "";
-      go.textContent = "解析";
+      // 云端没有「解析 → 写入」两步，一次点击就是提交，按钮文字要对得上
+      go.textContent = CLOUD ? "提交" : "解析";
       go.disabled = false;
       dropCard();
     }
@@ -2460,15 +2566,24 @@
         if (actions && actions.parentNode) actions.parentNode.insertBefore(host, actions);
         else box.appendChild(host);
       }
-      /* 云端模式读不到订阅列表：这个端点要服务端去 mp.weixin.qq.com 抓合集名，
-         浏览器受同源策略限制做不了。给一句明确说明，别留一个永远转圈的空框。 */
+      /* 云端模式读得到订阅列表，但只能读文件本身：这个端点原来要服务端去
+         mp.weixin.qq.com 拿合集名，浏览器受同源策略限制做不了。而订阅列表
+         就写在 data/sources.json 里，用 Contents API 直接读，比原来还准。 */
       if (CLOUD) {
         host.innerHTML = "";
-        var cloudNote = document.createElement("span");
-        cloudNote.className = "wx-albums__title";
-        cloudNote.textContent = "云端模式看不了公众号合集（需要本地服务）。"
-          + "请在电脑上双击「启动控制台」后再管理订阅。";
-        host.appendChild(cloudNote);
+        var cTitle = document.createElement("span");
+        cTitle.className = "wx-albums__title";
+        cTitle.textContent = "已订阅的合集 · 每 6 小时自动检查";
+        host.appendChild(cTitle);
+        var cToken = savedToken();
+        if (!cToken) {
+          var needTok = document.createElement("span");
+          needTok.className = "wx-albums__warn";
+          needTok.textContent = "填过 Token 才能读到订阅列表。点顶栏「发布」填一次，之后这台设备会记住。";
+          host.appendChild(needTok);
+          return;
+        }
+        cloudAlbums(host, cToken);
         return;
       }
       fetch(localApi(ALBUM_LIST_PATH))
@@ -2535,6 +2650,70 @@
         });
     }
 
+    /* 云端的订阅列表：直接读/写 data/sources.json。
+       退订不需要探测合集（那一步才要联网），所以在浏览器里就能立刻完成，
+       提交后 update-links 会被这个文件的变化触发，一次运行就生效。 */
+    async function cloudAlbums(host, token) {
+      var list;
+      try {
+        var f = await ghReadText(token, "data/sources.json");
+        var cfg = JSON.parse(f.text);
+        list = (cfg.sources || []).filter(function (s) { return s.type === "album"; });
+      } catch (e) {
+        host.innerHTML = "";
+        var bad = document.createElement("span");
+        bad.className = "wx-albums__title";
+        bad.textContent = "读不到订阅配置：" + ((e && e.message) || e);
+        host.appendChild(bad);
+        return;
+      }
+
+      if (!list.length) {
+        var none = document.createElement("span");
+        none.className = "wx-albums__title";
+        none.textContent = "还没有订阅的合集。贴一个合集分享链接就能订阅。";
+        host.appendChild(none);
+        return;
+      }
+
+      list.forEach(function (a) {
+        var line = document.createElement("div");
+        line.className = "wx-albums__row";
+        var nm = document.createElement("span");
+        nm.textContent = a.name || a.id;
+        line.appendChild(nm);
+        var cnt = document.createElement("i");
+        cnt.textContent = "每次抓最近 " + (a.limit || 20) + " 篇";
+        line.appendChild(cnt);
+        var del = document.createElement("button");
+        del.type = "button";
+        del.className = "wx-albums__del";
+        del.textContent = "取消";
+        del.addEventListener("click", async function () {
+          del.disabled = true;
+          try {
+            var f2 = await ghReadText(token, "data/sources.json");
+            var cfg2 = JSON.parse(f2.text);
+            var src2 = cfg2.sources || [];
+            var kept = src2.filter(function (s) { return s.id !== a.id; });
+            if (kept.length === src2.length) throw new Error("这条订阅已经不在了");
+            cfg2.sources = kept;
+            cfg2.updated_at = new Date().toISOString();
+            await ghWriteText(token, "data/sources.json",
+              JSON.stringify(cfg2, null, 2) + "\n",
+              "sources: 退订合集「" + (a.name || a.id) + "」", f2.sha);
+            toast("已退订（已收进来的文章保留）· 线上约 1 分钟后停止抓取");
+            renderAlbums();
+          } catch (e) {
+            del.disabled = false;
+            toast("退订失败：" + ((e && e.message) || e));
+          }
+        });
+        line.appendChild(del);
+        host.appendChild(line);
+      });
+    }
+
     function submit() {
       go.disabled = true;
       step.textContent = "正在写入存档 …";
@@ -2566,14 +2745,9 @@
 
     function parse(url) {
       /* 云端模式做不了这一步：必须由服务端去抓 mp.weixin.qq.com，
-         浏览器直接抓会被同源策略挡（响应没有 CORS 头），换什么令牌都没用。 */
-      if (CLOUD) {
-        step.textContent = "";
-        err.textContent = "云端模式解析不了公众号文章（浏览器跨域限制）。"
-          + "请在电脑上双击「启动控制台」后再添加。";
-        go.disabled = false;
-        return;
-      }
+         浏览器直接抓会被同源策略挡（响应没有 CORS 头），换什么令牌都没用。
+         能做的是把它写成一条待办，交给 Actions —— 见 cloudGo()。 */
+      if (CLOUD) { cloudGo(url); return; }
       go.disabled = true;
       err.textContent = "";
       step.textContent = "正在解析 …";
@@ -2599,6 +2773,63 @@
           err.textContent = msg;
         })
         .then(function () { go.disabled = false; });
+    }
+
+    /* 云端「一步到位」：没有解析这一步，点一下就是提交待办 + 等后台结果。
+       刻意保留短链校验：长链（?__biz=&mid=）在 Actions 里也会被风控成
+       「环境异常」，提交上去只是多等一分钟再拿到一个失败。 */
+    async function cloudGo(url) {
+      var token = savedToken();
+      if (!token) {
+        err.textContent = "还没填 GitHub Token。点顶栏「发布」填一次，之后这台设备会记住。";
+        return;
+      }
+      var kind = wechatKindOf(url);
+      if (!/^https?:\/\/mp\.weixin\.qq\.com\//i.test(url)) {
+        err.textContent = "只支持 mp.weixin.qq.com 的链接。";
+        return;
+      }
+      if (kind === "article" && !/^https?:\/\/mp\.weixin\.qq\.com\/s\//i.test(url)) {
+        err.textContent = "文章请贴短链（形如 https://mp.weixin.qq.com/s/xxxx）。"
+          + "长链带 ?__biz=… 的那种会被微信风控成「环境异常」，解析不出正文。"
+          + "在微信里打开文章 → 右上角 → 复制链接，拿到的就是短链。";
+        return;
+      }
+
+      go.disabled = true;
+      err.textContent = "";
+      step.textContent = kind === "album" ? "正在提交订阅 …" : "正在提交 …";
+      var task = inboxTask(kind, url);
+      try {
+        await submitInbox(token, task);
+      } catch (e) {
+        err.textContent = "提交失败：" + ((e && e.message) || e);
+        step.textContent = "";
+        go.disabled = false;
+        return;
+      }
+
+      step.textContent = "已提交，后台（GitHub Actions）正在处理，通常 1 分钟内完成 …";
+      go.textContent = "再提交一条";
+      var got = await waitInbox(token, task.id, function (i) {
+        step.textContent = "已提交，等待后台处理 …（" + (i + 1) + "）";
+      });
+      go.disabled = false;
+
+      if (!got) {
+        step.textContent = "后台还在处理。结果会写回待办队列，稍后重新打开这个面板就能看到"
+          + "（保留最近 " + INBOX_KEEP + " 条）；线上页面大约 2-3 分钟后生效。";
+        return;
+      }
+      if (got.status === "error") {
+        step.textContent = "";
+        err.textContent = "后台处理失败：" + (got.error || "未知原因");
+        return;
+      }
+      step.textContent = (got.result || "已完成。")
+        + " 线上页面大约 2-3 分钟后生效。";
+      toast(got.result || "已完成");
+      if (kind === "album") renderAlbums();
     }
 
     function open() {
@@ -2670,10 +2901,13 @@
 
     var wxHint = document.querySelector("#wx .pub__hint");
     if (wxHint) {
-      wxHint.textContent = "云端模式解析不了公众号文章：mp.weixin.qq.com 不允许网页"
-        + "跨域读取内容，这一步必须有本地服务。请在电脑上双击「启动控制台」后再加，"
-        + "或者直接往 data/links.json 的存档尾部手动加一条。";
+      wxHint.textContent = "贴文章短链（mp.weixin.qq.com/s/…）或合集分享链接。"
+        + "浏览器读不了微信的响应（同源策略），所以这里只负责把它提交到待办队列 "
+        + "data/inbox.json，真正的解析由仓库的 GitHub Actions 完成，通常 1 分钟内出结果。"
+        + "线上页面大约 2-3 分钟后更新。";
     }
+    var wxGo = $("#wx-go");
+    if (wxGo) wxGo.textContent = "提交";
   }
 
   /* 云端启动对齐。
