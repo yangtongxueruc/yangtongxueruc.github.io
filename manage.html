@@ -6,6 +6,11 @@
 <title>内容控制台 · v2</title>
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#000000">
+<!-- 控制台会在浏览器里记住 GitHub Token，所以必须限制它能连到哪去：
+     connect-src 只放行本站与 api.github.com，一旦有人往页面里塞脚本，
+     也没法把 Token 发到别的地方。frame-src 'self' 是给右侧预览 iframe 用的；
+     img-src 要 data: 是因为上传前会用 canvas 生成 data URL 预览。 -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://api.github.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/css/base.css?v=67">
 <link rel="stylesheet" href="assets/css/studio.css?v=67">
