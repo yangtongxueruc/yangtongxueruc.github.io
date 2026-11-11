@@ -1,14 +1,14 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-11T22:20:30+08:00",
- "generated_at_human": "2026-11-11 22:20",
+ "generated_at": "2026-11-12T03:38:34+08:00",
+ "generated_at_human": "2026-11-12 03:38",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "stats": {
   "sources_total": 5,
   "sources_ok": 5,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 67,
+  "items": 68,
   "items_added": 1,
   "archive_max": 3000
  },
@@ -22,7 +22,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1197,
+   "ms": 1130,
    "http": 200
   },
   {
@@ -34,7 +34,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 214,
+   "ms": 156,
    "http": 200
   },
   {
@@ -42,11 +42,11 @@ window.SITE_FEED = {
    "name": "GitHub 量化开源",
    "type": "json",
    "kind": "开源",
-   "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-12&sort=updated&order=desc&per_page=10",
+   "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-13&sort=updated&order=desc&per_page=10",
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 815,
+   "ms": 593,
    "http": 200
   },
   {
@@ -58,7 +58,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 257,
+   "ms": 274,
    "http": 200
   },
   {
@@ -70,7 +70,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 889,
+   "ms": 931,
    "http": 200
   }
  ],
@@ -123,8 +123,26 @@ window.SITE_FEED = {
   {
    "title": "Lumiwealth/lumibot",
    "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-11T22:20:22+08:00",
+   "date": "2026-11-12T03:36:50+08:00",
    "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "ArturSepp/QuantInvestStrats",
+   "url": "https://github.com/ArturSepp/QuantInvestStrats",
+   "date": "2026-11-12T03:31:34+08:00",
+   "summary": "Performance analytics, portfolio backtesting, risk analysis, and factsheet reporting in Python",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "banbox/banbot",
+   "url": "https://github.com/banbox/banbot",
+   "date": "2026-11-12T03:17:21+08:00",
+   "summary": "a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading bot",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -132,8 +150,17 @@ window.SITE_FEED = {
   {
    "title": "questdb/questdb",
    "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-11T22:20:05+08:00",
+   "date": "2026-11-12T02:58:27+08:00",
    "summary": "QuestDB is a high performance, open-source, time-series database",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "man-group/ArcticDB",
+   "url": "https://github.com/man-group/ArcticDB",
+   "date": "2026-11-12T02:14:17+08:00",
+   "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -206,15 +233,6 @@ window.SITE_FEED = {
    "url": "https://github.com/jundizhou/easy-stock",
    "date": "2026-11-11T10:58:48+08:00",
    "summary": "A股 AI 投研",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "banbox/banbot",
-   "url": "https://github.com/banbox/banbot",
-   "date": "2026-11-11T10:26:10+08:00",
-   "summary": "a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading bot",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -299,15 +317,6 @@ window.SITE_FEED = {
    "source": "arxiv-qfin",
    "source_name": "arXiv q-fin",
    "kind": "研究"
-  },
-  {
-   "title": "ArturSepp/QuantInvestStrats",
-   "url": "https://github.com/ArturSepp/QuantInvestStrats",
-   "date": "2026-11-10T13:46:24+08:00",
-   "summary": "Performance analytics, portfolio backtesting, risk analysis, and factsheet reporting in Python",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
   },
   {
    "title": "OpenAI：如何在 ChatGPT 中构建金融 Agent",
@@ -691,5 +700,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "2ab769057587e2f175f245fd2159a239"
+ "signature": "f1a2991db1bd083f64591b6661ae2c7b"
 };
