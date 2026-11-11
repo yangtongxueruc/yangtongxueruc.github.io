@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>​</title>
+<meta name="description" content="宣讲会、办公室、白板与深夜的城市。一些和校招有关的碎片。">
+<meta name="theme-color" content="#000000">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- 托管方（GitHub Pages）不能加 HTTP 头，只能用 meta 版的 CSP。
+     目标是挡住「页面被注入一段外链脚本」这条最危险的路：script-src 只允许
+     同源，外站脚本即使被塞进 DOM 也加载不了。
+     必须保留 'unsafe-inline' —— 页头那段主题预置脚本是内联的，属性里也有
+     内联 style；换成 hash 会把维护成本抬得比收益高。
+     img-src 要带 data:，人像是内嵌的 data URI。 -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta property="og:type" content="website">
+<meta property="og:title" content="影像 · 校招现场与日常">
+<meta property="og:description" content="宣讲会、办公室、白板与深夜的城市。一些和校招有关的碎片。">
+<meta property="og:image" content="../assets/img/photo-01.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<script>
+  document.documentElement.classList.add("js");
+  (function () {
+    try {
+      var m = localStorage.getItem("v2:theme") || "dark";
+      var r = m === "system"
+        ? (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")
+        : m;
+      document.documentElement.setAttribute("data-theme", r);
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="assets/css/base.css?v=67">
+<link rel="stylesheet" href="assets/css/pages.css?v=67">
+<!-- 全页排版精修 -->
+<link rel="stylesheet" href="assets/css/refine.css?v=67">
+</head>
+<body data-page="gallery">
+
+<div class="bg" aria-hidden="true">
+  <span class="bg__aurora"></span>
+  <span class="bg__grid"></span>
+  <span class="bg__grain"></span>
+</div>
+<div class="cursor" aria-hidden="true"><i class="cursor__dot"></i><b class="cursor__ring"></b></div>
+<div class="veil" aria-hidden="true"><span class="veil__mark">🐑</span></div>
+
+<a class="skip-link" href="#main">跳到主要内容</a>
+<header id="nav-root"></header>
+
+<noscript><div class="noscript">本站内容由脚本渲染，请开启 JavaScript 后刷新；如需联系，请在开启脚本后查看页面底部的邮箱。</div></noscript>
+<main id="main"></main>
+
+<footer class="footer" id="footer-root"></footer>
+<nav class="tabbar" id="tab-root" aria-label="页面导航"></nav>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="照片查看">
+  <button class="lb-btn lb-close" type="button" data-lb="close" aria-label="关闭">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <button class="lb-btn lb-prev" type="button" data-lb="prev" aria-label="上一张">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
+  <button class="lb-btn lb-next" type="button" data-lb="next" aria-label="下一张">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+  </button>
+  <figure>
+    <!-- 不要写 src=""：浏览器会把空 src 解析成当前页面地址，去请求一份 HTML
+         当图片用（控制台里会看到一个失败请求 + 一个坏图）。src 由 render.js
+         在点开大图时才填。 -->
+    <img alt="">
+    <figcaption><span data-lb-cap></span><span data-lb-meta></span></figcaption>
+  </figure>
+</div>
+
+<script src="data/content.js?v=67"></script>
+
+<script src="assets/js/render.js?v=67"></script>
+</body>
+</html>

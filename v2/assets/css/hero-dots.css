@@ -1,0 +1,33 @@
+/* ============================================================================
+   HERO-DOTS.CSS — 首屏「流动点阵」背景层
+   canvas 由 hero-dots.js 插入，参数来自内容控制台
+   （pages.home.sections.hero.dots.*），节点没有时这里全部不生效。
+
+   层级：.hero::before/::after（光斑，z 0）→ .hero-dots（z 0，后绘制）
+        → .hero__grid（z 1，文字与人像）
+   ========================================================================== */
+
+.hero--dots { position: relative; }
+
+.hero-dots {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* 边缘淡出在 JS 里按点算（见 hero-dots.js）：CSS mask 的 composite
+     在浏览器间表现不一致，会让中间整块消失 */
+  opacity: 0;
+  transition: opacity 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+body.is-lit .hero-dots { opacity: 1; }
+
+/* 点阵和原来的青色光斑在抢同一层「气氛」：开着点阵时把光斑压一半，
+   背景回到接近纯黑，点阵才是主角（参考站就是纯黑 + 白点） */
+body.is-lit .hero--dots::before { opacity: 0.5; }
+html[data-theme="light"] body.is-lit .hero--dots::after { opacity: 0.55; }
+
+/* 控制台里关掉点阵时，别再留下半张画布 */
+.hero-dots--off { display: none; }

@@ -1,0 +1,12 @@
+# 产物仓只包含公开页面；以下为防御性规则，这些路径本来就不在产物里。
+# 项目站的站点前缀是 /<repo>/，两种写法都列上以覆盖自定义域名。
+User-agent: *
+Allow: /
+Disallow: /v1/
+Disallow: /*/v1/
+Disallow: /v2/studio.html
+Disallow: /*/v2/studio.html
+Disallow: /scripts/
+Disallow: /*/scripts/
+Disallow: /data/sources.json
+Disallow: /*/data/sources.json
