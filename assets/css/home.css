@@ -652,16 +652,16 @@ body.is-ready .mask-line > span { transform: none; }
 }
 .tl-item.is-active .tl-item__year { color: var(--accent); }
 
-/* logo 列：列宽是上限，图片按统一高度缩放。
-   这几张都是 3.7~7.6 的横向 lockup，塞进正方形框后实际高度只剩十几像素，
-   公司名根本认不出来，所以定高不定宽。
-   必须给死框 + object-fit：只写 max-width/max-height 会让两个约束各自生效，
-   把图压变形。 */
+/* logo 列：列宽是上限，高度按每张自己的 --logo-h 走。
+   这几张都是横向 lockup，比例 3.7~7.6，塞进正方形框后字会糊，所以定高不定宽。
+   高度不写死 28 是因为原图里主体占比差很多：纯字标的主体占 95%，
+   带英文副标题的只占 58%，一律按画布高度对齐会让字大小差近四成。
+   必须给死框 + object-fit：只写 max-width/max-height 会让两个约束各自生效，把图压变形。 */
 .tl-item__logo {
   grid-column: 3;
   grid-row: 1;
   width: 100%;
-  height: var(--tl-logo-h);
+  height: var(--logo-h, var(--tl-logo-h));
   align-self: center;
 }
 .tl-item__logo img {
@@ -700,19 +700,6 @@ html[data-theme="light"] .tl-item__logo img { filter: none; opacity: 1; }
   color: var(--text-3);
   line-height: 1.8;
   max-width: 54ch;
-}
-
-/* 学历段：一条很淡的分割线，向右渐隐，避免和左侧竖线撞成十字 */
-.tl-item--divided {
-  margin-top: calc(var(--tl-row) + 6px);
-  padding-top: 20px;
-  background-image: linear-gradient(90deg,
-    var(--border) 0%,
-    color-mix(in srgb, var(--border) 50%, transparent) 55%,
-    transparent 85%);
-  background-size: 100% 1px;
-  background-repeat: no-repeat;
-  background-position: 0 0;
 }
 
 /* 861~1000px：左栏还占着 168px，正文被挤得很窄，先把 logo 列收一档 */

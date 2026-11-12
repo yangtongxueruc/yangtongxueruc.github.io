@@ -350,6 +350,42 @@
     return out;
   }
 
+  /* 按「主体字高」算显示高度 —— 这是几张 logo 摆在一起能看着一样大的关键。
+     原图里主体占画布的比例差很多：纯字标能占 95%，带一行英文副标题的只占 58%。
+     要是统一按画布高度缩放，字的大小差近四成，放在列表里一眼就看出不齐。
+     做法：逐行数不透明像素，取最宽的那段连续高密度行当「主体」，
+     再反推出画布该显示多高；上下夹在 22~32px，既保证字够大又不至于某张特别高。 */
+  function logoDisplayHeight(cv) {
+    var TARGET = 19, MIN_H = 22, MAX_H = 32;
+    var c = cv.getContext("2d");
+    var w = cv.width, h = cv.height;
+    var d;
+    try { d = c.getImageData(0, 0, w, h).data; } catch (e) { return 28; }
+    var rows = [], max = 0;
+    for (var y = 0; y < h; y++) {
+      var n = 0, row = y * w * 4;
+      for (var x = 0; x < w; x++) {
+        if (d[row + x * 4 + 3] > 12) n++;
+      }
+      rows.push(n);
+      if (n > max) max = n;
+    }
+    if (!max) return 28;
+    var thr = max * 0.25, best = [0, -1], cur = null;
+    for (var y2 = 0; y2 < h; y2++) {
+      if (rows[y2] >= thr) {
+        if (cur === null) cur = y2;
+      } else if (cur !== null) {
+        if (y2 - 1 - cur > best[1] - best[0]) best = [cur, y2 - 1];
+        cur = null;
+      }
+    }
+    if (cur !== null && h - 1 - cur > best[1] - best[0]) best = [cur, h - 1];
+    var band = best[1] - best[0] + 1;
+    if (band <= 2) return 28;
+    return Math.max(MIN_H, Math.min(MAX_H, Math.round(TARGET * h / band)));
+  }
+
   function compressLogo(img) {
     var MAX_H = 160, MAX_W = 1200, MAX_SIDE = 2400;
     var w = img.naturalWidth || img.width;
@@ -374,7 +410,8 @@
     c1.imageSmoothingQuality = "high";
     c1.drawImage(cv, 0, 0, out.width, out.height);
 
-    return { data: out.toDataURL("image/png"), w: out.width, h: out.height };
+    return { data: out.toDataURL("image/png"), w: out.width, h: out.height,
+             logoH: logoDisplayHeight(out) };
   }
 
   /* 读文件 → 裁边距 → 压缩 → 上传；返回 {path, repo, bytes, picW, picH} */
@@ -403,7 +440,7 @@
           }
           if (CLOUD) {
             cloudUploadImage(file.name, out.data, out.w, out.h, "logos")
-              .then(function (d) { d.origBytes = file.size; resolve(d); })
+              .then(function (d) { d.origBytes = file.size; d.logoH = out.logoH; resolve(d); })
               .catch(function (e) { reject(new Error((e && e.message) || "上传失败")); });
             return;
           }
@@ -414,6 +451,7 @@
               d.origBytes = file.size;
               d.picW = out.w;
               d.picH = out.h;
+              d.logoH = out.logoH;
               resolve(d);
             })
             .catch(function (e) {
@@ -798,9 +836,14 @@
       say("这张图加载不出来，路径可能失效了，建议重新上传", true, false);
     });
 
+    /* logoH 和路径是一对：前者决定这张图显示多高，删掉路径时得一起清，
+       否则换图后会沿用上一张的高度，大小又对不齐了。 */
+    var hAbs = abs.replace(/\.logo$/, ".logoH") === abs ? "" : abs.replace(/\.logo$/, ".logoH");
+
     pick.addEventListener("click", function () { picker.click(); });
     rm.addEventListener("click", function () {
       commit(abs, "");
+      if (hAbs) commit(hAbs, "");
       show("", "已移除，点「发布」后生效", "文件还留在 assets/img/logos/，需要的话可以手动删");
     });
     picker.addEventListener("change", function () {
@@ -810,10 +853,11 @@
       say("正在裁边距并压缩 " + file.name + " …", false, true);
       uploadLogoFile(file).then(function (d) {
         commit(abs, d.path);
+        if (hAbs && d.logoH) commit(hAbs, String(d.logoH));
         markUpload(d.repo);
         show(d.path, "已上传 " + file.name,
           Math.round(file.size / 1024) + " KB → " + Math.round(d.bytes / 1024)
-          + " KB · " + d.picW + "×" + d.picH
+          + " KB · " + d.picW + "×" + d.picH + " · 显示高 " + d.logoH + "px"
           + (CLOUD ? " · 已存入仓库 · 点「发布」后显示在网站上" : " · 点「发布」后上线"));
       }).catch(function (e) {
         say((e && e.message) || "上传失败", true, false);
