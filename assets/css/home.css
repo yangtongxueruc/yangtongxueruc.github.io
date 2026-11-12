@@ -583,7 +583,7 @@ body.is-ready .mask-line > span { transform: none; }
   --tl-rail: 24px;        /* 轨道列：节点在列里居中，不再靠 top 硬算 */
   --tl-time: 116px;       /* 时间列：等宽 + tabular-nums，够放 "2011 — 2015" */
   --tl-logo-w: 176px;     /* logo 列的上限宽度（不是图片宽度） */
-  --tl-logo-h: 28px;      /* 真正的对齐基准：所有 logo 的内容高度一致 */
+  --tl-logo-h: 20px;      /* 没写 logoH 时的兜底：与 18px 职位文字同一量级 */
   --tl-gap: 20px;         /* 16 太挤：logo 顶满列宽时（小马）会贴住职位 */
   --tl-row: 2rem;
   position: relative;
@@ -654,8 +654,9 @@ body.is-ready .mask-line > span { transform: none; }
 
 /* logo 列：列宽是上限，高度按每张自己的 --logo-h 走。
    这几张都是横向 lockup，比例 3.7~7.6，塞进正方形框后字会糊，所以定高不定宽。
-   高度不写死 28 是因为原图里主体占比差很多：纯字标的主体占 95%，
-   带英文副标题的只占 58%，一律按画布高度对齐会让字大小差近四成。
+   --logo-h 是「光学尺寸」，不是把字高或画布高机械对齐：实心圆徽（招商）
+   反白后是一大块白，要压到比职位文字还小；细线书法（有道）反白后很轻，
+   得反过来放大一点才不显小。整列块高控制在 19~21px，和 18px 的职位同一量级。
    必须给死框 + object-fit：只写 max-width/max-height 会让两个约束各自生效，把图压变形。 */
 .tl-item__logo {
   grid-column: 3;
@@ -712,7 +713,7 @@ html[data-theme="light"] .tl-item__logo img { filter: none; opacity: 1; }
 }
 /* 手机：176px 的 logo 列会把正文挤没，改成 logo 独占一行 */
 @media (max-width: 720px) {
-  .timeline { --tl-rail: 16px; --tl-logo-h: 24px; --tl-gap: 12px; }
+  .timeline { --tl-rail: 16px; --tl-logo-h: 18px; --tl-gap: 12px; }
   .tl-item { grid-template-columns: var(--tl-rail) minmax(0, 1fr); }
   .tl-item::before { grid-column: 1; grid-row: 1; }
   .tl-item__year { grid-column: 2; grid-row: 1; justify-self: start; }

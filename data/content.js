@@ -1,9 +1,9 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/12 11:20:00
+   导出时间：2026/11/12 11:40:00
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 72,
+  "version": 73,
   "updatedAt": "2026-11-12",
   "styles": {
     "blocks": {
@@ -406,7 +406,7 @@ window.V2_CONTENT = {
               "role": "校招负责人",
               "org": "明汯投资",
               "logo": "assets/img/logos/minghong.png",
-              "logoH": 27,
+              "logoH": 20,
               "desc": "国内头部私募量化"
             },
             {
@@ -414,7 +414,7 @@ window.V2_CONTENT = {
               "role": "北京研发中心校招负责人",
               "org": "小马智行Pony.ai",
               "logo": "assets/img/logos/pony-ai.png",
-              "logoH": 21,
+              "logoH": 18,
               "desc": "国内头部自动驾驶公司；\n从0搭建校招体系，顶尖技术人才招聘与大规模校招项目。"
             },
             {
@@ -422,7 +422,7 @@ window.V2_CONTENT = {
               "role": "HR",
               "org": "招商局漳州",
               "logo": "assets/img/logos/china-merchants-zhangzhou.png",
-              "logoH": 34,
+              "logoH": 20,
               "desc": "一段有趣的老家经历"
             },
             {
@@ -430,7 +430,7 @@ window.V2_CONTENT = {
               "role": "校招HR",
               "org": "网易有道",
               "logo": "assets/img/logos/youdao.png",
-              "logoH": 20,
+              "logoH": 22,
               "desc": "从新人开始的校招负责人"
             },
             {

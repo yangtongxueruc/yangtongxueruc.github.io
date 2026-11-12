@@ -350,20 +350,21 @@
     return out;
   }
 
-  /* 按「文字主体高度」算显示高度 —— 这是几张 logo 摆在一起能看着一样大的关键。
+  /* 按「文字主体高度」给显示高度一个起点，再用控制台的加减号做光学补偿。
      原图里文字占画布的比例差得很远：纯字标能顶满 128px 画布，
      带方形图标 + 一行英文副标题的，中文只占 76px。统一按画布高度缩放，
      字的大小就差了将近七成，一列摆下来一眼看穿。
      做法：逐行取最左/最右的不透明像素算出这一行的横向跨度，
      文字行的跨度接近整幅宽，只有图标的那几行跨度很窄（图标只占左边一小块），
      于是「跨度 ≥ 最宽行 60%」的连续行就是文字带，再反推画布该显示多高。
-     上下夹在 18~36px：够大能看清，又不至于让带大图标的牌子把整行顶开。 */
+     目标 17px 是比正文职位（18px）略小一档：logo 只是识别标记，不能抢正文。
+     上下夹在 16~24px；实心徽标或特别细的线稿，用控制台的加减号再做光学补偿。 */
   function logoDisplayHeight(cv) {
-    var TARGET = 20, MIN_H = 18, MAX_H = 36;
+    var TARGET = 17, MIN_H = 16, MAX_H = 24;
     var c = cv.getContext("2d");
     var w = cv.width, h = cv.height;
     var d;
-    try { d = c.getImageData(0, 0, w, h).data; } catch (e) { return 26; }
+    try { d = c.getImageData(0, 0, w, h).data; } catch (e) { return 19; }
     var spans = [], maxSpan = 0;
     for (var y = 0; y < h; y++) {
       var minX = -1, maxX = -1, row = y * w * 4;
@@ -377,7 +378,7 @@
       spans.push(sp);
       if (sp > maxSpan) maxSpan = sp;
     }
-    if (!maxSpan) return 26;
+    if (!maxSpan) return 19;
     var thr = maxSpan * 0.6, best = [0, -1], cur = null;
     for (var y2 = 0; y2 < h; y2++) {
       if (spans[y2] >= thr) {
@@ -389,7 +390,7 @@
     }
     if (cur !== null && h - 1 - cur > best[1] - best[0]) best = [cur, h - 1];
     var band = best[1] - best[0] + 1;
-    if (band <= 2) return 26;
+    if (band <= 2) return 19;
     return Math.max(MIN_H, Math.min(MAX_H, Math.round(TARGET * h / band)));
   }
 
