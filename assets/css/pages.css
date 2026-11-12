@@ -650,14 +650,25 @@ html[data-theme="light"] .hero__title {
   transition: border-color var(--dur-color) var(--ease), transform var(--dur-color) var(--ease);
 }
 .lcard:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+/* 没有可跳转链接的卡片（比如「微信里搜索」这种纯提示文字）：别再做点击暗示 */
+.lcard--plain { cursor: default; }
+.lcard--plain:hover { border-color: var(--border); transform: none; }
 .lcard__top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-8); }
 .lcard__name { font-size: var(--text-base); font-weight: 500; line-height: 1.45; }
 .lcard__arrow { color: var(--text-3); flex: none; }
 .lcard:hover .lcard__arrow { color: var(--accent); }
 .lcard__desc { font-size: var(--text-sm); line-height: 1.7; color: var(--text-3); flex: 1; }
-.lcard__foot { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; }
+/* 标签与链接文字强制同一行：wrap 会让域名另起一行、看着像两栏错位。
+   标签固定不收缩，链接文字吃掉剩余宽度，过长时省略号收尾。 */
+.lcard__foot { display: flex; flex-wrap: nowrap; gap: var(--space-4); align-items: center; min-width: 0; }
+.lcard__foot .tag { flex: none; }
 .lcard__host {
   margin-left: auto;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--text-3);

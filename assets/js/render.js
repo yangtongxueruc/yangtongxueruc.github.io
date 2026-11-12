@@ -94,11 +94,21 @@
     return svg;
   }
 
-  function isExternal(url) { return /^https?:/i.test(String(url || "")); }
+  function isExternal(url) { return /^https?:\/\//i.test(String(url || "")); }
 
-  function hostOf(url) {
-    try { return new URL(url, location.href).hostname.replace(/^www\./, ""); }
-    catch (e) { return ""; }
+  /* 只有真正的网页地址才当成可跳转链接。小程序 scheme、纯文字提示
+     （例如「微信里搜索」）都不是网页，硬塞进 href 会跳到站内的相对路径去。 */
+  function isWebLink(url) { return /^https?:\/\//i.test(String(url || "").trim()); }
+
+  /* 卡片底部显示什么：网址显示域名；不是网址就把原文显示出来。
+     以前一律用 new URL(url, location.href)，「微信里搜索」被当成相对路径
+     解析成当前站点域名，用户写的文字就这么无声无息地丢了。 */
+  function linkLabel(url) {
+    var s = String(url || "").trim();
+    if (!s) return "";
+    if (!isWebLink(s)) return s;
+    try { return new URL(s, location.href).hostname.replace(/^www\./, ""); }
+    catch (e) { return s; }
   }
 
   /* ---------------- 区块渲染器 ---------------- */
@@ -805,21 +815,25 @@
 
       var cards = el("div", "cards");
       (m.items || []).forEach(function (it, idx) {
-        var a = el("a", "lcard", {
+        var href = isWebLink(it.url) ? it.url : null;
+        var a = el("a", "lcard" + (href ? "" : " lcard--plain"), {
           "data-reveal": "rise",
-          href: it.url || "#",
+          href: href,
           target: isExternal(it.url) ? "_blank" : null,
           rel: isExternal(it.url) ? "noopener noreferrer" : null,
-          "data-search": ((it.name || "") + " " + (it.desc || "") + " " + (it.tag || "") + " " + (it.badge || "")).toLowerCase()
+          "data-search": ((it.name || "") + " " + (it.desc || "") + " " + (it.tag || "")
+            + " " + (it.badge || "") + " " + (it.linkText || "")).toLowerCase()
         });
         a.style.setProperty("--i", idx % 4);
         var top = el("div", "lcard__top");
         var name = el("span", "lcard__name");
         setText(name, it.name);
         top.appendChild(name);
-        var ar = el("span", "lcard__arrow", { "aria-hidden": "true" });
-        ar.textContent = "↗";
-        top.appendChild(ar);
+        if (href) {
+          var ar = el("span", "lcard__arrow", { "aria-hidden": "true" });
+          ar.textContent = "↗";
+          top.appendChild(ar);
+        }
         a.appendChild(top);
 
         var desc = el("p", "lcard__desc");
@@ -838,7 +852,8 @@
           foot.appendChild(b);
         }
         var host2 = el("span", "lcard__host");
-        host2.textContent = hostOf(it.url) || "";
+        /* 优先用控制台里填的「链接文字」，其次才回落到网址域名 / 非网址原文 */
+        host2.textContent = String(it.linkText || "").trim() || linkLabel(it.url);
         foot.appendChild(host2);
         a.appendChild(foot);
 

@@ -554,7 +554,10 @@ window.V2_SCHEMA = {
               itemLabel: "卡片",
               fields: [
                 { path: "name", label: "名称", type: "text" },
-                { path: "url", label: "链接", type: "text" },
+                { path: "url", label: "链接", type: "text",
+                  hint: "填网址会显示域名；也可以直接写「微信里搜索」这类提示文字，卡片上会原样显示，且不会乱跳转" },
+                { path: "linkText", label: "链接文字", type: "text",
+                  hint: "可选。填了就覆盖卡片底部那行字（例如「微信里搜索」「在公众号里看」）；留空则显示网址域名" },
                 { path: "desc", label: "一句话描述", type: "textarea", rows: 2 },
                 { path: "tag", label: "标签", type: "text" },
                 { path: "badge", label: "角标", type: "text" }
