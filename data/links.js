@@ -1,15 +1,15 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-12T03:38:34+08:00",
- "generated_at_human": "2026-11-12 03:38",
+ "generated_at": "2026-11-12T09:56:19+08:00",
+ "generated_at_human": "2026-11-12 09:56",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "stats": {
   "sources_total": 5,
   "sources_ok": 5,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 68,
-  "items_added": 1,
+  "items": 69,
+  "items_added": 0,
   "archive_max": 3000
  },
  "sources": [
@@ -22,7 +22,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1130,
+   "ms": 935,
    "http": 200
   },
   {
@@ -34,7 +34,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 156,
+   "ms": 324,
    "http": 200
   },
   {
@@ -46,7 +46,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 593,
+   "ms": 632,
    "http": 200
   },
   {
@@ -58,7 +58,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 274,
+   "ms": 347,
    "http": 200
   },
   {
@@ -70,7 +70,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 931,
+   "ms": 1061,
    "http": 200
   }
  ],
@@ -123,8 +123,55 @@ window.SITE_FEED = {
   {
    "title": "Lumiwealth/lumibot",
    "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-12T03:36:50+08:00",
+   "date": "2026-11-12T09:36:30+08:00",
    "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "questdb/questdb",
+   "url": "https://github.com/questdb/questdb",
+   "date": "2026-11-12T09:32:48+08:00",
+   "summary": "QuestDB is a high performance, open-source, time-series database",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "rolling-panda-san/notebooks",
+   "url": "https://github.com/rolling-panda-san/notebooks",
+   "date": "2026-11-12T08:26:06+08:00",
+   "summary": "Analysis on systematic trading strategies (e.g., trend-following, carry and mean-reversion). The result is regularly updated.",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "前 Citadel PM：为什么 AI 无法取代选股者",
+   "url": "https://mp.weixin.qq.com/s/iyHZpZ4FL-b5FJPxBwAReQ",
+   "date": "2026-11-12T08:00:00+08:00",
+   "summary": "访谈来源：AI Engineer 主持人：Vinoo Ganesh，Kepler 首席执行官 嘉宾：Jack Woodruff，Candlestick Capital Management 创始人，曾任 Citadel 旗下 Surveyo",
+   "source": "wechat-manual",
+   "source_name": "狄奥尼索斯之歌",
+   "kind": "公众号",
+   "manual": true,
+   "mid": "2247484894"
+  },
+  {
+   "title": "hummingbot/hummingbot",
+   "url": "https://github.com/hummingbot/hummingbot",
+   "date": "2026-11-12T07:40:36+08:00",
+   "summary": "Open source software that helps you create and deploy high-frequency crypto trading bots",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "banbox/banbot",
+   "url": "https://github.com/banbox/banbot",
+   "date": "2026-11-12T06:02:22+08:00",
+   "summary": "a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading bot",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -134,24 +181,6 @@ window.SITE_FEED = {
    "url": "https://github.com/ArturSepp/QuantInvestStrats",
    "date": "2026-11-12T03:31:34+08:00",
    "summary": "Performance analytics, portfolio backtesting, risk analysis, and factsheet reporting in Python",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "banbox/banbot",
-   "url": "https://github.com/banbox/banbot",
-   "date": "2026-11-12T03:17:21+08:00",
-   "summary": "a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading bot",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "questdb/questdb",
-   "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-12T02:58:27+08:00",
-   "summary": "QuestDB is a high performance, open-source, time-series database",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -220,15 +249,6 @@ window.SITE_FEED = {
    "kind": "开源"
   },
   {
-   "title": "hummingbot/hummingbot",
-   "url": "https://github.com/hummingbot/hummingbot",
-   "date": "2026-11-11T13:20:59+08:00",
-   "summary": "Open source software that helps you create and deploy high-frequency crypto trading bots",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
    "title": "jundizhou/easy-stock",
    "url": "https://github.com/jundizhou/easy-stock",
    "date": "2026-11-11T10:58:48+08:00",
@@ -251,15 +271,6 @@ window.SITE_FEED = {
    "url": "https://github.com/wilsonfreitas/awesome-quant",
    "date": "2026-11-11T09:02:24+08:00",
    "summary": "A curated list of insanely awesome libraries, packages and resources for Quants (Quantitative Finance)",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "rolling-panda-san/notebooks",
-   "url": "https://github.com/rolling-panda-san/notebooks",
-   "date": "2026-11-11T08:27:30+08:00",
-   "summary": "Analysis on systematic trading strategies (e.g., trend-following, carry and mean-reversion). The result is regularly updated.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -700,5 +711,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "f1a2991db1bd083f64591b6661ae2c7b"
+ "signature": "ff1d025999eb7a486e9389130363414a"
 };
