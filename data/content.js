@@ -1,9 +1,9 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/12 13:20:00
+   导出时间：2026/11/12 14:03:50
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 76,
+  "version": 77,
   "updatedAt": "2026-11-12",
   "styles": {
     "blocks": {
@@ -440,7 +440,7 @@ window.V2_CONTENT = {
               "role": "人力资源管理",
               "org": "中国人民大学",
               "logo": "assets/img/logos/ruc.png",
-              "logoH": "19",
+              "logoH": "20",
               "desc": "学校里的银杏叶和品园的糖葫芦，大概是我最难忘记的。"
             }
           ]
@@ -780,7 +780,7 @@ window.V2_CONTENT = {
               "id": "jobs",
               "filter": "招聘",
               "title": "招聘与求职渠道",
-              "note": "",
+              "note": "量化找工作，一些我也会出现的渠道",
               "items": [
                 {
                   "name": "明汯投资",
@@ -791,7 +791,7 @@ window.V2_CONTENT = {
                 },
                 {
                   "name": "PINNIX",
-                  "url": "#小程序://PINNIXCareer/I4ncG2LfyaDRn8w",
+                  "url": "微信里搜索",
                   "desc": "原名 HFA Community，起源北大、主打量化 / AI / 半导体赛道的顶尖名校定向招聘平台。只有微信小程序",
                   "tag": "招聘平台",
                   "badge": "微信小程序"
@@ -804,6 +804,13 @@ window.V2_CONTENT = {
                   "badge": "实习"
                 },
                 {
+                  "name": "Boss 直聘",
+                  "url": "https://www.zhipin.com/",
+                  "desc": "直接和 HR 或用人经理对话，效率高；岗位描述常不够具体，需主动问清。",
+                  "tag": "直聊",
+                  "badge": "社招 / 校招"
+                },
+                {
                   "name": "QuantNet",
                   "url": "https://quantnet.com/",
                   "desc": "北美量化圈标杆社区",
@@ -811,11 +818,11 @@ window.V2_CONTENT = {
                   "badge": "论坛"
                 },
                 {
-                  "name": "Boss 直聘",
-                  "url": "https://www.zhipin.com/",
-                  "desc": "直接和 HR 或用人经理对话，效率高；岗位描述常不够具体，需主动问清。",
-                  "tag": "直聊",
-                  "badge": "社招 / 校招"
+                  "name": "LinkedIn 领英",
+                  "url": "https://www.linkedin.com/",
+                  "desc": "应该可以找到所有外资和大部分内资的 Recruiter，虽然访问不友好，但还是很建议维护好自己的 profile",
+                  "tag": "招聘平台",
+                  "badge": ""
                 }
               ]
             },
@@ -823,7 +830,7 @@ window.V2_CONTENT = {
               "id": "reading",
               "filter": "信息库",
               "title": "公开信息库",
-              "note": "",
+              "note": "一些有关的公开信息",
               "items": [
                 {
                   "name": "arXiv · q-fin 预印本",
@@ -840,6 +847,13 @@ window.V2_CONTENT = {
                   "badge": ""
                 },
                 {
+                  "name": "Quant Wiki",
+                  "url": "https://quant-wiki.com/",
+                  "desc": "Quant Wiki 致力于打造一个免费开放、持续更新的量化金融 知识分享平台。",
+                  "tag": "社区",
+                  "badge": "中文百科"
+                },
+                {
                   "name": "Quantocracy",
                   "url": "https://quantocracy.com/",
                   "desc": "知名量化博客聚合站点，每日精选、聚合全网量化从业者博客、策略笔记、研究短文，一站式汇总行业一手实践内容。",
@@ -852,15 +866,30 @@ window.V2_CONTENT = {
                   "desc": "老牌量化社区，讨论偏衍生品定价与数学，翻旧帖的收获大于提问。",
                   "tag": "社区",
                   "badge": "经典"
-                },
-                {
-                  "name": "Quant Wiki",
-                  "url": "https://quant-wiki.com/",
-                  "desc": "Quant Wiki 致力于打造一个免费开放、持续更新的量化金融 知识分享平台。",
-                  "tag": "社区",
-                  "badge": "中文百科"
                 }
               ]
+            },
+            {
+              "title": "小玩意",
+              "filter": "🐑",
+              "note": "我自己 vibe coding 出来的信息更新网站",
+              "items": [
+                {
+                  "name": "AI 日报",
+                  "url": "https://yangtongxueruc.github.io/yang-daily-news/",
+                  "desc": "一些 AI, LLM 和自动驾驶的每日高热度信息",
+                  "tag": "信息",
+                  "badge": ""
+                },
+                {
+                  "name": "🐑 的收藏库",
+                  "url": "https://yangtongxueruc.github.io/yang-collection/index.html",
+                  "desc": "一些我觉得有趣的视频播客的文字整理稿和逐字稿",
+                  "tag": "视频整理",
+                  "badge": ""
+                }
+              ],
+              "id": "mod-5"
             }
           ]
         },
