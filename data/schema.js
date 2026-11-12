@@ -378,7 +378,8 @@ window.V2_SCHEMA = {
               hint: "PNG 透明底，内容高度 ≥ 128px，单个 < 100 KB。深色主题会自动反白，给原色图即可，"
                   + "不用另外做白色版；浅色主题保留原色。四周透明边距会自动裁掉，"
                   + "并按「文字主体高度」自动给出显示大小，基准略小于正文（17px）。"
-                  + "实心徽标反白后偏重、细线字标偏轻，用下面的加减号微调一两格做光学补偿。"
+                  + "实心徽标反白后偏重、细线字标偏轻，用下面的滑块等比缩放做光学补偿 —— "
+                  + "只调显示高度，宽度按原图比例自动算，不会把 logo 拉变形。"
             },
             { path: "desc", label: "做了什么", type: "textarea", rows: 3 }
           ]
@@ -516,7 +517,16 @@ window.V2_SCHEMA = {
       page: "links",
       section: "modules",
       icon: "L3",
-      hint: "模块里的「分类」决定筛选按钮，填新词会自动多出一个按钮。",
+      hint: "模块里的「分类」决定筛选按钮，填新词会自动多出一个按钮。点左边「新建模块」可以直接加一个，不用滚到表单最底下。",
+      /* 表单很长（十几个模块时能滚上万像素），把最常用的「加模块」放到目录里，
+         一键追加并自动展开、聚焦标题；新模块里再点「＋ 添加卡片」就能加内容。 */
+      actions: [
+        {
+          key: "mod-add",
+          label: "新建模块",
+          hint: "往资源库末尾追加一个模块，自动填好标识、标题和分类，并聚焦标题输入框"
+        }
+      ],
       fields: [
         { path: "pages.links.sections.modules.title", label: "区块标题", type: "text" },
         { path: "pages.links.sections.modules.note", label: "右侧说明", type: "text" },
@@ -529,6 +539,10 @@ window.V2_SCHEMA = {
           label: "模块",
           type: "repeater",
           itemLabel: "模块",
+          /* 新建时别给一个全空的壳：空分类不会生成筛选按钮、空标题看不出加了没加，
+             缺 id 又会让多个新模块在 DOM 里都叫 undefined。
+             @auto = 生成不重复的标识，@last = 沿用上一个模块的分类。 */
+          defaults: { id: "@auto", title: "新模块", filter: "@last", note: "" },
           fields: [
             { path: "title", label: "模块标题", type: "text" },
             { path: "filter", label: "分类", type: "text" },
@@ -545,7 +559,8 @@ window.V2_SCHEMA = {
                 { path: "tag", label: "标签", type: "text" },
                 { path: "badge", label: "角标", type: "text" }
               ]
-            }
+            },
+            { path: "id", label: "模块标识", type: "text", hint: "自动生成，用于区块锚点，一般不用改" }
           ]
         }
       ]

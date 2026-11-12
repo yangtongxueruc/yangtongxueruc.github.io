@@ -2,8 +2,17 @@
    STUDIO.CSS — 内容控制台
    ============================================================ */
 
+/* 控制台整页锁死在视口里。原来只给 body 设了 overflow:hidden，html 并没有锁：
+   任何 scrollIntoView / 平滑滚动仍可能把顶层文档滚走，最上面那条顶栏就跟着
+   消失（而且偶发，难复现）。position:fixed + inset:0 让 body 脱离文档流，
+   html 不再有可滚动内容；:has 那行是双保险，老浏览器不认也不影响。 */
+html:has(body[data-page="studio"]) { height: 100%; overflow: hidden; }
 body[data-page="studio"] {
+  position: fixed;
+  inset: 0;
+  width: 100%;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -11,6 +20,8 @@ body[data-page="studio"] {
 
 /* ---------------- 顶栏 ---------------- */
 .top {
+  position: relative;
+  z-index: 60;            /* 别被预览 / 背景层盖住 */
   flex: none;
   display: flex;
   align-items: center;
@@ -545,25 +556,47 @@ select.inp { cursor: pointer; }
 }
 .logopair.is-empty .logopair__cell--light::after { color: #9a9a9a; }
 
-/* 显示高度微调：公式给出的是起点，带徽标的牌子要按眼睛再挪一两格 */
+/* logo 编辑区改成上下两层：双主题预览占满第一行，控件独占第二行。
+   左右并排时右侧只剩 ~80px，等比缩放的滑块会被压得没法拖。 */
+.imgpick--logo .logopair { width: 100%; }
+.imgpick--logo .logopair__cell { flex: 1; width: auto; }
+.imgpick--logo .imgpick__side { flex: 1 1 100%; min-width: 100%; }
+
+/* 等比缩放：滑块 + 1px 微调。改的是 --logo-h，宽度由 contain 按原图比例算 */
 .logoh {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: var(--space-8);
+  margin-top: var(--space-12);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--border);
   font-size: var(--text-xs);
   color: var(--text-3);
 }
-.logoh__lbl { margin-right: 2px; white-space: nowrap; }
-.logoh__num {
-  min-width: 38px;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-2);
+.logoh__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-8);
+  margin-bottom: 6px;
 }
+.logoh__lbl { color: var(--text-2); font-weight: 500; white-space: nowrap; }
+.logoh__num {
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-1);
+}
+.logoh__ctl { display: flex; align-items: center; gap: var(--space-8); }
+.logoh__range {
+  flex: 1;
+  min-width: 80px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.logoh__range:disabled { opacity: 0.35; cursor: default; }
 .logoh__btn {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
+  flex: none;
   display: grid;
   place-items: center;
   padding: 0;
@@ -577,6 +610,7 @@ select.inp { cursor: pointer; }
 }
 .logoh__btn:hover:not(:disabled) { border-color: var(--text-2); color: var(--text-1); }
 .logoh__btn:disabled { opacity: 0.35; cursor: default; }
+.logoh__note { margin: 6px 0 0; line-height: 1.5; }
 
 /* ---------- 排版总览 ---------- */
 .ty {

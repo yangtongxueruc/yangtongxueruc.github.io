@@ -1,9 +1,9 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/12 13:10:37
+   导出时间：2026/11/12 13:20:00
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 75,
+  "version": 76,
   "updatedAt": "2026-11-12",
   "styles": {
     "blocks": {
@@ -407,6 +407,7 @@ window.V2_CONTENT = {
               "org": "明汯投资",
               "logo": "assets/img/logos/minghong.png",
               "logoH": "21",
+              "logoDY": 2,
               "desc": "国内头部私募量化"
             },
             {
@@ -423,6 +424,7 @@ window.V2_CONTENT = {
               "org": "招商局漳州",
               "logo": "assets/img/logos/china-merchants-zhangzhou.png",
               "logoH": "25",
+              "logoDY": 2,
               "desc": "一段有趣的老家经历"
             },
             {

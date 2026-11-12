@@ -357,13 +357,16 @@
       item.appendChild(year);
 
       /* logo：没有就留空 —— 列宽固定，其他行照样对齐，不会因为缺一张图整列塌掉。
-         高度用每张自己的 logoH：这几张原图里主体占比差很多（58%~95%），
-         统一画布高度会让字大小不一，所以按「主体字高」对齐。 */
+         显示高度用每张自己的 logoH（控制台滑块给的光学尺寸，不是机械对齐），
+         再用可选的 logoDY 修正带副标题 lockup 的视觉重心。 */
       var logoBox = el("span", "tl-item__logo");
       var src = String(it.logo || "").trim();
       if (src) {
         var lh = parseInt(it.logoH, 10);
         if (lh > 0) logoBox.style.setProperty("--logo-h", lh + "px");
+        // 带副标题的 lockup 主体偏上，数据里单独给 2px 的光学下移
+        var dy = parseFloat(it.logoDY);
+        if (dy) logoBox.style.setProperty("--logo-dy", dy + "px");
         // 公司名不再上屏，但要留作读屏与搜图的说明
         var img = el("img", "", { src: src, alt: it.org || "", loading: "lazy", decoding: "async" });
         logoBox.appendChild(img);

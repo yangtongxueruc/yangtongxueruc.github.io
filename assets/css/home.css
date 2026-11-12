@@ -582,9 +582,9 @@ body.is-ready .mask-line > span { transform: none; }
 .timeline {
   --tl-rail: 24px;        /* 轨道列：节点在列里居中，不再靠 top 硬算 */
   --tl-time: 116px;       /* 时间列：等宽 + tabular-nums，够放 "2011 — 2015" */
-  --tl-logo-w: 176px;     /* logo 列的上限宽度（不是图片宽度） */
+  --tl-logo-w: 148px;     /* logo 列上限：按「最宽那张图 + 一点余量」定，不是拍脑袋的 176 */
   --tl-logo-h: 20px;      /* 没写 logoH 时的兜底：与 18px 职位文字同一量级 */
-  --tl-gap: 20px;         /* 16 太挤：logo 顶满列宽时（小马）会贴住职位 */
+  --tl-gap: 14px;         /* 列间留白；配合上面的 148 让 logo 与职位不至于隔着一整段空白 */
   --tl-row: 2rem;
   position: relative;
   margin-top: 0.5rem;
@@ -664,6 +664,10 @@ body.is-ready .mask-line > span { transform: none; }
   width: 100%;
   height: var(--logo-h, var(--tl-logo-h));
   align-self: center;
+  /* 带英文副标题的 lockup（明汯 / 招商）裁完边距后中文主体仍偏上，
+     纯字标却是居中的。数据里给这几张单独写 --logo-dy 做 2px 的光学下移，
+     其余默认 0，不把本来就齐的那几张一起带偏。 */
+  transform: translateY(var(--logo-dy, 0px));
 }
 .tl-item__logo img {
   display: block;
@@ -687,12 +691,12 @@ html[data-theme="light"] .tl-item__logo img { filter: none; opacity: 1; }
   grid-row: 1;
   align-self: center;
   display: flex;
-  align-items: baseline;
+  align-items: center;   /* 与 logo 一样走中线，别用 baseline 让文字盒独自偏移 */
   gap: 1rem;
   flex-wrap: wrap;
   min-width: 0;
 }
-.tl-item__role { font-size: var(--text-lg); font-weight: 500; letter-spacing: -0.005em; }
+.tl-item__role { font-size: var(--text-lg); font-weight: 500; line-height: 1.45; letter-spacing: -0.005em; }
 .tl-item__desc {
   grid-column: 4;
   grid-row: 2;
@@ -703,13 +707,13 @@ html[data-theme="light"] .tl-item__logo img { filter: none; opacity: 1; }
   max-width: 54ch;
 }
 
-/* 861~1000px：左栏还占着 168px，正文被挤得很窄，先把 logo 列收一档 */
+/* 861~1000px：左栏还占着 168px，正文被挤得很窄，再把列宽收紧一档 */
 @media (max-width: 1000px) {
-  .timeline { --tl-logo-w: 140px; --tl-time: 104px; }
+  .timeline { --tl-logo-w: 136px; --tl-time: 104px; }
 }
-/* ≤860px 左栏折行，宽度回来了，恢复完整列宽 */
+/* ≤860px 左栏折行，宽度回来了，回到标准列宽（不再放大回 176） */
 @media (max-width: 860px) {
-  .timeline { --tl-logo-w: 176px; --tl-time: 116px; }
+  .timeline { --tl-logo-w: 148px; --tl-time: 116px; }
 }
 /* 手机：176px 的 logo 列会把正文挤没，改成 logo 独占一行 */
 @media (max-width: 720px) {

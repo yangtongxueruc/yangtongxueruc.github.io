@@ -811,31 +811,55 @@
     side.appendChild(mt);
     side.appendChild(acts);
 
-    /* 自动算出的高度只是起点。带圆形徽标的牌子（招商局那种）按比例放大后，
-       图标会比纯字标的牌子重，靠肉眼判断比靠公式准 —— 给一对加减号微调，
-       改的是同名的 logoH 字段，不用重新上传。 */
+    /* 等比缩放控件。公式算出的高度只是起点，实心徽标偏重、细线字标偏轻，
+       都得靠眼睛校准。这里改的是显示高度 --logo-h，图片用 object-fit: contain
+       渲染，宽度会按原图比例自动算 —— 所以拖滑块永远不会把 logo 拉变形。
+       拖动过程中只刷新预览，撤销历史记一次基线、松手才写盘，避免刷屏。 */
+    var MIN_H = 12, MAX_H = 40;
     var hRow = document.createElement("div");
     hRow.className = "logoh";
+
+    var hTop = document.createElement("div");
+    hTop.className = "logoh__top";
     var hLbl = document.createElement("span");
     hLbl.className = "logoh__lbl";
-    hLbl.textContent = "高度";
+    hLbl.textContent = "等比缩放";
+    var hVal = document.createElement("span");
+    hVal.className = "logoh__num";
+    hVal.textContent = "—";
+    hTop.appendChild(hLbl);
+    hTop.appendChild(hVal);
+
+    var hCtl = document.createElement("div");
+    hCtl.className = "logoh__ctl";
     var hMinus = document.createElement("button");
     hMinus.type = "button";
     hMinus.className = "logoh__btn";
     hMinus.textContent = "−";
-    hMinus.title = "调矮 1px";
-    var hVal = document.createElement("span");
-    hVal.className = "logoh__num";
-    hVal.textContent = "—";
+    hMinus.title = "缩小 1px";
+    var hSlider = document.createElement("input");
+    hSlider.type = "range";
+    hSlider.className = "logoh__range";
+    hSlider.min = String(MIN_H);
+    hSlider.max = String(MAX_H);
+    hSlider.step = "1";
+    hSlider.setAttribute("aria-label", "logo 显示高度，等比缩放");
     var hPlus = document.createElement("button");
     hPlus.type = "button";
     hPlus.className = "logoh__btn";
     hPlus.textContent = "+";
-    hPlus.title = "调高 1px";
-    hRow.appendChild(hLbl);
-    hRow.appendChild(hMinus);
-    hRow.appendChild(hVal);
-    hRow.appendChild(hPlus);
+    hPlus.title = "放大 1px";
+    hCtl.appendChild(hMinus);
+    hCtl.appendChild(hSlider);
+    hCtl.appendChild(hPlus);
+
+    var hNote = document.createElement("p");
+    hNote.className = "logoh__note";
+    hNote.textContent = "只调高度，宽度按原图比例自动算 · 右侧预览实时更新";
+
+    hRow.appendChild(hTop);
+    hRow.appendChild(hCtl);
+    hRow.appendChild(hNote);
     side.appendChild(hRow);
 
     box.appendChild(pair);
@@ -867,16 +891,19 @@
       pick.textContent = s ? "替换 logo" : "上传 logo";
       syncH();
     }
-    /* 微调只在有图的时候可用；读的是数据里的 logoH，没有就按 26 起步 */
+    /* 缩放只在有图的时候可用；读的是数据里的 logoH，没有就按兜底 20 起步 */
     function readH() {
       var v = hAbs ? parseInt(getPath(S.content, hAbs), 10) : NaN;
-      return v > 0 ? v : 26;
+      return v > 0 ? v : 20;
     }
     function syncH() {
       var on = !!String(getPath(S.content, abs) || "").trim();
-      hVal.textContent = on ? readH() + "px" : "—";
-      hMinus.disabled = !on || readH() <= 14;
-      hPlus.disabled = !on || readH() >= 48;
+      var v = readH();
+      hVal.textContent = on ? v + "px" : "—";
+      hSlider.value = String(Math.max(MIN_H, Math.min(MAX_H, v)));
+      hSlider.disabled = !on;
+      hMinus.disabled = !on || v <= MIN_H;
+      hPlus.disabled = !on || v >= MAX_H;
     }
     a.addEventListener("error", function () {
       pair.classList.add("is-empty");
@@ -890,12 +917,31 @@
     pick.addEventListener("click", function () { picker.click(); });
     function bump(d) {
       if (!hAbs) return;
-      var v = Math.max(14, Math.min(48, readH() + d));
+      var v = Math.max(MIN_H, Math.min(MAX_H, readH() + d));
       commit(hAbs, String(v));
       syncH();
     }
     hMinus.addEventListener("click", function () { bump(-1); });
     hPlus.addEventListener("click", function () { bump(1); });
+
+    /* 连续拖动算一次操作：第一次 input 时（数据还没改）记一条撤销基线，
+       之后只改内存 + 刷预览，松手才写草稿。不能每格都 commit()，
+       否则撤销栈会被一格一格的中间值塞满。 */
+    var dragArmed = false;
+    hSlider.addEventListener("input", function () {
+      if (!hAbs) return;
+      if (!dragArmed) { snapshot(); dragArmed = true; }
+      var v = Math.max(MIN_H, Math.min(MAX_H, parseInt(hSlider.value, 10)));
+      setPath(S.content, hAbs, String(v));
+      markDirty();
+      syncH();
+      schedulePreview();
+    });
+    hSlider.addEventListener("change", function () {
+      dragArmed = false;
+      schedulePersist();
+    });
+    hSlider.addEventListener("blur", function () { dragArmed = false; });
     rm.addEventListener("click", function () {
       commit(abs, "");
       if (hAbs) commit(hAbs, "");
@@ -1184,9 +1230,38 @@
     return "第 " + (i + 1) + " 项";
   }
 
+  /* 新建一条 repeater 记录的默认值。
+     schema 里可以写 defaults：@auto 生成不重复的标识，@last 沿用上一条同字段的值。
+     模块这类记录如果给一个全空的壳，用户会以为「点了没反应」——空分类不生成
+     筛选按钮、空标题看不出新增、缺 id 又让多个新模块在 DOM 里都叫 undefined。 */
+  function blankForRepeater(field, arr) {
+    var blank = {};
+    (field.fields || []).forEach(function (f) {
+      if (f.type === "repeater" || f.type === "lines") blank[f.path] = [];
+      else blank[f.path] = "";
+    });
+    var defs = field.defaults || {};
+    Object.keys(defs).forEach(function (k) {
+      var v = defs[k];
+      if (v === "@auto") {
+        var used = {}, n = arr.length + 1, id;
+        arr.forEach(function (m) { if (m && m[k]) used[m[k]] = true; });
+        do { id = "mod-" + n; n++; } while (used[id]);
+        blank[k] = id;
+      } else if (v === "@last") {
+        var last = arr.length ? arr[arr.length - 1] : null;
+        blank[k] = (last && last[k]) || "";
+      } else {
+        blank[k] = v;
+      }
+    });
+    return blank;
+  }
+
   function renderRepeater(field, abs) {
     var box = document.createElement("div");
     box.className = "rep";
+    box.setAttribute("data-rep", abs);
     var arr = getPath(S.content, abs) || [];
 
     /* 批量上传放在最上面：一次选十几张图，比一张张点「添加一项」再找图快得多 */
@@ -1239,13 +1314,7 @@
     add.addEventListener("click", function () {
       var a = getPath(S.content, abs);
       if (!Array.isArray(a)) { a = []; setPath(S.content, abs, a); }
-      var blank = {};
-      (field.fields || []).forEach(function (f) {
-        if (f.type === "repeater") blank[f.path] = [];
-        else if (f.type === "lines") blank[f.path] = [];
-        else blank[f.path] = "";
-      });
-      a.push(blank);
+      a.push(blankForRepeater(field, a));
       afterStructureChange();
     });
     box.appendChild(add);
@@ -1512,6 +1581,40 @@
         if (el) el.scrollIntoView({ block: "start", behavior: "smooth" });
       } catch (e) {}
     }
+  }
+
+  /* 目录里的「＋ 新建模块」：资源模块的表单动辄上万像素高，把最常用的操作
+     提到目录里。追加后自动展开、聚焦标题，用户立刻能改名；新模块里本来就有
+     「＋ 添加卡片」，不用另外再做一套。 */
+  function addResourceModule() {
+    var p = "pages.links.sections.modules.items";
+    var a = getPath(S.content, p);
+    if (!Array.isArray(a)) { a = []; setPath(S.content, p, a); }
+    var g = SCHEMA.filter(function (x) { return x.id === "modules"; })[0];
+    var f = null;
+    if (g) g.fields.forEach(function (x) { if (x.path === p) f = x; });
+    a.push(blankForRepeater(f || { fields: [] }, a));
+    afterStructureChange();
+    selectGroup("modules");
+    setTimeout(function () {
+      var pane = $("#formpane");
+      var rep = pane && pane.querySelector('.rep[data-rep="' + p + '"]');
+      if (!rep) return;
+      var kids = rep.children, last = null;
+      for (var i = kids.length - 1; i >= 0; i--) {
+        if (kids[i].classList.contains("rep__item")) { last = kids[i]; break; }
+      }
+      if (!last) return;
+      /* 只滚表单容器本身。scrollIntoView 会把所有可滚动祖先（含顶层文档）
+         一起滚，顶栏就是这么被带走的 —— 这里明确绕开它。 */
+      var y = last.getBoundingClientRect().top - pane.getBoundingClientRect().top + pane.scrollTop;
+      pane.scrollTop = Math.max(0, y - pane.clientHeight / 2 + last.offsetHeight / 2);
+      var first = last.querySelector("input[type=text], textarea");
+      if (first) {
+        first.focus({ preventScroll: true });
+        if (first.select) first.select();
+      }
+    }, 80);
   }
 
   /* ---------------- 导出 / 导入 / 保存 ---------------- */
@@ -2495,6 +2598,8 @@
     });
 
     $("#tree").addEventListener("click", function (e) {
+      var act = e.target.closest && e.target.closest("[data-act]");
+      if (act && act.dataset.act === "mod-add") { addResourceModule(); return; }
       var b = e.target.closest("[data-group]");
       if (!b) return;
       selectGroup(b.dataset.group);
