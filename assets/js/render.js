@@ -351,17 +351,28 @@
     tl.appendChild(el("span", "timeline__fill", { "aria-hidden": "true" }));
     (d.items || []).forEach(function (it) {
       var item = el("article", "tl-item");
-      var head = el("div", "tl-item__head");
+      if (String(it.divider) === "true") item.classList.add("tl-item--divided");
+
       var year = el("span", "tl-item__year");
       setText(year, it.period);
+      item.appendChild(year);
+
+      /* logo：没有就留空 —— 列宽固定，其他行照样对齐，不会因为缺一张图整列塌掉 */
+      var logoBox = el("span", "tl-item__logo");
+      var src = String(it.logo || "").trim();
+      if (src) {
+        // 公司名不再上屏，但要留作读屏与搜图的说明
+        var img = el("img", "", { src: src, alt: it.org || "", loading: "lazy", decoding: "async" });
+        logoBox.appendChild(img);
+      }
+      item.appendChild(logoBox);
+
+      var head = el("div", "tl-item__head");
       var role = el("span", "tl-item__role");
       setText(role, it.role);
-      var org = el("span", "tl-item__org");
-      setText(org, it.org);
-      head.appendChild(year);
       head.appendChild(role);
-      head.appendChild(org);
       item.appendChild(head);
+
       var desc = el("p", "tl-item__desc");
       setText(desc, it.desc);
       item.appendChild(desc);

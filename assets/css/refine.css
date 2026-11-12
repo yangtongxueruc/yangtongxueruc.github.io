@@ -109,8 +109,10 @@ body[data-page="home"] .hero { padding-bottom: var(--sp-section); }
 .lede { margin-top: var(--sp-3); }
 
 .timeline { margin-top: var(--sp-3); }
-.tl-item { padding: 0 0 var(--sp-4) var(--sp-4); }
-.tl-item__head { margin-bottom: var(--sp-1); }
+/* 时间线改成四列网格后，条目自己不能再有左内边距 ——
+   否则整块右移，节点会被顶到竖线外面去 */
+.tl-item { padding: 0 0 var(--tl-row, var(--sp-4)); }
+.tl-item__head { margin-bottom: 0; }
 
 .info-grid { margin-top: var(--sp-4); gap: var(--sp-3); }
 .info-card { padding: var(--sp-card); }
@@ -159,7 +161,7 @@ body[data-page="home"] .cta__mail { margin-top: var(--sp-4); }
 
 @media (max-width: 700px) {
   .about__cols { gap: var(--sp-4); }
-  .tl-item { padding-bottom: var(--sp-3); }
+  .tl-item { padding-bottom: var(--sp-2); }
   .body-text { line-height: 1.75; }
 }
 

@@ -3,7 +3,7 @@
    导出时间：2026/11/12 09:29:40
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 69,
+  "version": 70,
   "updatedAt": "2026-11-12",
   "styles": {
     "blocks": {
@@ -405,30 +405,36 @@ window.V2_CONTENT = {
               "period": "2023 - 至今",
               "role": "校招负责人",
               "org": "明汯投资",
+              "logo": "assets/img/logos/minghong.png",
               "desc": "国内头部私募量化"
             },
             {
               "period": "2018 - 2023",
               "role": "北京研发中心校招负责人",
               "org": "小马智行Pony.ai",
+              "logo": "assets/img/logos/pony-ai.png",
               "desc": "国内头部自动驾驶公司；\n从0搭建校招体系，顶尖技术人才招聘与大规模校招项目。"
             },
             {
               "period": "2017 - 2018",
               "role": "HR",
               "org": "招商局漳州",
+              "logo": "assets/img/logos/china-merchants-zhangzhou.png",
               "desc": "一段有趣的老家经历"
             },
             {
               "period": "2015 - 2017",
               "role": "校招HR",
               "org": "网易有道",
+              "logo": "assets/img/logos/youdao.png",
               "desc": "从新人开始的校招负责人"
             },
             {
               "period": "2011 — 2015",
               "role": "人力资源管理",
               "org": "中国人民大学",
+              "logo": "assets/img/logos/ruc.png",
+              "divider": "true",
               "desc": "学校里的银杏叶和品园的糖葫芦，大概是我最难忘记的。"
             }
           ]

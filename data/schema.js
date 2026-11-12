@@ -355,7 +355,7 @@ window.V2_SCHEMA = {
       page: "home",
       section: "experience",
       icon: "02",
-      hint: "与 v1 一致：左侧栏 + 竖向时间线，滚动时线条填充、条目点亮。",
+      hint: "左侧栏 + 竖向时间线，滚动时线条填充、条目点亮。logo 一律左对齐、按统一高度缩放，公司名不再写文字。",
       fields: [
         { path: "pages.home.sections.experience.no", label: "序号", type: "text" },
         { path: "pages.home.sections.experience.label", label: "栏目标签", type: "text" },
@@ -369,7 +369,25 @@ window.V2_SCHEMA = {
           fields: [
             { path: "period", label: "时间段", type: "text" },
             { path: "role", label: "职位", type: "text" },
-            { path: "org", label: "公司 / 机构", type: "text" },
+            { path: "org", label: "公司 / 机构", type: "text",
+              hint: "不再显示文字，只作为 logo 的说明与读屏文字" },
+            {
+              path: "logo",
+              label: "公司 logo",
+              type: "logo",
+              hint: "PNG 透明底，内容高度 ≥ 128px，单个 < 100 KB。深色主题会自动反白，给原色图即可，"
+                  + "不用另外做白色版；浅色主题保留原色。四周透明边距会自动裁掉。"
+            },
+            {
+              path: "divider",
+              label: "上方分隔线",
+              type: "select",
+              options: [
+                { v: "false", label: "不加（连续的经历）" },
+                { v: "true",  label: "加一条淡线（如学历段）" }
+              ],
+              hint: "在这条经历上方画一条向右渐隐的细线，用来把「学历」和「工作经历」分开。"
+            },
             { path: "desc", label: "做了什么", type: "textarea", rows: 3 }
           ]
         }

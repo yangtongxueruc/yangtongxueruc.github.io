@@ -575,12 +575,24 @@ body.is-ready .mask-line > span { transform: none; }
 }
 @media (max-width: 700px) { .only-wide { display: none; } }
 
-/* ---------- 时间线 ---------- */
-.timeline { position: relative; margin-top: 0.5rem; }
+/* ---------- 时间线 ----------
+   四列网格：轨道 / 时间 / logo / 正文。
+   时间和 logo 两列宽度写死，正文吃掉剩余宽度 —— 行行左对齐靠的是列宽，
+   不是 padding 凑出来的视觉巧合。 */
+.timeline {
+  --tl-rail: 24px;        /* 轨道列：节点在列里居中，不再靠 top 硬算 */
+  --tl-time: 116px;       /* 时间列：等宽 + tabular-nums，够放 "2011 — 2015" */
+  --tl-logo-w: 176px;     /* logo 列的上限宽度（不是图片宽度） */
+  --tl-logo-h: 28px;      /* 真正的对齐基准：所有 logo 的内容高度一致 */
+  --tl-gap: 20px;         /* 16 太挤：logo 顶满列宽时（小马）会贴住职位 */
+  --tl-row: 2rem;
+  position: relative;
+  margin-top: 0.5rem;
+}
 .timeline::before {
   content: "";
   position: absolute;
-  left: 7px;
+  left: calc(var(--tl-rail) / 2 - 0.5px);
   top: 8px;
   bottom: 8px;
   width: 1px;
@@ -588,7 +600,7 @@ body.is-ready .mask-line > span { transform: none; }
 }
 .timeline__fill {
   position: absolute;
-  left: 7px;
+  left: calc(var(--tl-rail) / 2 - 0.5px);
   top: 8px;
   width: 1px;
   height: 0;
@@ -597,17 +609,23 @@ body.is-ready .mask-line > span { transform: none; }
 }
 .tl-item {
   position: relative;
-  padding: 0 0 2.4rem 2.4rem;
-  opacity: 0.45;
+  display: grid;
+  grid-template-columns: var(--tl-rail) var(--tl-time) var(--tl-logo-w) minmax(0, 1fr);
+  column-gap: var(--tl-gap);
+  padding: 0 0 var(--tl-row);
+  /* 0.66 而不是原来的 0.45：加了 logo 之后压太狠，品牌标记会糊成一团 */
+  opacity: 0.66;
   transition: opacity 0.6s var(--ease);
 }
 .tl-item:last-child { padding-bottom: 0; }
 .tl-item.is-active { opacity: 1; }
+/* 节点是网格的第一项，align-self: center 让它自动落在这一行的中线上 */
 .tl-item::before {
   content: "";
-  position: absolute;
-  left: 2px;
-  top: 0.62rem;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  justify-self: center;
   width: 11px;
   height: 11px;
   border-radius: 50%;
@@ -621,28 +639,100 @@ body.is-ready .mask-line > span { transform: none; }
   background: var(--accent);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
 }
-.tl-item__head {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.35rem;
-}
 .tl-item__year {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   letter-spacing: 0.08em;
   color: var(--text-3);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 .tl-item.is-active .tl-item__year { color: var(--accent); }
+
+/* logo 列：列宽是上限，图片按统一高度缩放。
+   这几张都是 3.7~7.6 的横向 lockup，塞进正方形框后实际高度只剩十几像素，
+   公司名根本认不出来，所以定高不定宽。
+   必须给死框 + object-fit：只写 max-width/max-height 会让两个约束各自生效，
+   把图压变形。 */
+.tl-item__logo {
+  grid-column: 3;
+  grid-row: 1;
+  width: 100%;
+  height: var(--tl-logo-h);
+  align-self: center;
+}
+.tl-item__logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;   /* 图窄于框时靠左，右边缘参差但左边缘齐 */
+  /* 深色主题统一反白：任意颜色压成黑（保留 alpha）再翻白，
+     品牌红 / 青 / 金在深底上统一成白色剪影，才不会互相打架 */
+  filter: brightness(0) invert(1);
+  opacity: 0.88;
+  transition: opacity 0.5s var(--ease);
+}
+.tl-item:hover .tl-item__logo img,
+.tl-item.is-active .tl-item__logo img { opacity: 1; }
+/* 浅色主题保留原色 */
+html[data-theme="light"] .tl-item__logo img { filter: none; opacity: 1; }
+
+.tl-item__head {
+  grid-column: 4;
+  grid-row: 1;
+  align-self: center;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+  min-width: 0;
+}
 .tl-item__role { font-size: var(--text-lg); font-weight: 500; letter-spacing: -0.005em; }
-.tl-item__org { font-size: var(--text-sm); color: var(--text-2); }
 .tl-item__desc {
+  grid-column: 4;
+  grid-row: 2;
+  margin-top: 0.35rem;
   font-size: var(--text-sm);
   color: var(--text-3);
   line-height: 1.8;
   max-width: 54ch;
+}
+
+/* 学历段：一条很淡的分割线，向右渐隐，避免和左侧竖线撞成十字 */
+.tl-item--divided {
+  margin-top: calc(var(--tl-row) + 6px);
+  padding-top: 20px;
+  background-image: linear-gradient(90deg,
+    var(--border) 0%,
+    color-mix(in srgb, var(--border) 50%, transparent) 55%,
+    transparent 85%);
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+
+/* 861~1000px：左栏还占着 168px，正文被挤得很窄，先把 logo 列收一档 */
+@media (max-width: 1000px) {
+  .timeline { --tl-logo-w: 140px; --tl-time: 104px; }
+}
+/* ≤860px 左栏折行，宽度回来了，恢复完整列宽 */
+@media (max-width: 860px) {
+  .timeline { --tl-logo-w: 176px; --tl-time: 116px; }
+}
+/* 手机：176px 的 logo 列会把正文挤没，改成 logo 独占一行 */
+@media (max-width: 720px) {
+  .timeline { --tl-rail: 16px; --tl-logo-h: 24px; --tl-gap: 12px; }
+  .tl-item { grid-template-columns: var(--tl-rail) minmax(0, 1fr); }
+  .tl-item::before { grid-column: 1; grid-row: 1; }
+  .tl-item__year { grid-column: 2; grid-row: 1; justify-self: start; }
+  .tl-item__logo { grid-column: 2; grid-row: 2; margin-top: 8px; }
+  .tl-item__head { grid-column: 2; grid-row: 3; margin-top: 8px; }
+  .tl-item__role { font-size: var(--text-base); }
+  .tl-item__desc { grid-column: 2; grid-row: 4; margin-top: 0.3rem; max-width: none; }
 }
 
 /* ---------- 公司 ---------- */

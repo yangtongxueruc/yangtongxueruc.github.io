@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-12T09:56:19+08:00",
- "generated_at_human": "2026-11-12 09:56",
+ "generated_at": "2026-11-12T10:43:25+08:00",
+ "generated_at_human": "2026-11-12 10:43",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "stats": {
   "sources_total": 5,
@@ -22,7 +22,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 935,
+   "ms": 1048,
    "http": 200
   },
   {
@@ -34,7 +34,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 324,
+   "ms": 171,
    "http": 200
   },
   {
@@ -46,7 +46,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 632,
+   "ms": 616,
    "http": 200
   },
   {
@@ -58,7 +58,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 347,
+   "ms": 314,
    "http": 200
   },
   {
@@ -70,7 +70,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 1061,
+   "ms": 872,
    "http": 200
   }
  ],
@@ -123,7 +123,7 @@ window.SITE_FEED = {
   {
    "title": "Lumiwealth/lumibot",
    "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-12T09:36:30+08:00",
+   "date": "2026-11-12T10:42:15+08:00",
    "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
@@ -132,8 +132,26 @@ window.SITE_FEED = {
   {
    "title": "questdb/questdb",
    "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-12T09:32:48+08:00",
+   "date": "2026-11-12T10:03:36+08:00",
    "summary": "QuestDB is a high performance, open-source, time-series database",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "facioquo/stock-indicators-dotnet",
+   "url": "https://github.com/facioquo/stock-indicators-dotnet",
+   "date": "2026-11-12T09:37:07+08:00",
+   "summary": "Stock Indicators for .NET is a C# NuGet package that transforms raw equity, commodity, forex, or cryptocurrency financial market price quotes into technical …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "jundizhou/easy-stock",
+   "url": "https://github.com/jundizhou/easy-stock",
+   "date": "2026-11-12T09:36:28+08:00",
+   "summary": "A股 AI 投研",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -244,24 +262,6 @@ window.SITE_FEED = {
    "url": "https://github.com/openbq-org/OpenBB",
    "date": "2026-11-11T13:30:36+08:00",
    "summary": "Open Data Platform for analysts, quants and AI agents.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "jundizhou/easy-stock",
-   "url": "https://github.com/jundizhou/easy-stock",
-   "date": "2026-11-11T10:58:48+08:00",
-   "summary": "A股 AI 投研",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "facioquo/stock-indicators-dotnet",
-   "url": "https://github.com/facioquo/stock-indicators-dotnet",
-   "date": "2026-11-11T09:38:03+08:00",
-   "summary": "Stock Indicators for .NET is a C# NuGet package that transforms raw equity, commodity, forex, or cryptocurrency financial market price quotes into technical …",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -711,5 +711,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "ff1d025999eb7a486e9389130363414a"
+ "signature": "3c3933c2395e8f80ea855e0c0a450154"
 };

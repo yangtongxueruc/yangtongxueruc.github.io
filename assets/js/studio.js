@@ -139,7 +139,7 @@
      下载一遍。所以照片走本机服务落成 assets/img/gallery/ 下的真实文件，
      内容里只存路径，发布时再把文件作为二进制 blob 一起推上去。
 
-     顺带把「手写 assets/img/xxx.jpg」这条路封掉：路径拼错不会报错，只会
+     顺带把「手写相对上级的路径」这条路封掉：路径拼错不会报错，只会
      在页面上留一块空白。 */
   var IMG_UPLOAD_PATH = "/__img/upload";
   var IMG_RAW_PATH = "/__img/raw";
@@ -275,7 +275,7 @@
      内容此刻还没引用这张图，产物里只是多一个文件，发布 content.js 时才被用到。
      文件名加 4 位随机后缀，避免同一秒连传多张撞名（本机靠 os.path.exists
      递增，云端没有这个能力）。 */
-  function cloudUploadImage(name, dataUrl, picW, picH) {
+  function cloudUploadImage(name, dataUrl, picW, picH, subdir) {
     var token = savedToken();
     if (!token) {
       return Promise.reject(new Error(
@@ -298,7 +298,8 @@
       + "-" + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
     var rand = Math.random().toString(36).slice(2, 6);
     var fname = slug + "-" + stamp + "-" + rand + "." + ext;
-    var repoPath = "assets/img/gallery/" + fname;
+    var sub = subdir || "gallery";
+    var repoPath = "assets/img/" + sub + "/" + fname;
     var b64 = String(dataUrl).slice(String(dataUrl).indexOf(",") + 1);
     return gh(token, "PUT", "/repos/" + GH.repo + "/contents/" + repoPath, {
       message: "image: 上传 " + fname,
@@ -307,14 +308,125 @@
     }).then(function () {
       return {
         ok: true,
-        /* 内容里的路径相对 v2 目录，与本机服务保存的形态一致；
-           产物构建会把 assets/ 改写成 assets/。 */
-        path: "assets/img/gallery/" + fname,
+        /* 不带上级前缀：v2/ 里的页面直接命中 v2/assets/，拍平后的产物命中
+           根 assets/，两种形态都对。带前缀的写法只在产物里成立，dev 预览必然 404。 */
+        path: repoPath,
         repo: repoPath,
         bytes: Math.round(b64.length * 3 / 4),
         picW: picW,
         picH: picH
       };
+    });
+  }
+
+  /* ---- logo 专用压缩 ----
+     和照片那条链路的区别只有一个关键点：必须留透明通道。
+     compressPhoto 走 image/jpeg，透明底会被压成黑块或白块，logo 直接报废。
+     另外顺手裁掉四周的透明边距 —— 品牌方给的图常常带大片留白，
+     不裁的话同一行里有的 logo 会显得小一圈。 */
+  function trimAlpha(cv) {
+    var c = cv.getContext("2d");
+    var w = cv.width, h = cv.height;
+    var d;
+    try { d = c.getImageData(0, 0, w, h).data; } catch (e) { return cv; }
+    var top = h, left = w, right = -1, bottom = -1;
+    for (var y = 0; y < h; y++) {
+      var row = y * w * 4;
+      for (var x = 0; x < w; x++) {
+        if (d[row + x * 4 + 3] > 12) {
+          if (y < top) top = y;
+          if (y > bottom) bottom = y;
+          if (x < left) left = x;
+          if (x > right) right = x;
+        }
+      }
+    }
+    /* 整张全透明（或者取不到像素）就别裁，否则会得到一个 0×0 的画布 */
+    if (right < 0 || bottom < 0 || (right - left) < 2 || (bottom - top) < 2) return cv;
+    var out = document.createElement("canvas");
+    out.width = right - left + 1;
+    out.height = bottom - top + 1;
+    out.getContext("2d").drawImage(cv, left, top, out.width, out.height, 0, 0, out.width, out.height);
+    return out;
+  }
+
+  function compressLogo(img) {
+    var MAX_H = 160, MAX_W = 1200, MAX_SIDE = 2400;
+    var w = img.naturalWidth || img.width;
+    var h = img.naturalHeight || img.height;
+
+    /* 先按原尺寸画到画布（超大图先缩到 2400 以内，纯粹为了 getImageData 别太久） */
+    var pre = Math.min(1, MAX_SIDE / Math.max(w, h));
+    var cv = document.createElement("canvas");
+    cv.width = Math.max(1, Math.round(w * pre));
+    cv.height = Math.max(1, Math.round(h * pre));
+    var c0 = cv.getContext("2d");
+    c0.imageSmoothingQuality = "high";
+    c0.drawImage(img, 0, 0, cv.width, cv.height);
+
+    cv = trimAlpha(cv);
+
+    var scale = Math.min(1, MAX_H / cv.height, MAX_W / cv.width);
+    var out = document.createElement("canvas");
+    out.width = Math.max(1, Math.round(cv.width * scale));
+    out.height = Math.max(1, Math.round(cv.height * scale));
+    var c1 = out.getContext("2d");
+    c1.imageSmoothingQuality = "high";
+    c1.drawImage(cv, 0, 0, out.width, out.height);
+
+    return { data: out.toDataURL("image/png"), w: out.width, h: out.height };
+  }
+
+  /* 读文件 → 裁边距 → 压缩 → 上传；返回 {path, repo, bytes, picW, picH} */
+  function uploadLogoFile(file) {
+    return new Promise(function (resolve, reject) {
+      if (!/^image\//.test(file.type)) {
+        reject(new Error("不是图片文件"));
+        return;
+      }
+      if (file.size > 14 * 1024 * 1024) {
+        reject(new Error("超过 14 MB，请先压缩"));
+        return;
+      }
+      var fr = new FileReader();
+      fr.onerror = function () { reject(new Error("读取失败")); };
+      fr.onload = function () {
+        var im = new Image();
+        im.onerror = function () { reject(new Error("图片解码失败")); };
+        im.onload = function () {
+          var out;
+          try {
+            out = compressLogo(im);
+          } catch (e) {
+            reject(new Error("处理失败：" + (e && e.message ? e.message : e)));
+            return;
+          }
+          if (CLOUD) {
+            cloudUploadImage(file.name, out.data, out.w, out.h, "logos")
+              .then(function (d) { d.origBytes = file.size; resolve(d); })
+              .catch(function (e) { reject(new Error((e && e.message) || "上传失败")); });
+            return;
+          }
+          localPost(IMG_UPLOAD_PATH, { name: file.name, dataUrl: out.data, kind: "logos" }, 60000)
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+              if (!d || !d.ok) throw new Error((d && d.error) || "上传失败");
+              d.origBytes = file.size;
+              d.picW = out.w;
+              d.picH = out.h;
+              resolve(d);
+            })
+            .catch(function (e) {
+              var msg = (e && e.message) || "上传失败";
+              if (/Failed to fetch|NetworkError|load failed|ERR_/i.test(msg)) {
+                msg += "（本地服务没在跑？先执行 python v2/publish_server.py）";
+              }
+              reject(new Error(msg));
+            });
+        };
+        im.src = String(fr.result);
+      };
+      fr.readAsDataURL(file);
     });
   }
 
@@ -602,6 +714,115 @@
     show(val);
   }
 
+  /* 经历条目的 logo 上传：比照片那个多一个「两套主题一起预览」的小样。
+     站点的深色主题会把 logo 反白、浅色主题保留原色，只看单张预览判断不了，
+     所以左边给深底、右边给白底，一眼就能看出反白后还认不认得出来。 */
+  function renderLogoPicker(wrap, abs, val, field) {
+    var picker = document.createElement("input");
+    picker.type = "file";
+    picker.accept = "image/png,image/webp,image/svg+xml,image/*";
+    picker.hidden = true;
+
+    var box = document.createElement("div");
+    box.className = "imgpick imgpick--logo";
+
+    var pair = document.createElement("div");
+    pair.className = "logopair";
+    var cellDark = document.createElement("div");
+    cellDark.className = "logopair__cell logopair__cell--dark";
+    cellDark.title = "深色主题：自动反白";
+    var cellLight = document.createElement("div");
+    cellLight.className = "logopair__cell logopair__cell--light";
+    cellLight.title = "浅色主题：保留原色";
+    var a = document.createElement("img");
+    var b = document.createElement("img");
+    a.alt = "深色主题预览";
+    b.alt = "";
+    cellDark.appendChild(a);
+    cellLight.appendChild(b);
+    pair.appendChild(cellDark);
+    pair.appendChild(cellLight);
+
+    var side = document.createElement("div");
+    side.className = "imgpick__side";
+    var st = document.createElement("p");
+    st.className = "imgpick__status";
+    var mt = document.createElement("p");
+    mt.className = "imgpick__meta";
+    var acts = document.createElement("div");
+    acts.className = "imgpick__acts";
+    var pick = document.createElement("button");
+    pick.type = "button";
+    pick.className = "tbtn tbtn--sm";
+    pick.textContent = "上传 logo";
+    var rm = document.createElement("button");
+    rm.type = "button";
+    rm.className = "tbtn tbtn--sm";
+    rm.textContent = "移除";
+    acts.appendChild(pick);
+    acts.appendChild(rm);
+    side.appendChild(st);
+    side.appendChild(mt);
+    side.appendChild(acts);
+
+    box.appendChild(pair);
+    box.appendChild(side);
+    box.appendChild(picker);
+    wrap.appendChild(box);
+    if (field.hint) wrap.appendChild(hintNode(field.hint));
+
+    function repoOf(src) { return String(src || "").replace(/^\.\.\//, ""); }
+    function say(text, bad, busy) {
+      st.textContent = text;
+      st.classList.toggle("is-bad", !!bad);
+      box.classList.toggle("is-busy", !!busy);
+      pick.disabled = !!busy;
+    }
+    function show(src, statusText, metaText) {
+      var s = String(src || "");
+      if (s) {
+        a.src = s; b.src = s;
+        pair.classList.remove("is-empty");
+      } else {
+        a.removeAttribute("src"); b.removeAttribute("src");
+        pair.classList.add("is-empty");
+      }
+      var repo = repoOf(s);
+      say(statusText || (s ? (isPending(repo) ? "已上传 · 待发布" : "已上传") : "还没上传 logo"), false, false);
+      mt.textContent = metaText || (s ? repo + (isPending(repo) ? " · 点「发布」后上线" : "") : "PNG 透明底 · 内容高度 ≥ 128px");
+      rm.disabled = !s;
+      pick.textContent = s ? "替换 logo" : "上传 logo";
+    }
+    a.addEventListener("error", function () {
+      pair.classList.add("is-empty");
+      say("这张图加载不出来，路径可能失效了，建议重新上传", true, false);
+    });
+
+    pick.addEventListener("click", function () { picker.click(); });
+    rm.addEventListener("click", function () {
+      commit(abs, "");
+      show("", "已移除，点「发布」后生效", "文件还留在 assets/img/logos/，需要的话可以手动删");
+    });
+    picker.addEventListener("change", function () {
+      var file = picker.files && picker.files[0];
+      picker.value = "";
+      if (!file) return;
+      say("正在裁边距并压缩 " + file.name + " …", false, true);
+      uploadLogoFile(file).then(function (d) {
+        commit(abs, d.path);
+        markUpload(d.repo);
+        show(d.path, "已上传 " + file.name,
+          Math.round(file.size / 1024) + " KB → " + Math.round(d.bytes / 1024)
+          + " KB · " + d.picW + "×" + d.picH
+          + (CLOUD ? " · 已存入仓库 · 点「发布」后显示在网站上" : " · 点「发布」后上线"));
+      }).catch(function (e) {
+        say((e && e.message) || "上传失败", true, false);
+      });
+    });
+
+    show(val);
+  }
+
   function renderFields(host, fields, basePath) {
     fields.forEach(function (f) {
       renderField(host, f, basePath);
@@ -633,6 +854,13 @@
     /* 照片（影像页）：上传落成真实文件，内容里只存路径 */
     if (field.type === "photo") {
       renderPhotoPicker(wrap, abs, val, field);
+      host.appendChild(wrap);
+      return;
+    }
+
+    /* 经历条目的公司 logo：同样落成真实文件，但走 PNG 保留透明通道 */
+    if (field.type === "logo") {
+      renderLogoPicker(wrap, abs, val, field);
       host.appendChild(wrap);
       return;
     }
