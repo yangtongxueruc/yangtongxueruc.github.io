@@ -1,15 +1,15 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-12T10:43:25+08:00",
- "generated_at_human": "2026-11-12 10:43",
+ "generated_at": "2026-11-12T15:15:06+08:00",
+ "generated_at_human": "2026-11-12 15:15",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "stats": {
   "sources_total": 5,
   "sources_ok": 5,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 69,
-  "items_added": 0,
+  "items": 71,
+  "items_added": 2,
   "archive_max": 3000
  },
  "sources": [
@@ -22,7 +22,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1048,
+   "ms": 1032,
    "http": 200
   },
   {
@@ -34,7 +34,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 171,
+   "ms": 291,
    "http": 200
   },
   {
@@ -46,7 +46,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 616,
+   "ms": 622,
    "http": 200
   },
   {
@@ -58,7 +58,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 314,
+   "ms": 367,
    "http": 200
   },
   {
@@ -70,7 +70,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 872,
+   "ms": 835,
    "http": 200
   }
  ],
@@ -121,19 +121,37 @@ window.SITE_FEED = {
    "kind": "算法竞赛"
   },
   {
+   "title": "questdb/questdb",
+   "url": "https://github.com/questdb/questdb",
+   "date": "2026-11-12T14:59:45+08:00",
+   "summary": "QuestDB is a high performance, open-source, time-series database",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
    "title": "Lumiwealth/lumibot",
    "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-12T10:42:15+08:00",
+   "date": "2026-11-12T14:51:13+08:00",
    "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
   },
   {
-   "title": "questdb/questdb",
-   "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-12T10:03:36+08:00",
-   "summary": "QuestDB is a high performance, open-source, time-series database",
+   "title": "ZhuLinsen/daily_stock_analysis",
+   "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
+   "date": "2026-11-12T14:11:19+08:00",
+   "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "georgezouq/awesome-ai-in-finance",
+   "url": "https://github.com/georgezouq/awesome-ai-in-finance",
+   "date": "2026-11-12T13:25:29+08:00",
+   "summary": "🔬 A curated list of awesome LLMs & deep learning strategies & tools in financial market.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -711,5 +729,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "3c3933c2395e8f80ea855e0c0a450154"
+ "signature": "fd92db00b67843fb9d2850d3db0a3c5f"
 };
