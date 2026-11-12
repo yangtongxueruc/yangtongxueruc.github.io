@@ -1,15 +1,15 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-12T15:15:06+08:00",
- "generated_at_human": "2026-11-12 15:15",
+ "generated_at": "2026-11-13T03:57:04+08:00",
+ "generated_at_human": "2026-11-13 03:57",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "stats": {
   "sources_total": 5,
   "sources_ok": 5,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 71,
-  "items_added": 2,
+  "items": 72,
+  "items_added": 1,
   "archive_max": 3000
  },
  "sources": [
@@ -22,7 +22,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1032,
+   "ms": 1245,
    "http": 200
   },
   {
@@ -34,7 +34,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 291,
+   "ms": 296,
    "http": 200
   },
   {
@@ -42,11 +42,11 @@ window.SITE_FEED = {
    "name": "GitHub 量化开源",
    "type": "json",
    "kind": "开源",
-   "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-13&sort=updated&order=desc&per_page=10",
+   "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-14&sort=updated&order=desc&per_page=10",
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 622,
+   "ms": 660,
    "http": 200
   },
   {
@@ -58,7 +58,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 367,
+   "ms": 362,
    "http": 200
   },
   {
@@ -70,7 +70,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 835,
+   "ms": 859,
    "http": 200
   }
  ],
@@ -112,7 +112,7 @@ window.SITE_FEED = {
    "kind": "算法竞赛"
   },
   {
-   "title": "Codeforces Round (Div. 2)",
+   "title": "Codeforces Round 1135 (Div. 2)",
    "url": "https://codeforces.com/contest/2285",
    "date": "2026-11-15T22:35:00+08:00",
    "summary": "",
@@ -121,22 +121,58 @@ window.SITE_FEED = {
    "kind": "算法竞赛"
   },
   {
+   "title": "Lumiwealth/lumibot",
+   "url": "https://github.com/Lumiwealth/lumibot",
+   "date": "2026-11-13T03:37:46+08:00",
+   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
    "title": "questdb/questdb",
    "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-12T14:59:45+08:00",
+   "date": "2026-11-13T03:31:58+08:00",
    "summary": "QuestDB is a high performance, open-source, time-series database",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
   },
   {
-   "title": "Lumiwealth/lumibot",
-   "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-12T14:51:13+08:00",
-   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "title": "man-group/ArcticDB",
+   "url": "https://github.com/man-group/ArcticDB",
+   "date": "2026-11-13T02:41:38+08:00",
+   "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
+  },
+  {
+   "title": "lballabio/QuantLib",
+   "url": "https://github.com/lballabio/QuantLib",
+   "date": "2026-11-13T02:17:32+08:00",
+   "summary": "The QuantLib C++ library",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "HKUDS/Vibe-Trading",
+   "url": "https://github.com/HKUDS/Vibe-Trading",
+   "date": "2026-11-13T01:34:48+08:00",
+   "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "NeurIPS 2026｜LiveOption：大模型会做期权交易吗",
+   "url": "https://mp.weixin.qq.com/s?__biz=Mzg2MzAwNzM0NQ==&mid=2247494882&idx=1&sn=b27be62561fbcc01f400b391a3047d5b&chksm=ce7d8bfcf90a02eafdedf144e5a7a5467499c0bd166c1d361357a227a61b0ffd983998cd86fc#rd",
+   "date": "2026-11-12T17:02:49+08:00",
+   "summary": "",
+   "source": "wechat-19884288",
+   "source_name": "QuantML · 论文",
+   "kind": "公众号"
   },
   {
    "title": "ZhuLinsen/daily_stock_analysis",
@@ -222,15 +258,6 @@ window.SITE_FEED = {
    "kind": "开源"
   },
   {
-   "title": "man-group/ArcticDB",
-   "url": "https://github.com/man-group/ArcticDB",
-   "date": "2026-11-12T02:14:17+08:00",
-   "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
    "title": "HiThink-Tech/Financial-API",
    "url": "https://github.com/HiThink-Tech/Financial-API",
    "date": "2026-11-11T21:41:41+08:00",
@@ -262,15 +289,6 @@ window.SITE_FEED = {
    "url": "https://github.com/OpenByteInc/QuantDinger",
    "date": "2026-11-11T17:46:02+08:00",
    "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "HKUDS/Vibe-Trading",
-   "url": "https://github.com/HKUDS/Vibe-Trading",
-   "date": "2026-11-11T17:40:22+08:00",
-   "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -325,15 +343,6 @@ window.SITE_FEED = {
    "url": "https://github.com/jesse-ai/jesse",
    "date": "2026-11-10T18:05:34+08:00",
    "summary": "An advanced crypto trading bot written in Python",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "lballabio/QuantLib",
-   "url": "https://github.com/lballabio/QuantLib",
-   "date": "2026-11-10T17:29:36+08:00",
-   "summary": "The QuantLib C++ library",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -729,5 +738,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "fd92db00b67843fb9d2850d3db0a3c5f"
+ "signature": "13f3326e6bfba5c9157cd4e407743a24"
 };
