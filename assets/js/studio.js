@@ -46,12 +46,14 @@
   /* ---------------- 提示 ---------------- */
   var toastEl = $("#toast");
   var toastTimer;
-  function toast(msg) {
+  function toast(msg, ms) {
     if (!toastEl) return;
     toastEl.textContent = msg;
     toastEl.classList.add("is-on");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toastEl.classList.remove("is-on"); }, 2200);
+    /* 默认 2.2 秒够读一句话。发布成功那条要带上「看到旧页面怎么刷新」，
+       明显更长，所以允许按条指定停留时间，否则末尾的提示还没读到就消失了。 */
+    toastTimer = setTimeout(function () { toastEl.classList.remove("is-on"); }, ms || 2200);
   }
 
   function setState(text, dirty) {
@@ -2103,9 +2105,15 @@
         + (pruned ? " · 清掉 " + pruned + " 条失效样式" : "");
         if (dep.ok) {
           setState("已发布 v" + v + (dep.auto ? " · 自动上线中" : " · 已上线") + warnTail, !!warnTail);
+          /* 末尾这句是踩出来的：GitHub Pages 给 HTML 也是 10 分钟缓存，
+             刚发布就刷新，往往拿到的还是指向旧版本号的那份 HTML ——
+             于是「改了但没体现」，实际上内容早就进仓库了。
+             只有强制刷新能绕过，普通刷新会在 10 分钟内继续吃到缓存。 */
           toast((dep.auto ? "已提交，GitHub Actions 正在构建上线" : "已上线") + tail
             + " · 约一分钟后 " + (dep.site || ("https://" + GH.repo.split("/")[0] + ".github.io/"))
-            + " 生效" + (warnMsg ? "；注意：" + warnMsg : ""));
+            + " 生效。" + (warnMsg ? "注意：" + warnMsg + "。" : "")
+            + "若看到的还是旧内容，强制刷新一次（Ctrl/⌘ + Shift + R）："
+            + "GitHub Pages 给页面 10 分钟缓存，普通刷新会继续用它。", 9000);
         } else {
         setState("已发布 v" + v + " · 线上未更新" + warnTail, true);
         toast("已发布" + tail + "；" + (dep.msg || "但线上未更新")
