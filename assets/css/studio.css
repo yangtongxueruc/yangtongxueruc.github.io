@@ -545,6 +545,39 @@ select.inp { cursor: pointer; }
 }
 .logopair.is-empty .logopair__cell--light::after { color: #9a9a9a; }
 
+/* 显示高度微调：公式给出的是起点，带徽标的牌子要按眼睛再挪一两格 */
+.logoh {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: var(--space-8);
+  font-size: var(--text-xs);
+  color: var(--text-3);
+}
+.logoh__lbl { margin-right: 2px; white-space: nowrap; }
+.logoh__num {
+  min-width: 38px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}
+.logoh__btn {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--text-2);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+}
+.logoh__btn:hover:not(:disabled) { border-color: var(--text-2); color: var(--text-1); }
+.logoh__btn:disabled { opacity: 0.35; cursor: default; }
+
 /* ---------- 排版总览 ---------- */
 .ty {
   position: fixed;

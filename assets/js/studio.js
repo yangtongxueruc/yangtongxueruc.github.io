@@ -350,30 +350,37 @@
     return out;
   }
 
-  /* 按「主体字高」算显示高度 —— 这是几张 logo 摆在一起能看着一样大的关键。
-     原图里主体占画布的比例差很多：纯字标能占 95%，带一行英文副标题的只占 58%。
-     要是统一按画布高度缩放，字的大小差近四成，放在列表里一眼就看出不齐。
-     做法：逐行数不透明像素，取最宽的那段连续高密度行当「主体」，
-     再反推出画布该显示多高；上下夹在 22~32px，既保证字够大又不至于某张特别高。 */
+  /* 按「文字主体高度」算显示高度 —— 这是几张 logo 摆在一起能看着一样大的关键。
+     原图里文字占画布的比例差得很远：纯字标能顶满 128px 画布，
+     带方形图标 + 一行英文副标题的，中文只占 76px。统一按画布高度缩放，
+     字的大小就差了将近七成，一列摆下来一眼看穿。
+     做法：逐行取最左/最右的不透明像素算出这一行的横向跨度，
+     文字行的跨度接近整幅宽，只有图标的那几行跨度很窄（图标只占左边一小块），
+     于是「跨度 ≥ 最宽行 60%」的连续行就是文字带，再反推画布该显示多高。
+     上下夹在 18~36px：够大能看清，又不至于让带大图标的牌子把整行顶开。 */
   function logoDisplayHeight(cv) {
-    var TARGET = 19, MIN_H = 22, MAX_H = 32;
+    var TARGET = 20, MIN_H = 18, MAX_H = 36;
     var c = cv.getContext("2d");
     var w = cv.width, h = cv.height;
     var d;
-    try { d = c.getImageData(0, 0, w, h).data; } catch (e) { return 28; }
-    var rows = [], max = 0;
+    try { d = c.getImageData(0, 0, w, h).data; } catch (e) { return 26; }
+    var spans = [], maxSpan = 0;
     for (var y = 0; y < h; y++) {
-      var n = 0, row = y * w * 4;
+      var minX = -1, maxX = -1, row = y * w * 4;
       for (var x = 0; x < w; x++) {
-        if (d[row + x * 4 + 3] > 12) n++;
+        if (d[row + x * 4 + 3] > 12) {
+          if (minX < 0) minX = x;
+          maxX = x;
+        }
       }
-      rows.push(n);
-      if (n > max) max = n;
+      var sp = minX < 0 ? 0 : maxX - minX + 1;
+      spans.push(sp);
+      if (sp > maxSpan) maxSpan = sp;
     }
-    if (!max) return 28;
-    var thr = max * 0.25, best = [0, -1], cur = null;
+    if (!maxSpan) return 26;
+    var thr = maxSpan * 0.6, best = [0, -1], cur = null;
     for (var y2 = 0; y2 < h; y2++) {
-      if (rows[y2] >= thr) {
+      if (spans[y2] >= thr) {
         if (cur === null) cur = y2;
       } else if (cur !== null) {
         if (y2 - 1 - cur > best[1] - best[0]) best = [cur, y2 - 1];
@@ -382,7 +389,7 @@
     }
     if (cur !== null && h - 1 - cur > best[1] - best[0]) best = [cur, h - 1];
     var band = best[1] - best[0] + 1;
-    if (band <= 2) return 28;
+    if (band <= 2) return 26;
     return Math.max(MIN_H, Math.min(MAX_H, Math.round(TARGET * h / band)));
   }
 
@@ -803,6 +810,33 @@
     side.appendChild(mt);
     side.appendChild(acts);
 
+    /* 自动算出的高度只是起点。带圆形徽标的牌子（招商局那种）按比例放大后，
+       图标会比纯字标的牌子重，靠肉眼判断比靠公式准 —— 给一对加减号微调，
+       改的是同名的 logoH 字段，不用重新上传。 */
+    var hRow = document.createElement("div");
+    hRow.className = "logoh";
+    var hLbl = document.createElement("span");
+    hLbl.className = "logoh__lbl";
+    hLbl.textContent = "高度";
+    var hMinus = document.createElement("button");
+    hMinus.type = "button";
+    hMinus.className = "logoh__btn";
+    hMinus.textContent = "−";
+    hMinus.title = "调矮 1px";
+    var hVal = document.createElement("span");
+    hVal.className = "logoh__num";
+    hVal.textContent = "—";
+    var hPlus = document.createElement("button");
+    hPlus.type = "button";
+    hPlus.className = "logoh__btn";
+    hPlus.textContent = "+";
+    hPlus.title = "调高 1px";
+    hRow.appendChild(hLbl);
+    hRow.appendChild(hMinus);
+    hRow.appendChild(hVal);
+    hRow.appendChild(hPlus);
+    side.appendChild(hRow);
+
     box.appendChild(pair);
     box.appendChild(side);
     box.appendChild(picker);
@@ -830,6 +864,18 @@
       mt.textContent = metaText || (s ? repo + (isPending(repo) ? " · 点「发布」后上线" : "") : "PNG 透明底 · 内容高度 ≥ 128px");
       rm.disabled = !s;
       pick.textContent = s ? "替换 logo" : "上传 logo";
+      syncH();
+    }
+    /* 微调只在有图的时候可用；读的是数据里的 logoH，没有就按 26 起步 */
+    function readH() {
+      var v = hAbs ? parseInt(getPath(S.content, hAbs), 10) : NaN;
+      return v > 0 ? v : 26;
+    }
+    function syncH() {
+      var on = !!String(getPath(S.content, abs) || "").trim();
+      hVal.textContent = on ? readH() + "px" : "—";
+      hMinus.disabled = !on || readH() <= 14;
+      hPlus.disabled = !on || readH() >= 48;
     }
     a.addEventListener("error", function () {
       pair.classList.add("is-empty");
@@ -841,6 +887,14 @@
     var hAbs = abs.replace(/\.logo$/, ".logoH") === abs ? "" : abs.replace(/\.logo$/, ".logoH");
 
     pick.addEventListener("click", function () { picker.click(); });
+    function bump(d) {
+      if (!hAbs) return;
+      var v = Math.max(14, Math.min(48, readH() + d));
+      commit(hAbs, String(v));
+      syncH();
+    }
+    hMinus.addEventListener("click", function () { bump(-1); });
+    hPlus.addEventListener("click", function () { bump(1); });
     rm.addEventListener("click", function () {
       commit(abs, "");
       if (hAbs) commit(hAbs, "");
