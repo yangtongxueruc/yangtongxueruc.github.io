@@ -1,9 +1,9 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/12 09:27:36
+   导出时间：2026/11/12 09:29:40
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 68,
+  "version": 69,
   "updatedAt": "2026-11-12",
   "styles": {
     "blocks": {
@@ -216,7 +216,7 @@ window.V2_CONTENT = {
     "role": "校招HR",
     "company": "明汯投资",
     "email": "zyang@mhfunds.com",
-    "siteTitle": "",
+    "siteTitle": "Zhijie Yang | Campus Recruiter",
     "favicon": "🐑",
     "description": "",
     "lang": "zh-CN",
@@ -375,7 +375,7 @@ window.V2_CONTENT = {
             },
             {
               "value": "8",
-              "suffix": "",
+              "suffix": "+",
               "label": "在招岗位",
               "note": "研究 / 工程 · 校招 / 社招"
             }
