@@ -22,37 +22,21 @@
    · 首屏保留了人物头像，缩成 52px 圆形挪到标题上方（demo 里直接没有）。
    ========================================================================== */
 
-/* ---------- 标题衬线：自托管子集（只在这层用得到） ----------
-   之前写的是 "Songti SC"，桌面预览（Windows 落到 SimSun）看着是宋体，
-   真机上却不是：
-     · Android 没有任何内置中文衬线字体，`serif` 兜底 = Noto Sans CJK → 黑体；
-     · iOS 上 "Songti SC" 时灵时不灵（Chrome for iOS 尤其不稳定）。
-   所以把思源宋体的子集打进站里（只收站点实际用到的字，见 scripts/build_fonts.py），
-   两端渲同一份字形，跟系统装了什么字体彻底脱钩。
-   桌面的标题规则不引用这个字族，不会触发下载。 */
-@font-face {
-  font-family: "M Serif SC";
-  src: url("../fonts/serif-sc-400.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "M Serif SC";
-  src: url("../fonts/serif-sc-600.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
+/* ---------- 标题用哪种字：跟 demo 一致，黑体 ----------
+   曾经在这一层换成自托管宋体（"M Serif SC"），理由是「真机没有中文衬线」。
+   但 demo 本来就是黑的：`--font-sans` 一路落到 PingFang / Noto Sans CJK。
+   换成宋体之后反而和 demo 不是一套东西了，标题看着轻、也松散。
+   所以字族不再自建，直接用站点的 --font-sans，两端字形随系统走。
+   （v2/assets/fonts 下的宋体子集暂时留着，没有被任何规则引用，
+     浏览器不会去下载；要恢复只需把 --m-display 指回去。） */
 
 @media (max-width: 720px) {
   :root {
     --m-pad: 24px;
     --m-accent: var(--accent);
     --m-hair: var(--border);
-    /* 自托管字族排第一；后面那串是没等到字体（或出现子集外的字）时的兜底 */
-    --m-display: "M Serif SC", "Songti SC", "Source Han Serif SC",
-      "Noto Serif CJK SC", "STSong", "SimSun", "Songti TC", Georgia, serif;
+    /* 和 demo 同一套字：站点黑体，不再自建衬线。后面那串是极端环境的兜底 */
+    --m-display: var(--font-sans);
     --m-ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
@@ -186,19 +170,21 @@
     --m-k: 0.5;
     font-family: var(--m-display);
     font-size: calc(var(--tb-px, 72px) * var(--m-k)) !important;
-    line-height: var(--tb-lhr, 1.32) !important;
+    /* demo 的标题是「紧」的：36px 配 39.6px 行高（1.1）、字距 −1.26px（−0.035em）。
+       之前这里用了 1.32 行高 + 字距归零，同样的字号看着松、也没那么有力。 */
+    line-height: var(--tb-lhr, 1.1) !important;
     font-weight: 600;
-    letter-spacing: 0;
+    letter-spacing: -0.035em;
     margin: 0 !important;
   }
   .mask-line { display: block; }
 
   .hero__sub {
-    --m-k: 0.83;
+    --m-k: 1.11;
     margin: 20px 0 0;
     max-width: none;
     font-size: calc(var(--tb-px, 18px) * var(--m-k)) !important;
-    line-height: var(--tb-lhr, 1.8) !important;
+    line-height: var(--tb-lhr, 1.9) !important;
     color: var(--text-2);
   }
   .hero__actions {
@@ -311,13 +297,15 @@
   .h2,
   .pin__head .h2,
   .cta h2 {
-    --m-k: 0.6;
+    --m-k: 0.724;
     font-family: var(--m-display);
     font-size: calc(var(--tb-px, 42px) * var(--m-k)) !important;
-    /* 标题里有 1.29 倍的强调片段，同样需要行距下限，否则第二行会被压上去 */
-    line-height: max(1.34, var(--tb-lhr, 1.44)) !important;
+    /* demo 的章节标题在 390 宽是 30.4px / 行高 42 / 字距 −0.61（−0.02em）。
+       系数 0.724 就是让 42px 的桌面值落到 30.4，和 demo 同一个落点。
+       行距仍保留下限：标题里有 1.29 倍的强调片段，压太紧第二行会贴上。 */
+    line-height: max(1.38, var(--tb-lhr, 1.38)) !important;
     font-weight: 600;
-    letter-spacing: 0;
+    letter-spacing: -0.02em;
     margin-top: 0 !important;
     margin-bottom: 20px !important;
     text-wrap: balance;
@@ -334,16 +322,17 @@
   .only-wide { display: inline; }
 
   /* ---------- 关于 ---------- */
-  /* 衬线、约为桌面 38px 的一半。之前这里既丢了衬线、又把字号写死成 19px，
-     导致「我不是仅为了招聘」这句强调和正文一样大都变成了黑体。 */
+  /* 这一段是整页唯一「必须收」的地方：它的字号是作者在控制台里按桌面手调的
+     38px / 52px 行高，原样搬到 390 宽就是 28.5px 配 1.82 行距，一句话占四行。
+     收到 23px、行距 1.68 之后，既压得住场，又不会和下面正文拉开断层。
+     （demo 之所以显得这里偏大，就是因为它根本没做这一步。） */
   .about__lead {
-    --m-k: 0.5;
+    --m-k: 0.605;
     font-family: var(--m-display);
     font-size: calc(var(--tb-px, 38px) * var(--m-k)) !important;
-    /* 行距给个下限：强调句比整段大 1.42 倍时，作者为桌面定的 1.37 倍行距
-       会让两行几乎贴上，所以取「作者值」和下限里大的那个 */
-    line-height: max(1.55, var(--tb-lhr, 1.62)) !important;
-    letter-spacing: 0;
+    /* 行距给个下限：强调句比整段大 1.42 倍时，作者定的行距会让两行几乎贴上 */
+    line-height: max(1.68, var(--tb-lhr, 1.7)) !important;
+    letter-spacing: -0.012em;
     margin-bottom: 24px !important;
     max-width: none !important;
     color: var(--text-1);
@@ -355,7 +344,7 @@
   }
   .body-text,
   .lede {
-    --m-k: 0.94;
+    --m-k: 1;
     font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
     line-height: var(--tb-lhr, 1.8) !important;
     margin-bottom: 14px !important;
@@ -446,7 +435,7 @@
     color: var(--text-3);
   }
   .tl-item__desc {
-    --m-k: 0.84;
+    --m-k: 1;
     grid-column: 2 / -1;
     grid-row: 3;
     margin: 8px 0 0 !important;
@@ -483,7 +472,7 @@
     margin-bottom: 8px;
   }
   .info-card p {
-    --m-k: 0.84;
+    --m-k: 1;
     font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
     line-height: var(--tb-lhr, 1.78) !important;
     margin: 0 !important;
@@ -549,12 +538,12 @@
     scroll-snap-align: start;
   }
   .role h3 {
-    --m-k: 0.94;
+    --m-k: 1.222;
     font-size: calc(var(--tb-px, 18px) * var(--m-k)) !important;
-    line-height: var(--tb-lhr, 1.4) !important;
+    line-height: var(--tb-lhr, 1.35) !important;
   }
   .role__desc {
-    --m-k: 0.84;
+    --m-k: 1;
     font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
     line-height: 1.75 !important;
     margin: 0 !important;
@@ -578,9 +567,16 @@
     text-transform: none;
     color: var(--text-3);
   }
-  body[data-page="home"] .cta h2 { margin-top: 10px; }
+  body[data-page="home"] .cta h2 {
+    margin-top: 10px;
+    /* 联系区标题的桌面基准是 56px（不是其它区块的 42），跟着 .h2 的系数走会到
+       40.5px，「一个足够难的问题。」就被挤断成两行、末字「题。」孤零零一行。
+       这里单独收到 37px，正好两行收住。 */
+    --m-k: 0.66;
+    font-size: calc(var(--tb-px, 56px) * var(--m-k)) !important;
+  }
   body[data-page="home"] .cta p {
-    --m-k: 0.83;
+    --m-k: 1;
     margin: 16px 0 0 !important;
     max-width: none !important;
     font-size: calc(var(--tb-px, 18px) * var(--m-k)) !important;
@@ -673,7 +669,7 @@
     line-height: inherit !important;
   }
   .pagehead .lead {
-    --m-k: 0.83;
+    --m-k: 1;
     margin-top: 16px !important;
     max-width: none !important;
     font-size: calc(var(--tb-px, 18px) * var(--m-k)) !important;
@@ -685,14 +681,14 @@
     border-top: 1px solid var(--m-hair);
   }
   .block__head h2 {
-    --m-k: 0.62;
+    --m-k: 0.75;
     font-family: var(--m-display);
     font-size: calc(var(--tb-px, 32px) * var(--m-k)) !important;
     line-height: var(--tb-lhr, 1.4) !important;
     letter-spacing: 0;
   }
   .block__head p {
-    --m-k: 0.81;
+    --m-k: 1;
     margin-top: 6px;
     font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
     line-height: var(--tb-lhr, 1.7) !important;
