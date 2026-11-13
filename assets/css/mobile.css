@@ -580,6 +580,16 @@
     border-radius: 20px;
     scroll-snap-align: start;
   }
+  /* 触屏没有真正的 hover：手指点一下就粘住 = 卡片一直悬停，而 home.css 的
+     `.role:hover` 带 translateY(-4px)，上浮那一截会被父级的渐隐 mask（以及
+     iOS 上对 mask 边界的处理）裁掉，看起来就是「顶部缺一条」。
+     手机上干脆不做位移：选中反馈交给描边颜色 + 阴影，这两样都不会越界，
+     任何浏览器都不会被切。桌面端保持原来的上浮。 */
+  .role:hover,
+  .role:focus-visible {
+    transform: none;
+    box-shadow: var(--shadow-2);
+  }
   .role h3 {
     font-size: var(--tb-px0, 21.996px) !important;
     line-height: var(--tb-lhr, 1.35) !important;
