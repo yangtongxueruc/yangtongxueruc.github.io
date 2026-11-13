@@ -509,18 +509,23 @@
   }
   /* 头：标题独占一行，说明和翻页按钮并排 —— 说明靠右、与 40px 箭头垂直居中。
      说明原来独占标题下两行，把「标题 → 卡片」的间距撑到 100px 以上，
-     和别的区块（标题下 20~24px 就进内容）完全不是一个节奏。 */
+     和别的区块（标题下 20~24px 就进内容）完全不是一个节奏。
+     必须显式写 flex-direction: row —— 基础样式在窄屏把 .pin__head 改成了
+     column，那样 align-items:center 变成「水平居中」、子项的 flex-basis:100%
+     变成「高度拉满」，标题块只剩自己的内容宽度并被居中，就和别区左边缘对不上。 */
   .pin__head {
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: flex-start;
     /* 基础样式是 width:min(1240px,100% - 40px) + margin:0 auto：
        窄屏上 350px 的盒子配 auto 居中，和其它区块的 24px 左边缘对不上。
        改成吃满内容区、左右各 24。 */
     width: auto !important;
     margin: 0 var(--m-pad) 24px !important;
   }
-  .pin__head > div { flex: 1 0 100%; }
+  .pin__head > div { flex: 1 0 100%; min-width: 0; }
   .pin__head .muted {
     order: 2;
     flex: 1 1 auto;
@@ -728,51 +733,60 @@
 
   /* ---------- 信息库：搜索与筛选条 ----------
      桌面是「搜索框 + 一排 chip + 计数」横排；手机照搬会占掉 206px，
-     而且 .wrap 套 .wrap 让它比卡片又多缩进 24px。这里压成三行、
-     并且和卡片同一条左边缘（24px）。 */
+     而且 .wrap 套 .wrap 让它比卡片又多缩进 24px。现在压成「单行」：
+     左边半个搜索框，右边一排 chip 横滚，计数在手机上没意义（卡片自带张数），
+     直接不显示。整条高度从 206 压到 ~70。 */
   .toolbar {
     top: 52px;                       /* 导航是 52px，原来按桌面 72px 算会悬空 */
     margin-top: 20px !important;
-    padding: 10px 0;
+    padding: 8px 0;
     /* 背景条拉到屏幕两边（.wrap 两侧各 24px），内部再用 24 对齐卡片 */
     margin-inline: calc(-1 * var(--m-pad)) !important;
     padding-inline: var(--m-pad);
   }
   .toolbar__inner {
-    gap: 8px;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
     padding-inline: 0 !important;    /* 去掉第二层 24px 内缩 */
   }
-  .search { flex: 1 1 100%; max-width: none; }
+  /* 搜索框占一半，剩下的宽度留给 chip */
+  .search { flex: 0 0 calc(50% - 5px); max-width: none; }
   .search input {
-    min-height: 38px;
-    padding: 6px 10px 6px 34px;
-    border-radius: 10px;
-    font-size: 13.5px;
+    min-height: 34px;
+    padding: 4px 8px 4px 30px;
+    border-radius: 9px;
+    font-size: 12.5px;
   }
-  .search svg { width: 13px; height: 13px; left: 11px; }
-  /* chip 单行横滚：换行会把工具条又撑回两行高，横滚只占 30px */
+  .search svg { width: 12px; height: 12px; left: 10px; }
+  /* chip 单行横滚：换行会把工具条又撑回两行高 */
   .chips {
-    flex: 1 1 100%;
+    flex: 1 1 0;
+    min-width: 0;
     flex-wrap: nowrap;
+    align-items: center;
     gap: 6px;
     overflow-x: auto;
     overscroll-behavior-x: contain;
-    padding-bottom: 2px;
+    padding-block: 1px;
     scrollbar-width: none;
+  }
+  /* 横滚的右端做一段渐隐：不然最后一个 chip 会被硬切在半个字上，像裁歪了 */
+  .chips {
+    mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 20px), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 20px), transparent 100%);
   }
   .chips::-webkit-scrollbar { display: none; }
   .chip {
     flex: 0 0 auto;
-    min-height: 30px;
-    padding: 2px 10px;
-    font-size: 12.5px;
+    min-height: 26px;
+    padding: 1px 9px;
+    font-size: 11.5px;
+    letter-spacing: 0;
     border-radius: 999px;
   }
-  .toolbar__count {
-    margin-left: auto;
-    font-size: 11px;
-    letter-spacing: 0.02em;
-  }
+  /* 手机上不显示「29 个资源」：占一行、信息量也低 */
+  .toolbar__count { display: none; }
   /* 工具条到第一张卡片的距离：内联写的是 var(--space-32)（32px），
      加上工具条的 padding 会到 48px，比其它区块松一档。 */
   [data-modules] { margin-top: 20px !important; }

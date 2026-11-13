@@ -3,7 +3,7 @@
    导出时间：2026/11/13 19:00:39
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 106,
+  "version": 107,
   "updatedAt": "2026-11-13",
   "styles": {
     "blocks": {
@@ -586,14 +586,14 @@ window.V2_CONTENT = {
         "lh": 50,
         "mb": 30,
         "weight": "600",
-        "align": "left"
+        "align": "center"
       },
       "links-page-lead-0": {
         "size": 16,
         "lh": 27,
         "mb": 0,
         "weight": "400",
-        "align": "left"
+        "align": "center"
       },
       "gallery-page-kicker-0": {
         "size": 16,
@@ -606,7 +606,7 @@ window.V2_CONTENT = {
         "lh": 50,
         "mb": 24,
         "weight": "600",
-        "align": "left"
+        "align": "center"
       },
       "feed-page-kicker-0": {
         "size": 16,
