@@ -33,6 +33,9 @@
 @media (max-width: 720px) {
   :root {
     --m-pad: 24px;
+    /* 窄屏导航是固定定位、实测 52px（base.css 的 --nav-h 88px 是桌面值，
+       这里不能再引用它，否则留白会多算 36px） */
+    --m-nav: 52px;
     --m-accent: var(--accent);
     --m-hair: var(--border);
     /* 和 demo 同一套字：站点黑体，不再自建衬线。后面那串是极端环境的兜底 */
@@ -717,18 +720,32 @@
     line-height: var(--tb-lhr, 1.8) !important;
     color: var(--text-2);
   }
-  /* 信息库 / 相册的页头在窄屏居中：这两页标题是「两句话」式的短句，
-     左对齐时右半边整片空着，看着像没排完。控制台若给标题或引言设过
-     对齐方式，行内值会盖过这里，仍以作者设置为准。 */
+  /* 信息库 / 相册的页头：文字块要落在这一区块的「水平中线」上。
+     上下可见留白取同一个值，内容自然居中；再叠一层 flex 居中，
+     任何设备把区块撑高都不会偏。
+     上留白必须把固定导航的 52px 算进去 —— 导航是 fixed、会盖住页头顶部，
+     只写 64px 的话肉眼看到的上留白只剩十几像素，文字就显偏上。
+     对齐方式不再在这里写死：标题/引言的对齐由控制台的 align 决定
+     （2026-11-13 起作者把这两页设成左对齐），标签跟着继承同一边就一致了。 */
   body[data-page="links"] .pagehead,
   body[data-page="gallery"] .pagehead {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: calc(var(--m-nav) + 64px) 64px;
   }
-  body[data-page="links"] .pagehead h1,
-  body[data-page="gallery"] .pagehead h1,
-  body[data-page="links"] .pagehead .lead,
-  body[data-page="gallery"] .pagehead .lead {
-    margin-inline: auto;
+  /* 紧随页头的第一个区块带 64px 外边距，会把「区块边界」推到 128px 外，
+     页头里明明是居中的文字，看着又变成偏上。把这段外边距收掉，分隔线就落在
+     页头下沿，文字正好落在「上一沿 → 分隔线」的正中间。 */
+  body[data-page="links"] .pagehead + .block,
+  body[data-page="gallery"] .pagehead + .block {
+    margin-top: 0 !important;
+  }
+  /* 最后一块的段后留白会算进页头下沿：相册页只有标题、没有引言，标题自己的
+     margin-bottom 就成了页面底部那段「看不见的空白」，把下沿撑到 88px。 */
+  body[data-page="links"] .pagehead .wrap > *:last-child,
+  body[data-page="gallery"] .pagehead .wrap > *:last-child {
+    margin-bottom: 0 !important;
   }
 
   /* ---------- 信息库：搜索与筛选条 ----------
@@ -737,7 +754,7 @@
      左边半个搜索框，右边一排 chip 横滚，计数在手机上没意义（卡片自带张数），
      直接不显示。整条高度从 206 压到 ~70。 */
   .toolbar {
-    top: 52px;                       /* 导航是 52px，原来按桌面 72px 算会悬空 */
+    top: var(--m-nav);               /* 导航固定 52px，原来按桌面 72px 算会悬空 */
     margin-top: 20px !important;
     padding: 8px 0;
     /* 背景条拉到屏幕两边（.wrap 两侧各 24px），内部再用 24 对齐卡片 */
