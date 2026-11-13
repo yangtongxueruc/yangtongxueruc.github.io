@@ -1,9 +1,9 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/13 18:09:57
+   导出时间：2026/11/13 18:58:01
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 104,
+  "version": 105,
   "updatedAt": "2026-11-13",
   "styles": {
     "blocks": {
@@ -158,7 +158,8 @@ window.V2_CONTENT = {
         },
         {
           "text": "一份不那么水的地图",
-          "scale": 1
+          "scale": 1,
+          "weight": "400"
         }
       ],
       "gallery-page-title-0": [
@@ -184,6 +185,12 @@ window.V2_CONTENT = {
           "text": "我在找的岗位",
           "scale": 1.185
         }
+      ],
+      "links-page-lead-0": [
+        {
+          "text": "一些我会自己看，也会推荐给对量化感兴趣的人的内容。",
+          "scale": 1.5
+        }
       ]
     },
     "roles": {
@@ -204,8 +211,9 @@ window.V2_CONTENT = {
         "lh": 52
       },
       "pageTitle": {
-        "size": 48,
-        "lh": 66
+        "size": 58,
+        "lh": 76,
+        "mb": 58
       },
       "h1": {
         "size": 75,
@@ -593,15 +601,17 @@ window.V2_CONTENT = {
       },
       "links-page-title-0": {
         "size": 36,
-        "lh": 49.5,
-        "mb": 24,
-        "weight": "600"
+        "lh": 50,
+        "mb": 30,
+        "weight": "600",
+        "align": "left"
       },
       "links-page-lead-0": {
         "size": 16,
-        "lh": 27.01,
+        "lh": 27,
         "mb": 0,
-        "weight": "400"
+        "weight": "400",
+        "align": "left"
       },
       "gallery-page-kicker-0": {
         "size": 16,
@@ -611,9 +621,10 @@ window.V2_CONTENT = {
       },
       "gallery-page-title-0": {
         "size": 36,
-        "lh": 49.5,
+        "lh": 50,
         "mb": 24,
-        "weight": "600"
+        "weight": "600",
+        "align": "left"
       },
       "feed-page-kicker-0": {
         "size": 16,
