@@ -3041,11 +3041,16 @@
       var baseFs = parseFloat(el.style.getPropertyValue("--tb-px")) ||
         parseFloat(getComputedStyle(el).fontSize) || 0;
       var curFs = parseFloat(getComputedStyle(el).fontSize) || baseFs;
+      /* 桌面：行高要照顾放大的片段，否则片段折行时两行会叠在一起。
+         窄屏不用：.tb-run 已经改成按自身字号算行高，片段自己撑得开，
+         这里再乘一遍放大倍数，只会把整段行距虚高到 2.5 倍。 */
       var grow = 1;
-      Array.prototype.forEach.call(el.querySelectorAll(".tb-run"), function (s) {
-        var v = parseFloat(getComputedStyle(s).fontSize) || 0;
-        if (curFs > 0 && v / curFs > grow) grow = v / curFs;
-      });
+      if (window.innerWidth > 720) {
+        Array.prototype.forEach.call(el.querySelectorAll(".tb-run"), function (s) {
+          var v = parseFloat(getComputedStyle(s).fontSize) || 0;
+          if (curFs > 0 && v / curFs > grow) grow = v / curFs;
+        });
+      }
       if (baseFs > 0) markLead(el, baseFs * grow * naturalLeading(el));
     });
   }
