@@ -1,9 +1,9 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/13 21:56:50
+   导出时间：2026/11/13 21:58:19
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 108,
+  "version": 109,
   "updatedAt": "2026-11-13",
   "styles": {
     "blocks": {
@@ -586,14 +586,14 @@ window.V2_CONTENT = {
         "lh": 50,
         "mb": 30,
         "weight": "600",
-        "align": "center"
+        "align": "left"
       },
       "links-page-lead-0": {
         "size": 16,
         "lh": 27,
         "mb": 0,
         "weight": "400",
-        "align": "center"
+        "align": "left"
       },
       "gallery-page-kicker-0": {
         "size": 16,
@@ -606,7 +606,7 @@ window.V2_CONTENT = {
         "lh": 50,
         "mb": 24,
         "weight": "600",
-        "align": "center"
+        "align": "left"
       },
       "feed-page-kicker-0": {
         "size": 16,
