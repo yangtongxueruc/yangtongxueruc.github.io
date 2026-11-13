@@ -2549,15 +2549,26 @@
     /* 视口变了（横竖屏、开控制台、手机选转）字号倍率要重算：
        自然字号变了，倍数不变才能保持同一比例。 */
     var rsTimer = 0;
+    var lastNarrow = window.innerWidth <= 720;
     window.addEventListener("resize", function () {
+      /* 跨过 720px 分界线 = 换了编辑端。面板里缓存的是上一端的数值，
+         继续开着会把旧端的 px 写进新端的数据里，所以先关掉。 */
+      var nowNarrow = window.innerWidth <= 720;
+      if (nowNarrow !== lastNarrow) {
+        lastNarrow = nowNarrow;
+        closePick();
+      }
       clearTimeout(rsTimer);
       rsTimer = setTimeout(function () {
         if (!state.content) return;
         resetNatural();
+        applyTypeStyles(state.content);
         applyBlockStyles(state.content);
         applyRuns();
         if (panelRefresh) panelRefresh();
         if (guideOn) updateGuides();
+        /* 跨过 720px 等于换了编辑端，排版总览里的数字要跟着换一套。 */
+        postReport();
       }, 180);
     });
 
@@ -2688,7 +2699,33 @@
     body: "正文",
     meta: "辅助信息"
   };
-  var STYLE_KEYS = ["size", "scale", "weight", "color", "colorLight", "lh", "mb", "w", "align", "wrap"];
+  var STYLE_KEYS = ["size", "scale", "weight", "color", "colorLight", "lh", "mb",
+    "family", "ls", "w", "align", "wrap"];
+
+  /* ---------------- 桌面 / 手机两套独立样式 ----------------
+     以前只有一份 styles，窄屏靠「桌面字号 × 0.75」现算，所以改任何一端
+     都会牵动另一端（而且 16px 下限还让小字号看起来「两端一样」）。
+     现在按视口宽度各读各的：<=720px 用 stylesMobile，其余用 styles；
+     写盘也只写当前这一端。stylesMobile 的初值是从 v99 的 390 宽逐块
+     量出来的快照，拆分上线时手机端外观保持不变。 */
+  function isNarrow() { return window.innerWidth <= 720; }
+  function styleRoot(narrow) {
+    var c = state.content || {};
+    if (!(narrow == null ? isNarrow() : narrow)) return c.styles || {};
+    if (c.stylesMobile) return c.stylesMobile;
+    /* 兼容还没有手机套的旧内容/旧草稿：宁可退回 mobile.css 的设计默认值，
+       也绝不能把桌面 px 直接当成手机 px —— 那样标题会整整大一圈。 */
+    return {};
+  }
+  /* narrow 可显式传入「这个面板打开时属于哪一端」。
+     切设备时 iframe 宽度先变、输入框失焦还会补发一次 change/input，
+     若此刻重新按当前视口判端，手机面板里的数值就会被写进桌面套 ——
+     这就是「改手机连桌面一起变」的根因。 */
+  function ensureStyleRoot(narrow) {
+    var c = state.content = state.content || {};
+    var key = (narrow == null ? isNarrow() : narrow) ? "stylesMobile" : "styles";
+    return (c[key] = c[key] || {});
+  }
   /* 块 id → 规则名：先去尾号，再去页面前缀。
      「每页都有、内容不同」的块（页面标题）要带页面前缀，否则资源库和影像
      会共用同一个 id —— 改一页，另一页跟着变。前缀只影响 id，分类和清理
@@ -2738,7 +2775,8 @@
     /* 窄屏落点 = 桌面目标 × 0.75，下限 16px。
        早先这里还夹了个「最高 44px」，结果 58.7px 以上的标题在手机上一律 44 ——
        控制台往上拖字号完全没有反应（联系区标题就是这么被卡住的）。
-       这个上限去掉了：作者设多大，窄屏就按 0.75 落到多大。 */
+       这个上限去掉了：作者设多大，桌面窄视口就按 0.75 落到多大。
+       手机端的外观不再由这条 clamp 决定，改由 stylesMobile 的绝对 px 直接给。 */
     var min = clampFloor(px);
     var vw = (px / 14.4).toFixed(4); /* px / 1440 * 100 */
     return "clamp(" + min.toFixed(2) + "px, " + vw + "vw, " + px + "px)";
@@ -2832,7 +2870,7 @@
   /* 三类设置合并后的最终值：块自己的 > 类别的 > CSS 默认。
      空字符串一律当作「没设」，这样面板换写法（旧数据带 ""）也不会把颜色误清掉。 */
   function merged(id) {
-    var st = (state.content && state.content.styles) || {};
+    var st = styleRoot();
     var out = {};
     var role = roleOf(id);
     var base = (role && st.roles && st.roles[role]) || null;
@@ -2925,7 +2963,21 @@
 
   function applyOneBlock(el, o) {
     var light = document.documentElement.getAttribute("data-theme") === "light";
-    el.style.fontSize = sizeValue(el, o);
+    /* 窄屏写本端存的绝对 px（不再写桌面那条 clamp）：
+       大部分块由 mobile.css 的 var(--tb-px0, …) !important 接管，值相同；
+       但 .stat__label / .role__foot / .pagehead .kicker 这几类在窄屏表里是
+       写死的 13.5 / 15 / 12px、且不读 --tb-px0 —— 行内若清空就会掉回字面
+       默认值，比拆分前小一圈。行内直接给绝对 px 才能两类块都对齐。
+       没设字号时仍清空，交回样式表，保持「恢复默认」的语义。 */
+    var narrowSize = o && parseFloat(o.size);
+    el.style.fontSize = isNarrow()
+      ? (narrowSize > 0 ? narrowSize + "px" : "")
+      : sizeValue(el, o);
+    /* 字体 / 字距在窄屏样式表里都没有 !important，行内值直接生效，
+       所以桌面和手机可以各自设不同的字体与字距。 */
+    el.style.fontFamily = o && o.family ? String(o.family).trim() : "";
+    var ls = o && o.ls != null && o.ls !== "" ? parseFloat(o.ls) : NaN;
+    el.style.letterSpacing = isFinite(ls) ? ls + "px" : "";
     el.style.color = blockColor(o, light);
     /* 页面标题的第二行在样式表里是渐变字（color: transparent + 背景裁剪），
        整块指定颜色时它会坚持自己的渐变，用户会以为「改了颜色没反应」。
@@ -2939,20 +2991,25 @@
     el.style.lineHeight = o && o.lh ? Math.round(parseFloat(o.lh)) + "px" : "";
     el.style.marginBottom = o && o.mb ? Math.round(parseFloat(o.mb)) + "px" : "";
 
-    /* ---- 窄屏字号 / 行距的换算基准 ----
-       移动层不能把字号写死成 px：写死之后控制台「按角色调字号」「按块调字号」
-       在手机上就全部失效（改了没反应）。所以这里只留两个基准值 ——
-       桌面目标字号、行距比 —— 由移动层用 calc(基准 × 系数) 换算。
-       桌面不读这两个属性，两边互不干扰。 */
-    var target = clampPx(el.style.fontSize);
-    if (target > 0) el.style.setProperty("--tb-px", target + "px");
-    else el.style.removeProperty("--tb-px");
-
-    /* 窄屏落点：clamp 的下限，就是这条规则在手机宽度下的实际字号。
-       移动层优先用它，缺了才退回「桌面 px × 系数」。 */
-    var phone = clampMinPx(el.style.fontSize);
-    if (phone > 0) el.style.setProperty("--tb-px0", phone + "px");
-    else el.style.removeProperty("--tb-px0");
+    /* ---- 当前端的字号基准 ----
+       桌面：从 clamp(...) 里取回目标 px，写 --tb-px。
+       手机：直接写 stylesMobile 里的绝对 px 到 --tb-px0 / --tb-px，
+             mobile.css 读 --tb-px0，pinLeadings 用 --tb-px 当行距分母。
+       两端数据互不参考，改一端不会动另一端。 */
+    if (isNarrow()) {
+      if (narrowSize > 0) {
+        el.style.setProperty("--tb-px", narrowSize + "px");
+        el.style.setProperty("--tb-px0", narrowSize + "px");
+      } else {
+        el.style.removeProperty("--tb-px");
+        el.style.removeProperty("--tb-px0");
+      }
+    } else {
+      var target = clampPx(el.style.fontSize);
+      if (target > 0) el.style.setProperty("--tb-px", target + "px");
+      else el.style.removeProperty("--tb-px");
+      el.style.removeProperty("--tb-px0");
+    }
 
     /* 段后：控制台设了就用它，移动层不再写死 20px 把行内值压掉。 */
     var mb = o && o.mb ? Math.round(parseFloat(o.mb)) : 0;
@@ -3023,7 +3080,7 @@
     return f > 0 ? l / f : 1.5;
   }
   function pinLeadings() {
-    var runsMap = (state.content && state.content.styles && state.content.styles.runs) || {};
+    var runsMap = styleRoot().runs || {};
     /* 行距比：移动层按比例缩了字号，行高也不能还是桌面那串 px，
        否则 28px 的字配 52px 的行，整段散架。给它一个无单位比值。
        分子分母都必须是**桌面域**的值：px 是桌面行高，--tb-px 是桌面目标字号。
@@ -3063,9 +3120,9 @@
   }
   /* 改类别：写 styles.roles.<role>，并把同类块的对应字段本地覆盖清掉，
      否则「统一」只统一了没被单独调过的那些，剩下几个还各是各的。 */
-  function setRoleStyle(role, patch) {
+  function setRoleStyle(role, patch, narrow) {
     if (!role || !state.content) return;
-    var st = state.content.styles = state.content.styles || {};
+    var st = ensureStyleRoot(narrow);
     st.roles = st.roles || {};
     var base = st.roles[role] || {};
     Object.keys(patch).forEach(function (k) {
@@ -3109,6 +3166,25 @@
       if (list[i].dataset.run === text) return list[i];
     }
     return null;
+  }
+  /* 拖选文字时用户通常不会把句尾标点一起选上，但 wrapRun 会把后置标点
+     吸进片段（data-run 存的是「原文 + 标点」）。两边对不上时，findRun 返回空，
+     片段面板就退化成「编辑整块」：填字号新建一条孤儿记录、DOM 上旧片段
+     纹丝不动 —— 表现就是「选了文字改字号没反应」。
+     这里把选区文字归一化到真正存在的那条片段 key，展示仍用用户选的原文。 */
+  function resolveRunText(blockEl, text) {
+    if (!blockEl || !text || findRun(blockEl, text)) return text;
+    var list = blockEl.querySelectorAll("[data-run]");
+    for (var i = 0; i < list.length; i++) {
+      var key = list[i].dataset.run || "";
+      var rest = key.indexOf(text) === 0 ? key.slice(text.length) : "";
+      if (!rest.length) continue;
+      var allPunct = Array.prototype.every.call(rest, function (ch) {
+        return TRAILING_PUNCT.test(ch);
+      });
+      if (allPunct) return key;
+    }
+    return text;
   }
   /* 中文后置标点属于它前面的那一段文字。片段若只包住汉字、把标点留在外层，
      标点就退回父块的基础字号和字重 —— 同一行里成了「大字后面跟一个小细逗号」。
@@ -3157,7 +3233,11 @@
   }
   function applyRunStyle(span, run) {
     var light = document.documentElement.getAttribute("data-theme") === "light";
-    span.style.fontSize = sizeValue(span, run);
+    /* 窄屏片段由 --tb-sc 相对父级算字号，行内 font-size 不参与 */
+    span.style.fontSize = isNarrow() ? "" : sizeValue(span, run);
+    span.style.fontFamily = run && run.family ? String(run.family).trim() : "";
+    var rls = run && run.ls != null && run.ls !== "" ? parseFloat(run.ls) : NaN;
+    span.style.letterSpacing = isFinite(rls) ? rls + "px" : "";
     span.style.color = blockColor(run, light);
     span.style.fontWeight = run && run.weight ? String(run.weight).trim() : "";
     /* 片段存的是「相对本段字号」的倍数。窄屏不能直接沿用桌面那条 clamp
@@ -3168,7 +3248,7 @@
     else span.style.removeProperty("--tb-sc");
   }
   function applyRuns(root) {
-    var runs = (state.content && state.content.styles && state.content.styles.runs) || {};
+    var runs = styleRoot().runs || {};
     var scope = root || document;
     Object.keys(runs).forEach(function (id) {
       var blockEl = scope.querySelector('[data-tb="' + id + '"]');
@@ -3203,38 +3283,43 @@
     return buf.join("\u0001");
   }
   function pruneStyles(c) {
-    if (!c || !c.styles) return { blocks: 0, runs: 0 };
+    if (!c || (!c.styles && !c.stylesMobile)) return { blocks: 0, runs: 0 };
     var body = allText(c);
     var removed = { blocks: 0, runs: 0 };
+    /* 两套样式都要按同一套规则清理；漏掉手机套的话，文案一改它就会留着
+       对不上号的旧片段，而且发布/导出时同样会被一起写出去。 */
+    [c.styles, c.stylesMobile].forEach(function (styles) {
+      if (!styles) return;
 
-    var blocks = c.styles.blocks || {};
-    Object.keys(blocks).forEach(function (id) {
-      /* 用 tbNameOf 而不是只剥尾号：页面标题的 id 是 links-page-title-0，
-         只剥尾号会得到 links-page-title，对不上规则表就被当成失效样式清掉 */
-      var name = tbNameOf(id);
-      if (TB_NAMES.indexOf(name) < 0) { delete blocks[id]; removed.blocks++; }
-    });
-
-    var runs = c.styles.runs || {};
-    Object.keys(runs).forEach(function (id) {
-      var name = tbNameOf(id);
-      var keep = (runs[id] || []).filter(function (r) {
-        return r && r.text && body.indexOf(r.text) > -1;
+      var blocks = styles.blocks || {};
+      Object.keys(blocks).forEach(function (id) {
+        /* 用 tbNameOf 而不是只剥尾号：页面标题的 id 是 links-page-title-0，
+           只剥尾号会得到 links-page-title，对不上规则表就被当成失效样式清掉 */
+        var name = tbNameOf(id);
+        if (TB_NAMES.indexOf(name) < 0) { delete blocks[id]; removed.blocks++; }
       });
-      if (TB_NAMES.indexOf(name) < 0) keep = [];
-      removed.runs += (runs[id] || []).length - keep.length;
-      if (keep.length) runs[id] = keep;
-      else delete runs[id];
-    });
 
-    if (!Object.keys(blocks).length) delete c.styles.blocks;
-    if (!Object.keys(runs).length) delete c.styles.runs;
+      var runs = styles.runs || {};
+      Object.keys(runs).forEach(function (id) {
+        var name = tbNameOf(id);
+        var keep = (runs[id] || []).filter(function (r) {
+          return r && r.text && body.indexOf(r.text) > -1;
+        });
+        if (TB_NAMES.indexOf(name) < 0) keep = [];
+        removed.runs += (runs[id] || []).length - keep.length;
+        if (keep.length) runs[id] = keep;
+        else delete runs[id];
+      });
 
-    var roles = c.styles.roles || {};
-    Object.keys(roles).forEach(function (k) {
-      if (ROLE_ORDER.indexOf(k) < 0) { delete roles[k]; removed.blocks++; }
+      if (!Object.keys(blocks).length) delete styles.blocks;
+      if (!Object.keys(runs).length) delete styles.runs;
+
+      var roles = styles.roles || {};
+      Object.keys(roles).forEach(function (k) {
+        if (ROLE_ORDER.indexOf(k) < 0) { delete roles[k]; removed.blocks++; }
+      });
+      if (!Object.keys(roles).length) delete styles.roles;
     });
-    if (!Object.keys(roles).length) delete c.styles.roles;
     return removed;
   }
 
@@ -3246,7 +3331,7 @@
     else root.style.removeProperty(name);
   }
   function applyTypeStyles(c) {
-    var st = (c && c.styles) || {};
+    var st = styleRoot();
     TYPE_ROLES.forEach(function (k) {
       var v = st[k] || {};
       setVar("--ty-" + k + "-size", v.size);
@@ -3495,6 +3580,9 @@
   function closePick() {
     if (pickEl) pickEl.classList.remove("tb-sel");
     pickEl = null;
+    /* 先让面板失效再摘 DOM：失焦补发的 change / 防抖里的 setSize 都会走
+       push()，closed 一置位就全被拦下，不会污染刚切换到的那一端。 */
+    if (pickPanel && pickPanel.__tbDispose) pickPanel.__tbDispose();
     if (pickPanel && pickPanel.parentNode) pickPanel.parentNode.removeChild(pickPanel);
     pickPanel = null;
     panelRefresh = null;
@@ -3577,19 +3665,21 @@
     var base = o.base || {};
     var kind = o.kind || "block";
     var own = o.own || {};
-
-    var sizePx = parseFloat(base.size) > 0 ? parseFloat(base.size) : basePxOf(el);
-    sizePx = Math.max(12, Math.min(96, Math.round(sizePx)));
+    /* 面板一旦关闭就彻底失效：切设备时输入框失焦会补发 change，
+       数字框防抖也还有 140ms 的尾巴，两者都会在「已经换成另一端」
+       的视口下把旧数值写进新一端的样式数据。 */
+    var closed = false;
 
     var cs = getComputedStyle(el);
     var fs = parseFloat(cs.fontSize) || 16;
+    /* 手机套存的就是「手机实际 px」，面板也直接显示这个 px，
+       不再反解成 1440 基准、也不再把行距折回去。桌面仍按 clamp 反解。 */
+    var sizePx = parseFloat(base.size) > 0 ? parseFloat(base.size)
+      : (isNarrow() ? fs : basePxOf(el));
+    sizePx = Math.max(12, Math.min(96, Math.round(sizePx)));
+
     var lhPx = parseFloat(cs.lineHeight);
     if (!isFinite(lhPx) || lhPx <= 0) lhPx = Math.round(fs * 1.5);
-    /* 手机预览里移动层用 --tb-lhr 把行高按比例缩过（桌面 58px 在 390 宽只有 43.7px）。
-       面板刻度是「1440 基准的 px」，量到的窄屏值要按「桌面字号 ÷ 窄屏字号」折回去，
-       否则拖一次行距就写回一个 0.75× 的值，下次再缩一次 —— 看起来就是改不动。
-       桌面域不换算，sizePx / fs 在 1440 宽下本就等于 1。 */
-    if (window.innerWidth <= 720 && fs > 0) lhPx = lhPx * (sizePx / fs);
     var mbPx = Math.round(parseFloat(cs.marginBottom) || 0);
     var cw = parseInt(cs.fontWeight, 10) || 400;
 
@@ -3600,6 +3690,8 @@
       colorLight: base.colorLight || "",
       lh: base.lh ? Math.round(parseFloat(base.lh)) : Math.round(lhPx),
       mb: base.mb ? Math.round(parseFloat(base.mb)) : mbPx,
+      family: base.family || "",
+      ls: base.ls != null ? String(base.ls) : "",
       w: base.w != null ? String(base.w) : "",
       align: base.align || "",
       wrap: base.wrap || ""
@@ -3608,6 +3700,7 @@
     var refW = refWidth(el);
     var dirtySize = parseFloat(base.size) > 0;
     var dirtyLh = false, dirtyMb = false, dirtyWeight = false;
+    var dirtyFamily = false, dirtyLs = false;
     var dirtyW = false, dirtyAlign = false, dirtyWrap = false;
     var scope = o.scope || (Object.keys(own).length ? "self" : "role");
     var sizes = o.sizes || [];
@@ -3643,9 +3736,9 @@
       (kind === "block"
         ? '<div class="tpc is-info" data-k="metrics"></div>'
         : "") +
-      /* 手机预览里桌面基准会被缩到 0.75 倍，只盯着数字框容易以为"改了没反应"。
-         把两个域的值并排写出来，改一格就能看到手机实际 px 跟着动。 */
-      '<div class="tpc is-info" data-k="phonesize" style="display:none"></div>' +
+      /* 现在两端各有自己的样式数据，必须让用户一眼看清「正在改哪一端」。
+         以前这里显示「桌面基准 / 手机实际」，那套缩放已经不存在了。 */
+      '<div class="tpc is-info" data-k="phonesize"></div>' +
       '<div class="prow"><span class="pk">字号</span>' +
         '<button class="stp" type="button" data-k="minus" title="小 1px">−</button>' +
         '<input class="rg" type="range" data-k="size" min="12" max="96" step="1">' +
@@ -3680,6 +3773,16 @@
             '</div></div>' +
           '</details>'
         : "") +
+      '<div class="prow"><span class="pk">字体</span><select class="sel" data-k="family">' +
+        '<option value="">跟随站点</option>' +
+        '<option value="var(--font-sans)">无衬线 · 站点黑体</option>' +
+        '<option value="var(--font-mono)">等宽</option>' +
+        '<option value="Georgia, \'Songti SC\', \'Noto Serif CJK SC\', serif">衬线 · 宋体感</option>' +
+        '<option value="system-ui, -apple-system, \'PingFang SC\', sans-serif">系统默认</option>' +
+      "</select></div>" +
+      '<div class="prow"><span class="pk">字距</span>' +
+        '<input class="numin" type="number" data-k="lsn" min="-4" max="8" step="0.1"><i class="u">px</i>' +
+        '<span class="pk"></span></div>' +
       '<div class="prow"><span class="pk">粗细</span><div class="seg" data-k="seg">' +
         '<button type="button" data-v="400">常规</button>' +
         '<button type="button" data-v="500">中</button>' +
@@ -3730,6 +3833,8 @@
         q("mb").value = String(st.mb);
         q("mbn").value = String(st.mb);
       }
+      if (q("family")) q("family").value = st.family || "";
+      if (q("lsn")) q("lsn").value = st.ls === "" ? "" : String(st.ls);
       if (q("w")) {
         var shown = st.w === "full" ? colW
           : (parseFloat(st.w) > 0 ? parseFloat(st.w) : Math.round(el.getBoundingClientRect().width));
@@ -3748,25 +3853,21 @@
             : st.wrap === "balance" ? "折行时各行更均匀。" : "宽度不够才折行。");
       }
     }
-    /* 桌面基准 → 手机实际，两个域并排写出来。
+    /* 编辑目标 + 当前实际 px 的即时读数。
        片段面板没有 metrics 行，所以这件事必须独立成一个函数，
        放在 syncMetrics() 的早退之前，否则片段改字号时读数永远空白。 */
     function syncPhoneSize() {
       var ps = q("phonesize");
       if (!ps) return;
-      if (window.innerWidth > 720) { ps.style.display = "none"; return; }
-      /* 只有「片段」面板才量片段本身：它的 el 可能是整块（新片段还没包 span），
-         也可能已经是片段 span。整块面板必须量块自身 —— 标题里常带 1.1~1.6 倍的
-         强调片段，量它的话「手机实际」会虚高到 43 / 56px，而真实整块只有 36px，
-         读数反而成了新的不一致来源。 */
-      var target = el;
-      if (kind === "run" && el.dataset && el.dataset.tb) {
-        var s = (o.runText && findRun(el, o.runText)) || el.querySelector(".tb-run");
-        if (s) target = s;
-      }
-      var actual = Math.round(parseFloat(getComputedStyle(target).fontSize) || 0);
+      /* 两套样式已完全独立，面板要明说「这一格改的是哪一端」。
+         以前这里显示「桌面基准 / 手机实际」，那是联动时代的读数。 */
+      var phone = isNarrow();
+      /* 面板 el 本身就是被编辑的对象：整块面板传块、片段面板传那个 .tb-run。
+         直接量它即可；早先整块面板误量块里放大的片段，读数会虚高（v99 修过）。 */
+      var actual = Math.round(parseFloat(getComputedStyle(el).fontSize) || 0);
       ps.style.display = "";
-      ps.innerHTML = "<span>桌面基准 " + st.size + "px</span><b>手机实际 " + actual + "px</b>";
+      ps.innerHTML = "<span>编辑目标 · " + (phone ? "手机端" : "桌面端") + "</span>" +
+        "<b>当前实际 " + actual + "px · 只影响" + (phone ? "手机" : "桌面") + "</b>";
     }
     /* 实时把「这一改到底会不会折行 / 会不会被裁掉」说出来，不用靠肉眼数 */
     function syncMetrics() {
@@ -3824,6 +3925,8 @@
       /* 粗细显示的是「当前算出来的值」，不是用户改过的值。没动过就不要写盘，
          否则只改个换行也会把 400 钉死，以后样式表调粗细就跟不上了。 */
       if (dirtyWeight || base.weight) out.weight = String(st.weight);
+      if (dirtyFamily || base.family) out.family = st.family;
+      if (dirtyLs || base.ls != null) out.ls = st.ls;
       if (st.color) out.color = st.color;
       if (st.colorLight) out.colorLight = st.colorLight;
       if (kind === "block") {
@@ -3842,6 +3945,7 @@
       return out;
     }
     function push() {
+      if (closed) return;
       syncText();
       o.apply(collect(), scope);
       syncMetrics();
@@ -3990,7 +4094,29 @@
     q("color").addEventListener("input", function () { st.color = q("color").value; push(); });
     q("colorLight").addEventListener("input", function () { st.colorLight = q("colorLight").value; push(); });
     q("autoLight").addEventListener("click", function () { st.colorLight = ""; syncColor(); push(); });
+    /* 字体 / 字距：和字号一样写到「当前端」那一套数据里。
+       字体是下拉，选完即生效；字距接 input 边输边看。 */
+    q("family").addEventListener("change", function () {
+      st.family = q("family").value;
+      dirtyFamily = true;
+      push();
+    });
+    liveNumber(q("lsn"), function () {
+      var v = parseFloat(q("lsn").value);
+      if (!isFinite(v)) return;
+      st.ls = String(Math.round(Math.max(-4, Math.min(8, v)) * 10) / 10);
+      dirtyLs = true;
+      push();
+    });
+    q("lsn").addEventListener("change", function () {
+      var v = parseFloat(q("lsn").value);
+      st.ls = isFinite(v) ? String(Math.round(Math.max(-4, Math.min(8, v)) * 10) / 10) : "";
+      dirtyLs = true;
+      syncText();
+      push();
+    });
     q("clear").addEventListener("click", function () {
+      if (closed) return;
       /* 恢复默认 = 撤掉这一块自己的设置，回到类别（再回到样式表） */
       st = {
         size: sizePx,
@@ -3999,11 +4125,14 @@
         colorLight: "",
         lh: Math.round(lhPx),
         mb: mbPx,
+        family: "",
+        ls: "",
         w: "",
         align: "",
         wrap: ""
       };
       dirtySize = false; dirtyLh = false; dirtyMb = false; dirtyWeight = false;
+      dirtyFamily = false; dirtyLs = false;
       dirtyW = false; dirtyAlign = false; dirtyWrap = false;
       o.apply({}, "self", true);
       closePick();
@@ -4014,6 +4143,7 @@
     document.body.appendChild(panel);
     placePanel(panel, (o.anchor || el).getBoundingClientRect());
     pickPanel = panel;
+    panel.__tbDispose = function () { closed = true; };
     /* 控制台切设备（1440 / 390）会改 iframe 宽度，页面重排后面板里的
        「几行 / 宽多少 / 是否已兜底」必须跟着刷新，不能停在旧数字上。 */
     panelRefresh = function () { syncText(); syncMetrics(); };
@@ -4034,17 +4164,32 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toastEl.classList.remove("is-on"); }, 1600);
   }
-  /* 改完统一交给控制台：整份 styles 一起发，避免两边各拼一份拼出分歧 */
+  /* 改完统一交给控制台：两套 styles 一起整份发，避免两边各拼一份拼出分歧。
+     只发当前端会改的那一套也不行 —— 控制台保存的是整份 content，
+     漏发一套就等于把手机端数据从发布稿里抹掉。 */
   function pushStyles() {
     if (!state.content) return;
     applyBlockStyles(state.content);
     applyRuns();
     if (window.parent !== window) {
-      window.parent.postMessage(
-        { __v2: true, type: "styles", styles: state.content.styles || {} },
-        "*"
-      );
+      var msg = { __v2: true, type: "styles", styles: state.content.styles || {} };
+      /* 旧内容没有手机套时不要发空对象，否则控制台会用空壳覆盖掉
+         仓库里那份完整的手机端快照。 */
+      if (state.content.stylesMobile) msg.stylesMobile = state.content.stylesMobile;
+      window.parent.postMessage(msg, "*");
     }
+  }
+
+  /* 控制台切换设备时显式通知一次（iframe 自身的 resize 也会触发同样的重算，
+     双保险是为了对付 834→390 这种只改宽度、不一定派发 resize 的情况）。 */
+  function refreshDeviceStyles() {
+    if (!state.content) return;
+    closePick();
+    resetNatural();
+    applyTypeStyles(state.content);
+    applyBlockStyles(state.content);
+    applyRuns();
+    postReport();
   }
 
   function openPick(el) {
@@ -4054,9 +4199,11 @@
     pickEl = el;
     el.classList.add("tb-sel");
 
+    /* 记住这个面板属于哪一端：后面所有写盘都按 atNarrow 落，不再看当前视口。 */
+    var atNarrow = isNarrow();
     var id = el.dataset.tb;
     var role = roleOf(id);
-    var blocks = (state.content && state.content.styles && state.content.styles.blocks) || {};
+    var blocks = styleRoot(atNarrow).blocks || {};
     var stats = role ? roleStats(role) : [];
     var excerpt = (el.textContent || "").replace(/\s+/g, " ").trim();
     if (excerpt.length > 34) excerpt = excerpt.slice(0, 34) + "…";
@@ -4071,12 +4218,12 @@
       sub: excerpt ? escapeHtml(excerpt) : "",
       apply: function (style, scope, reset) {
         if (!state.content) return;
-        state.content.styles = state.content.styles || {};
+        var root = ensureStyleRoot(atNarrow);
         if (scope === "role" && role) {
-          setRoleStyle(role, style);
+          setRoleStyle(role, style, atNarrow);
         } else {
-          state.content.styles.blocks = state.content.styles.blocks || {};
-          var map = state.content.styles.blocks;
+          root.blocks = root.blocks || {};
+          var map = root.blocks;
           if (reset) {
             /* 恢复默认 = 撤掉这一块自己的全部设置，回到类别 / 样式表 */
             delete map[id];
@@ -4092,7 +4239,7 @@
             if (Object.keys(cur).length) map[id] = cur;
             else delete map[id];
           }
-          if (!Object.keys(map).length) delete state.content.styles.blocks;
+          if (!Object.keys(map).length) delete root.blocks;
         }
         pushStyles();
       }
@@ -4109,16 +4256,19 @@
     pickEl = blockEl;
     blockEl.classList.add("tb-sel");
 
+    var atNarrow = isNarrow();
     var id = blockEl.dataset.tb;
-    var all = (state.content && state.content.styles && state.content.styles.runs) || {};
+    /* 片段 key 可能带着吸附进来的句尾标点，先对齐，避免面板退化成编辑整块。 */
+    var key = resolveRunText(blockEl, text);
+    var all = styleRoot(atNarrow).runs || {};
     var cur = null;
-    (all[id] || []).forEach(function (r) { if (r.text === text) cur = r; });
+    (all[id] || []).forEach(function (r) { if (r.text === key) cur = r; });
     var short = text.length > 30 ? text.slice(0, 30) + "…" : text;
 
     buildPanel({
-      el: findRun(blockEl, text) || blockEl,
+      el: findRun(blockEl, key) || blockEl,
       kind: "run",
-      runText: text,
+      runText: key,
       own: cur || {},
       base: cur || {},
       title: "片段 · " + (ROLE_LABEL[roleOf(id)] || id),
@@ -4126,7 +4276,9 @@
       apply: function (style) {
         /* 片段在界面上按 px 填，落盘换成「相对本段字号」的倍数 */
         if (style.size) {
-          var bb = basePxOf(blockEl) || 16;
+          /* 手机端面板填的就是手机实际 px，不能再用 basePxOf 反解成桌面刻度 */
+          var bb = (atNarrow ? parseFloat(getComputedStyle(blockEl).fontSize)
+            : basePxOf(blockEl)) || 16;
           style.scale = Math.round((style.size / bb) * 1000) / 1000;
           delete style.size;
         }
@@ -4135,10 +4287,9 @@
            于是先改字号、再改粗细，字号就被抹回默认值；反过来也一样，
            看起来就是「改了不生效 / 互相打架」。先把这个片段原有的设置读回来。 */
         var prev = null;
-        var runsMap = (state.content && state.content.styles &&
-          state.content.styles.runs) || {};
-        (runsMap[id] || []).forEach(function (r) { if (r.text === text) prev = r; });
-        var item = { text: text };
+        var runsMap = ensureStyleRoot(atNarrow).runs || {};
+        (runsMap[id] || []).forEach(function (r) { if (r.text === key) prev = r; });
+        var item = { text: key };
         Object.keys(prev || {}).forEach(function (k) {
           if (k !== "text") item[k] = prev[k];
         });
@@ -4148,16 +4299,16 @@
         });
         /* 1) 先落到数据，重绘后还能长回来 */
         if (state.content) {
-          state.content.styles = state.content.styles || {};
-          state.content.styles.runs = state.content.styles.runs || {};
-          var arr = (state.content.styles.runs[id] || []).filter(function (r) { return r.text !== text; });
+          var root = ensureStyleRoot(atNarrow);
+          root.runs = root.runs || {};
+          var arr = (root.runs[id] || []).filter(function (r) { return r.text !== key; });
           if (has) arr.push(item);
-          if (arr.length) state.content.styles.runs[id] = arr;
-          else delete state.content.styles.runs[id];
-          if (!Object.keys(state.content.styles.runs).length) delete state.content.styles.runs;
+          if (arr.length) root.runs[id] = arr;
+          else delete root.runs[id];
+          if (!Object.keys(root.runs).length) delete root.runs;
         }
         /* 2) 再改 DOM：有就更新，没有就包一层，清空了就解开 */
-        var span = findRun(blockEl, text);
+        var span = findRun(blockEl, key);
         if (!has) {
           if (span) {
             var parent = span.parentNode;
@@ -4165,7 +4316,7 @@
             parent.removeChild(span);
           }
         } else {
-          var payload = { text: text };
+          var payload = { text: key };
           Object.keys(item).forEach(function (k) { payload[k] = item[k]; });
           if (span) applyRunStyle(span, payload);
           else if (!wrapRun(blockEl, payload)) {
@@ -4240,7 +4391,9 @@
         sizes: uniq.sort(function (a, b) { return a - b; }),
         widths: uniqW.sort(function (a, b) { return a - b; }),
         widthBad: widthBad,
-        size: Math.round(basePxOf(first)),
+        /* 手机端存的就是手机实际 px，总览不能再拿 basePxOf 反解到 1440 基准
+           （那样会显示成实际值的 1.33 倍，填回去字号就凭空大一截）。 */
+        size: Math.round(isNarrow() ? fs : basePxOf(first)),
         w: own.w != null ? String(own.w) : "",
         /* 总览这一列叫「最宽」，给的是 max-width，自然要显示同类里最宽的那个 */
         wNow: Math.max.apply(null, widths),
@@ -4314,6 +4467,7 @@
       var d = e.data;
       if (!d || d.__v2 !== true) return;
       if (d.type === "pick") setPick(d.on);
+      if (d.type === "device") { refreshDeviceStyles(); return; }
       if (d.type === "guides") { setGuides(d.on); return; }
       /* 控制台「排版总览」：要一份各类别的现状 */
       if (d.type === "type-request") { postReport(); return; }
@@ -4322,6 +4476,8 @@
         var v = d.patch || {};
         if (v.size) p.size = Math.round(v.size);
         if (v.weight) p.weight = String(v.weight);
+        if (v.family != null) p.family = String(v.family);
+        if (v.ls != null) p.ls = v.ls;
         if (v.color != null) p.color = v.color;
         if (v.colorLight != null) p.colorLight = v.colorLight;
         if (v.mb != null) p.mb = Math.round(v.mb);
@@ -4332,8 +4488,9 @@
         if (v.lh) p.lh = Math.round(v.lh);
         else if (v.lhRatio && (v.size || v.px)) p.lh = Math.round((v.size || v.px) * v.lhRatio);
         if (d.reset) p = {}; 
-        if (d.reset && state.content && state.content.styles) {
-          setRoleStyle(d.role, { size: "", weight: "", color: "", colorLight: "", lh: "", mb: "" });
+        if (d.reset && state.content) {
+          setRoleStyle(d.role, { size: "", weight: "", color: "", colorLight: "",
+            lh: "", mb: "", family: "", ls: "" });
         } else {
           setRoleStyle(d.role, p);
         }

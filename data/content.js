@@ -3,7 +3,7 @@
    导出时间：2026/11/13 15:59:04
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 99,
+  "version": 100,
   "updatedAt": "2026-11-13",
   "styles": {
     "blocks": {
@@ -210,6 +210,612 @@ window.V2_CONTENT = {
         "size": 16,
         "lh": 27
       }
+    }
+  },
+  "stylesMobile": {
+    "roles": {
+      "body": {
+        "w": "587",
+        "mb": 2,
+        "lh": 28,
+        "align": "justify",
+        "weight": "400"
+      },
+      "meta": {
+        "weight": "700",
+        "color": "#7bd7e3",
+        "align": "left",
+        "size": 16
+      },
+      "h2": {
+        "lh": 52
+      },
+      "pageTitle": {
+        "size": 48,
+        "lh": 66
+      },
+      "h1": {
+        "size": 53
+      },
+      "lead": {
+        "size": 16,
+        "lh": 27
+      }
+    },
+    "blocks": {
+      "hero-title-0": {
+        "size": 39.75,
+        "lh": 43.73,
+        "mb": 0,
+        "weight": "600"
+      },
+      "hero-lead-0": {
+        "size": 16,
+        "lh": 27.01,
+        "mb": 0,
+        "weight": "400"
+      },
+      "stat-label-0": {
+        "size": 16,
+        "lh": 26,
+        "mb": 0,
+        "weight": "700"
+      },
+      "stat-label-1": {
+        "size": 16,
+        "lh": 26,
+        "mb": 0,
+        "weight": "700"
+      },
+      "stat-label-2": {
+        "size": 16,
+        "lh": 26,
+        "mb": 0,
+        "weight": "700"
+      },
+      "about-lead-0": {
+        "size": 16,
+        "lh": 27.01,
+        "mb": 36,
+        "weight": "400"
+      },
+      "about-p-0": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "about-p-1": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "about-p-2": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "exp-title-0": {
+        "size": 30.41,
+        "lh": 41.99,
+        "mb": 36,
+        "weight": "600"
+      },
+      "exp-role-0": {
+        "size": 16,
+        "lh": 22,
+        "mb": 0,
+        "weight": "700"
+      },
+      "exp-desc-0": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "exp-role-1": {
+        "size": 16,
+        "lh": 22,
+        "mb": 0,
+        "weight": "700"
+      },
+      "exp-desc-1": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "exp-role-2": {
+        "size": 16,
+        "lh": 22,
+        "mb": 0,
+        "weight": "700"
+      },
+      "exp-desc-2": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "exp-role-3": {
+        "size": 16,
+        "lh": 22,
+        "mb": 0,
+        "weight": "700"
+      },
+      "exp-desc-3": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "exp-role-4": {
+        "size": 16,
+        "lh": 22,
+        "mb": 0,
+        "weight": "700"
+      },
+      "exp-desc-4": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "company-title-0": {
+        "size": 31.5,
+        "lh": 39,
+        "mb": 36,
+        "weight": "600"
+      },
+      "company-lead-0": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "company-card-title-0": {
+        "size": 17,
+        "lh": 24.14,
+        "mb": 8,
+        "weight": "600"
+      },
+      "company-card-desc-0": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "company-card-title-1": {
+        "size": 17,
+        "lh": 24.14,
+        "mb": 8,
+        "weight": "600"
+      },
+      "company-card-desc-1": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "company-card-title-2": {
+        "size": 17,
+        "lh": 24.14,
+        "mb": 8,
+        "weight": "600"
+      },
+      "company-card-desc-2": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "roles-title-0": {
+        "size": 30.41,
+        "lh": 52,
+        "mb": 20,
+        "weight": "600"
+      },
+      "role-title-0": {
+        "size": 22,
+        "lh": 29.69,
+        "mb": 0,
+        "weight": "600"
+      },
+      "role-desc-0": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "role-foot-0": {
+        "size": 16,
+        "lh": 26,
+        "mb": 0,
+        "weight": "700"
+      },
+      "role-title-1": {
+        "size": 22,
+        "lh": 29.69,
+        "mb": 0,
+        "weight": "600"
+      },
+      "role-desc-1": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "role-foot-1": {
+        "size": 16,
+        "lh": 26,
+        "mb": 0,
+        "weight": "700"
+      },
+      "role-title-2": {
+        "size": 22,
+        "lh": 29.69,
+        "mb": 0,
+        "weight": "600"
+      },
+      "role-desc-2": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "role-foot-2": {
+        "size": 16,
+        "lh": 26,
+        "mb": 0,
+        "weight": "700"
+      },
+      "role-title-3": {
+        "size": 22,
+        "lh": 29.69,
+        "mb": 0,
+        "weight": "600"
+      },
+      "role-desc-3": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "role-foot-3": {
+        "size": 16,
+        "lh": 26,
+        "mb": 0,
+        "weight": "700"
+      },
+      "role-title-4": {
+        "size": 22,
+        "lh": 29.69,
+        "mb": 0,
+        "weight": "600"
+      },
+      "role-desc-4": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "role-foot-4": {
+        "size": 16,
+        "lh": 26,
+        "mb": 0,
+        "weight": "700"
+      },
+      "role-title-5": {
+        "size": 22,
+        "lh": 29.69,
+        "mb": 0,
+        "weight": "600"
+      },
+      "role-desc-5": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "role-foot-5": {
+        "size": 16,
+        "lh": 26,
+        "mb": 0,
+        "weight": "700"
+      },
+      "role-title-6": {
+        "size": 22,
+        "lh": 29.69,
+        "mb": 0,
+        "weight": "600"
+      },
+      "role-desc-6": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "role-foot-6": {
+        "size": 16,
+        "lh": 26,
+        "mb": 0,
+        "weight": "700"
+      },
+      "role-title-7": {
+        "size": 22,
+        "lh": 29.69,
+        "mb": 0,
+        "weight": "600"
+      },
+      "role-desc-7": {
+        "size": 16,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "role-foot-7": {
+        "size": 16,
+        "lh": 26,
+        "mb": 0,
+        "weight": "700"
+      },
+      "cta-title-0": {
+        "size": 36,
+        "lh": 43.49,
+        "mb": 36,
+        "weight": "600"
+      },
+      "cta-lead-0": {
+        "size": 16,
+        "lh": 27.01,
+        "mb": 48,
+        "weight": "400",
+        "w": 876
+      },
+      "cta-mail-0": {
+        "size": 14,
+        "lh": 28,
+        "mb": 2,
+        "weight": "400"
+      },
+      "links-page-kicker-0": {
+        "size": 16,
+        "lh": 24,
+        "mb": 0,
+        "weight": "700"
+      },
+      "links-page-title-0": {
+        "size": 36,
+        "lh": 49.5,
+        "mb": 24,
+        "weight": "600"
+      },
+      "links-page-lead-0": {
+        "size": 16,
+        "lh": 27.01,
+        "mb": 0,
+        "weight": "400"
+      },
+      "gallery-page-kicker-0": {
+        "size": 16,
+        "lh": 24,
+        "mb": 0,
+        "weight": "700"
+      },
+      "gallery-page-title-0": {
+        "size": 36,
+        "lh": 49.5,
+        "mb": 24,
+        "weight": "600"
+      },
+      "feed-page-kicker-0": {
+        "size": 16,
+        "lh": 24,
+        "mb": 0,
+        "weight": "700"
+      },
+      "feed-page-title-0": {
+        "size": 36,
+        "lh": 49.5,
+        "mb": 24,
+        "weight": "600"
+      },
+      "feed-page-lead-0": {
+        "size": 16,
+        "lh": 27.01,
+        "mb": 0,
+        "weight": "400"
+      },
+      "legal-page-kicker-0": {
+        "size": 16,
+        "lh": 24,
+        "mb": 0,
+        "weight": "700"
+      },
+      "legal-page-title-0": {
+        "size": 36,
+        "lh": 49.5,
+        "mb": 24,
+        "weight": "600"
+      },
+      "legal-page-lead-0": {
+        "size": 16,
+        "lh": 27.01,
+        "mb": 0,
+        "weight": "400"
+      },
+      "notfound-page-kicker-0": {
+        "size": 16,
+        "lh": 24,
+        "mb": 0,
+        "weight": "700"
+      },
+      "notfound-page-title-0": {
+        "size": 36,
+        "lh": 49.5,
+        "mb": 24,
+        "weight": "600"
+      },
+      "notfound-page-lead-0": {
+        "size": 16,
+        "lh": 27.01,
+        "mb": 0,
+        "weight": "400"
+      }
+    },
+    "runs": {
+      "about-lead-0": [
+        {
+          "text": "而是一起探索未来3-5年值得投入的事情。",
+          "scale": 0.912
+        },
+        {
+          "text": "我不是仅为了招聘，",
+          "weight": "600",
+          "scale": 1.564
+        }
+      ],
+      "exp-title-0": [
+        {
+          "text": "十年，四个阶段，",
+          "scale": 1.185
+        },
+        {
+          "text": "一条主线。",
+          "weight": "400",
+          "scale": 1.185
+        }
+      ],
+      "company-title-0": [
+        {
+          "text": "把「不确定」当成原材料。",
+          "weight": "400",
+          "scale": 0.857
+        },
+        {
+          "text": "我所在的团队，",
+          "scale": 1.185
+        }
+      ],
+      "stat-label-0": [
+        {
+          "text": "年校园招聘经验",
+          "weight": "400"
+        }
+      ],
+      "exp-role-1": [
+        {
+          "text": "北京研发中心校招负责人",
+          "color": "#ffffff",
+          "scale": 0.8
+        }
+      ],
+      "exp-role-2": [
+        {
+          "text": "HR",
+          "color": "#ffffff",
+          "scale": 0.8
+        }
+      ],
+      "exp-role-3": [
+        {
+          "text": "校招HR",
+          "color": "#ffffff",
+          "scale": 0.8
+        }
+      ],
+      "exp-role-4": [
+        {
+          "text": "人力资源管理",
+          "color": "#ffffff",
+          "scale": 0.8
+        }
+      ],
+      "exp-org-0": [
+        {
+          "text": "明汯投资",
+          "color": "#9e4d40"
+        }
+      ],
+      "exp-org-2": [
+        {
+          "text": "招商局漳州",
+          "color": "#a7926a"
+        }
+      ],
+      "exp-org-3": [
+        {
+          "text": "网易有道",
+          "color": "#f12d28"
+        }
+      ],
+      "exp-org-4": [
+        {
+          "text": "中国人民大学",
+          "color": "#8b170d"
+        }
+      ],
+      "stat-label-1": [
+        {
+          "text": "累计发出校招 offer",
+          "weight": "400"
+        }
+      ],
+      "stat-label-2": [
+        {
+          "text": "在招岗位",
+          "weight": "400"
+        }
+      ],
+      "exp-role-0": [
+        {
+          "text": "校招负责人",
+          "color": "#ffffff"
+        }
+      ],
+      "cta-lead-0": [
+        {
+          "text": "告诉我你最近在解决什么、卡在哪一步，对未来有什么想法，剩下的我们聊聊看。",
+          "scale": 1
+        }
+      ],
+      "links-page-title-0": [
+        {
+          "text": "给对量化感兴趣的人",
+          "color": "#ffffff",
+          "scale": 1.125
+        },
+        {
+          "text": "一份不那么水的地图",
+          "scale": 1
+        }
+      ],
+      "gallery-page-title-0": [
+        {
+          "text": "有时候也会想多看看",
+          "color": "#ffffff",
+          "scale": 1.125
+        },
+        {
+          "text": "这个美丽的世界",
+          "weight": "400",
+          "scale": 1.125
+        }
+      ],
+      "exp-org-1": [
+        {
+          "text": "小马智行Pony.ai",
+          "colorLight": "#52b7c6"
+        }
+      ],
+      "roles-title-0": [
+        {
+          "text": "我在找的岗位",
+          "scale": 1.185
+        }
+      ]
     }
   },
   "meta": {

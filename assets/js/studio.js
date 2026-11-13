@@ -1547,7 +1547,8 @@
     if (!h) return;
     var mode = patched === true ? "局部更新该区块" : "整页更新";
     if (patched === undefined) mode = "实时";
-    h.textContent = S.device + "px · " + mode;
+    var side = S.device <= 720 ? "编辑手机端" : "编辑桌面端";
+    h.textContent = S.device + "px · " + side + " · " + mode;
   }
 
   /* ---------------- 页面切换 ---------------- */
@@ -2182,16 +2183,16 @@
     if (!w) return;
     try { w.postMessage({ __v2: true, type: "type-request" }, "*"); } catch (e) {}
   }
-  /* 手机预览里这里填的是「1440 基准 px」，窄屏会按 0.75 落到更小的字号。
-     不写清楚的话，用户把 56 改成 60、手机只从 42 变到 45，会以为没生效。 */
+  /* 两端样式已完全独立：预览停在哪一端，这里填的就是那一端的实际 px，
+     也只写到那一端的样式数据里。必须写清楚，否则用户会担心又联动了。 */
   function typeHint() {
     var h = $("#ty-hint");
     if (!h) return;
     var narrow = false;
     try { narrow = (previewWin().innerWidth || 1440) <= 720; } catch (e) {}
     h.textContent = narrow
-      ? "手机预览 · 填的是桌面基准 px，手机实际 = 基准 × 0.75 · 边输边生效"
-      : "数据来自当前预览页 · 字号 / 宽度不一致会标红 · 手动换行始终保留";
+      ? "正在编辑【手机端】· 填的就是手机实际 px · 改动只存手机端，桌面不受影响 · 边输边生效"
+      : "正在编辑【桌面端】· 改动只存桌面端，手机不受影响 · 字号 / 宽度不一致会标红";
   }
   function openType() {
     $("#type").hidden = false;
@@ -2637,6 +2638,12 @@
         fit();
         setPreviewHint();
         if (!$("#type").hidden) typeHint();
+        /* 明确告诉预览：编辑端换了，按新宽度重读那一套样式数据。
+           只靠 iframe 的 resize 在部分浏览器上不派发，双保险。 */
+        try {
+          $("#preview").contentWindow.postMessage(
+            { __v2: true, type: "device", w: S.device }, "*");
+        } catch (e) {}
         try { $("#preview").contentWindow.scrollTo(0, 0); } catch (e) {}
       });
     });
@@ -2661,12 +2668,17 @@
       var d = e.data;
       if (!d || d.__v2 !== true) return;
 
-      /* 样式：预览端按「类别 + 块」合并算好后，把整份 styles 发回来。
-         整份替换比逐条增量合并可靠 —— 以前两边各拼一份，字段一多就分叉。 */
+      /* 样式：预览端把桌面套 + 手机套一起整份发回来。
+         只存一份的话，用户从控制台发布一次，另一端的数据就静默丢了
+         （移动端样式层就是这么丢过一次）。 */
       if (d.type === "styles") {
         snapshot();
         S.content.styles = d.styles || {};
         if (!Object.keys(S.content.styles).length) delete S.content.styles;
+        if (d.stylesMobile) {
+          S.content.stylesMobile = d.stylesMobile;
+          if (!Object.keys(S.content.stylesMobile).length) delete S.content.stylesMobile;
+        }
         markDirty();
         schedulePersist();
         setState("已记录样式改动 · 未发布", true);
