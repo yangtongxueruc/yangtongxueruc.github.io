@@ -2727,12 +2727,19 @@
      现在改存「1440 视口下的目标 px」，同类填同一个数就是同一个字号。
      响应式用一条统一规则换算，同一个 px 输入在任何视口都算出同一个输出，
      所以「一致性」不会因为换个设备就破掉。 */
+  /* 响应式字号的窄屏下限：写样式（pxToCss）和反解滑块读数（pxToCssAt）
+     必须是同一条公式。早先两处各写一份，反解那份还多夹了 44px 上限，
+     于是窄屏看到 54px 的字，二分反解永远够不着，滑块直接跳到 96 ——
+     在手机预览里拖字号就像「改了没反应」。 */
+  function clampFloor(px) {
+    return Math.max(16, px * 0.75);
+  }
   function pxToCss(px) {
     /* 窄屏落点 = 桌面目标 × 0.75，下限 16px。
        早先这里还夹了个「最高 44px」，结果 58.7px 以上的标题在手机上一律 44 ——
        控制台往上拖字号完全没有反应（联系区标题就是这么被卡住的）。
        这个上限去掉了：作者设多大，窄屏就按 0.75 落到多大。 */
-    var min = Math.max(16, px * 0.75);
+    var min = clampFloor(px);
     var vw = (px / 14.4).toFixed(4); /* px / 1440 * 100 */
     return "clamp(" + min.toFixed(2) + "px, " + vw + "vw, " + px + "px)";
   }
@@ -3528,7 +3535,7 @@
      这样即便在平板/手机预览里调字号，滑块和数值仍然是桌面那一套刻度，
      不会把 31px 当成桌面值写进去。 */
   function pxToCssAt(px, W) {
-    var min = Math.min(44, Math.max(16, px * 0.75));
+    var min = clampFloor(px);
     var vw = ((px / 14.4) * W) / 100;
     return Math.min(Math.max(min, vw), px);
   }
@@ -3578,6 +3585,11 @@
     var fs = parseFloat(cs.fontSize) || 16;
     var lhPx = parseFloat(cs.lineHeight);
     if (!isFinite(lhPx) || lhPx <= 0) lhPx = Math.round(fs * 1.5);
+    /* 手机预览里移动层用 --tb-lhr 把行高按比例缩过（桌面 58px 在 390 宽只有 43.7px）。
+       面板刻度是「1440 基准的 px」，量到的窄屏值要按「桌面字号 ÷ 窄屏字号」折回去，
+       否则拖一次行距就写回一个 0.75× 的值，下次再缩一次 —— 看起来就是改不动。
+       桌面域不换算，sizePx / fs 在 1440 宽下本就等于 1。 */
+    if (window.innerWidth <= 720 && fs > 0) lhPx = lhPx * (sizePx / fs);
     var mbPx = Math.round(parseFloat(cs.marginBottom) || 0);
     var cw = parseInt(cs.fontWeight, 10) || 400;
 
@@ -3812,10 +3824,15 @@
     }
 
     function setSize(v, fromSlider) {
+      /* 先取「改之前的行距倍数」再改字号。早先顺序反了：st.size 先变，
+         lhRatio() 拿新 size 一除，算出来还是原来那个行高，字号拖大后行距纹丝不动，
+         手机上就出现行高小于字号、多行标题叠在一起。
+         联动出来的行距还必须标脏：collect() 只写 dirty 字段，不标就永远不落盘。 */
+      var ratio = lhRatio();
       st.size = Math.max(12, Math.min(96, Math.round(v) || 12));
       dirtySize = true;
-      /* 字号变了，行距按同一比例跟着走，观感不会突然变紧或变松 */
-      st.lh = Math.round(st.size * lhRatio());
+      st.lh = Math.max(16, Math.min(140, Math.round(st.size * ratio)));
+      dirtyLh = true;
       if (!fromSlider) syncSize();
       else { q("numbox").value = String(st.size); syncText(); }
       push();

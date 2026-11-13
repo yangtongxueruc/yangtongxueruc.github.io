@@ -357,12 +357,16 @@
     --m-k: 1;
     font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.8) !important;
-    margin-bottom: 14px !important;
+    /* 段后必须读控制台的 --tb-mb：早先写死 14px !important，
+       内联的 --tb-mb / margin-bottom 全被压掉，正文「改段后」永远没反应。 */
+    margin-bottom: var(--tb-mb, 14px) !important;
     max-width: none !important;
     text-align: left !important;
     color: var(--text-2);
   }
-  .body-text + .body-text { margin-top: 14px; }
+  /* 相邻段落的上边距也跟随同一个值：只改下边距的话，
+     margin collapse 会取两者较大值，用户把段后归零时这里仍顶着 14px。 */
+  .body-text + .body-text { margin-top: var(--tb-mb, 14px); }
 
   /* ---------- 经历：时间轴 ---------- */
   .timeline {
