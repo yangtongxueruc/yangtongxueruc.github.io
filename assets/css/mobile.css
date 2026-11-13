@@ -355,7 +355,10 @@
        内联的 --tb-mb / margin-bottom 全被压掉，正文「改段后」永远没反应。 */
     margin-bottom: var(--tb-mb, 14px) !important;
     max-width: none !important;
-    text-align: left !important;
+    /* 对齐不能写死 left：控制台给正文设了「两端对齐」时，行内 text-align
+       会被这条 !important 压掉，手机上看起来就是「选了 justify 没生效」。
+       这里不声明对齐，交给行内（没设时自然继承 start）。 */
+    text-justify: inter-ideograph;
     color: var(--text-2);
   }
   /* 相邻段落的上边距也跟随同一个值：只改下边距的话，
@@ -372,6 +375,10 @@
     /* v2 给 timeline 上下各留了 96px（桌面版的呼吸感）。窄屏上这段内边距
        会把竖线也拉长 96px，末条下面拖出一条没内容的线，必须清掉 */
     padding-block: 0 !important;
+    /* 桌面靠这条顶边把「时间轴」和上一段分开；窄屏上它正好横穿
+       「2023 – 至今」那一行，看着像一条错位的分割线。窄屏已经有
+       区块之间的 56px 留白，不需要它。 */
+    border-top: 0 !important;
   }
   /* 竖线复用原实现，只把位置对到 18px 轨道列的中线上 */
   .timeline::before,
@@ -500,27 +507,41 @@
     overflow: visible;
     padding: 56px 0;
   }
+  /* 头：标题独占一行，说明和翻页按钮并排 —— 说明靠右、与 40px 箭头垂直居中。
+     说明原来独占标题下两行，把「标题 → 卡片」的间距撑到 100px 以上，
+     和别的区块（标题下 20~24px 就进内容）完全不是一个节奏。 */
   .pin__head {
-    display: block;
-    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    /* 基础样式是 width:min(1240px,100% - 40px) + margin:0 auto：
+       窄屏上 350px 的盒子配 auto 居中，和其它区块的 24px 左边缘对不上。
+       改成吃满内容区、左右各 24。 */
+    width: auto !important;
+    margin: 0 var(--m-pad) 24px !important;
   }
+  .pin__head > div { flex: 1 0 100%; }
   .pin__head .muted {
-    margin-top: 12px;
-    text-align: left !important;
+    order: 2;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0 0 0 16px !important;
+    text-align: right !important;
     max-width: none !important;
-    font-size: var(--tb-px0, 13.5px) !important;
-    line-height: var(--tb-lhr, 1.7) !important;
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
+    letter-spacing: 0;
     color: var(--text-3);
   }
-  /* 说明文字与翻页按钮分两行：并排时说明只有 130px 宽，一行放不下 6 个字 */
   .pin__tools {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-    margin-top: 16px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    margin-top: 18px !important;
   }
-  .roles-nav { align-self: flex-start; }
+  .roles-nav { order: 1; flex: none; align-self: center; }
   .roles-nav__count {
     font-size: 12px;
     letter-spacing: 0.04em;
@@ -691,6 +712,70 @@
     line-height: var(--tb-lhr, 1.8) !important;
     color: var(--text-2);
   }
+  /* 信息库 / 相册的页头在窄屏居中：这两页标题是「两句话」式的短句，
+     左对齐时右半边整片空着，看着像没排完。控制台若给标题或引言设过
+     对齐方式，行内值会盖过这里，仍以作者设置为准。 */
+  body[data-page="links"] .pagehead,
+  body[data-page="gallery"] .pagehead {
+    text-align: center;
+  }
+  body[data-page="links"] .pagehead h1,
+  body[data-page="gallery"] .pagehead h1,
+  body[data-page="links"] .pagehead .lead,
+  body[data-page="gallery"] .pagehead .lead {
+    margin-inline: auto;
+  }
+
+  /* ---------- 信息库：搜索与筛选条 ----------
+     桌面是「搜索框 + 一排 chip + 计数」横排；手机照搬会占掉 206px，
+     而且 .wrap 套 .wrap 让它比卡片又多缩进 24px。这里压成三行、
+     并且和卡片同一条左边缘（24px）。 */
+  .toolbar {
+    top: 52px;                       /* 导航是 52px，原来按桌面 72px 算会悬空 */
+    margin-top: 20px !important;
+    padding: 10px 0;
+    /* 背景条拉到屏幕两边（.wrap 两侧各 24px），内部再用 24 对齐卡片 */
+    margin-inline: calc(-1 * var(--m-pad)) !important;
+    padding-inline: var(--m-pad);
+  }
+  .toolbar__inner {
+    gap: 8px;
+    padding-inline: 0 !important;    /* 去掉第二层 24px 内缩 */
+  }
+  .search { flex: 1 1 100%; max-width: none; }
+  .search input {
+    min-height: 38px;
+    padding: 6px 10px 6px 34px;
+    border-radius: 10px;
+    font-size: 13.5px;
+  }
+  .search svg { width: 13px; height: 13px; left: 11px; }
+  /* chip 单行横滚：换行会把工具条又撑回两行高，横滚只占 30px */
+  .chips {
+    flex: 1 1 100%;
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: 0 0 auto;
+    min-height: 30px;
+    padding: 2px 10px;
+    font-size: 12.5px;
+    border-radius: 999px;
+  }
+  .toolbar__count {
+    margin-left: auto;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+  }
+  /* 工具条到第一张卡片的距离：内联写的是 var(--space-32)（32px），
+     加上工具条的 padding 会到 48px，比其它区块松一档。 */
+  [data-modules] { margin-top: 20px !important; }
   .block {
     padding-block: 40px;
     border-top: 1px solid var(--m-hair);
