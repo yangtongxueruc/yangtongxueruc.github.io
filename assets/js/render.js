@@ -2739,6 +2739,13 @@
     var m = /^clamp\(\s*[-\d.]+\s*px\s*,\s*[-\d.]+\s*vw\s*,\s*([-\d.]+)\s*px\s*\)$/.exec(String(css || "").trim());
     return m ? parseFloat(m[1]) : 0;
   }
+  /* 取 clamp 的**下限** = 手机宽度下这条响应式规则会落到的字号。
+     移动层直接用它当字号，等于「控制台设多大，窄屏就按同一条规则缩到多大」，
+     不用再另乘一套各自为政的系数（那套系数就是「改了字号手机没反应」的来源）。 */
+  function clampMinPx(css) {
+    var m = /^clamp\(\s*([-\d.]+)\s*px\s*,/.exec(String(css || "").trim());
+    return m ? parseFloat(m[1]) : 0;
+  }
 
   var naturalCache = new WeakMap();
   function naturalSize(el) {
@@ -2931,6 +2938,17 @@
     if (target > 0) el.style.setProperty("--tb-px", target + "px");
     else el.style.removeProperty("--tb-px");
 
+    /* 窄屏落点：clamp 的下限，就是这条规则在手机宽度下的实际字号。
+       移动层优先用它，缺了才退回「桌面 px × 系数」。 */
+    var phone = clampMinPx(el.style.fontSize);
+    if (phone > 0) el.style.setProperty("--tb-px0", phone + "px");
+    else el.style.removeProperty("--tb-px0");
+
+    /* 段后：控制台设了就用它，移动层不再写死 20px 把行内值压掉。 */
+    var mb = o && o.mb ? Math.round(parseFloat(o.mb)) : 0;
+    if (mb > 0) el.style.setProperty("--tb-mb", mb + "px");
+    else el.style.removeProperty("--tb-mb");
+
     /* ---- 宽度 / 对齐 / 换行 ----
        样式表里很多 max-width 用 ch，ch 跟着字号涨，字号一调就撑出栅格列，
        于是同类文字块的右边界各是各的。这里改成可显式指定的 px。
@@ -2979,23 +2997,33 @@
      没设过字号、也没有片段的块完全不动，保持样式表原样。 */
   function naturalLeading(el) {
     var pf = el.style.fontSize, pl = el.style.lineHeight;
+    /* 移动层用 var(--tb-lhr) 算行高，量的时候必须把它也摘掉，
+       否则量到的是「上一次算出来的比值」，自己喂自己，越算越小。 */
+    var pv = el.style.getPropertyValue("--tb-lhr");
     el.style.fontSize = "";
     el.style.lineHeight = "";
+    el.style.removeProperty("--tb-lhr");
     var cs = getComputedStyle(el);
     var f = parseFloat(cs.fontSize) || 0;
     var l = parseFloat(cs.lineHeight);
     if (!isFinite(l) || l <= 0) l = f * 1.5;
     el.style.fontSize = pf;
     el.style.lineHeight = pl;
+    if (pv) el.style.setProperty("--tb-lhr", pv);
     return f > 0 ? l / f : 1.5;
   }
   function pinLeadings() {
     var runsMap = (state.content && state.content.styles && state.content.styles.runs) || {};
-    /* 行距比：移动层把字号缩小后，行高不能还是桌面那串 px，
-       否则 19px 的字配 52px 的行，整段散架。留一个无单位比值给它。 */
+    /* 行距比：移动层按比例缩了字号，行高也不能还是桌面那串 px，
+       否则 28px 的字配 52px 的行，整段散架。给它一个无单位比值。
+       分子分母都必须是**桌面域**的值：px 是桌面行高，--tb-px 是桌面目标字号。
+       早先这里用「当前渲染字号」当分母，可移动层已经把字号缩小了一半，
+       于是每跑一次 pinLeadings 比值就被再折一次（0.55 → 0.275 → …），
+       首页大标题的行高就这样从 39.6 塌到 7.3px。 */
     function markLead(el, px) {
       el.style.lineHeight = Math.round(px) + "px";
-      var base = parseFloat(el.style.getPropertyValue("--tb-px")) || 0;
+      var base = parseFloat(el.style.getPropertyValue("--tb-px")) ||
+        parseFloat(getComputedStyle(el).fontSize) || 0;
       if (base > 0 && px > 0) el.style.setProperty("--tb-lhr", (px / base).toFixed(3));
       else el.style.removeProperty("--tb-lhr");
     }
@@ -3005,13 +3033,17 @@
       if (o.lh) { markLead(el, parseFloat(o.lh)); return; }
       var hasRuns = (runsMap[id] || []).some(function (r) { return r.size || r.scale; });
       if (!o.size && !hasRuns) { el.style.lineHeight = ""; el.style.removeProperty("--tb-lhr"); return; }
-      /* 行距跟着「这一段里最大的那个字号」走，大行不会被压扁 */
-      var maxFs = parseFloat(getComputedStyle(el).fontSize) || 0;
+      /* 行距跟着「这一段里最大的那个字号」走，大行不会被压扁。
+         基准取桌面字号（--tb-px），不是当前渲染字号 —— 见上面的注释。 */
+      var baseFs = parseFloat(el.style.getPropertyValue("--tb-px")) ||
+        parseFloat(getComputedStyle(el).fontSize) || 0;
+      var curFs = parseFloat(getComputedStyle(el).fontSize) || baseFs;
+      var grow = 1;
       Array.prototype.forEach.call(el.querySelectorAll(".tb-run"), function (s) {
         var v = parseFloat(getComputedStyle(s).fontSize) || 0;
-        if (v > maxFs) maxFs = v;
+        if (curFs > 0 && v / curFs > grow) grow = v / curFs;
       });
-      if (maxFs > 0) markLead(el, maxFs * naturalLeading(el));
+      if (baseFs > 0) markLead(el, baseFs * grow * naturalLeading(el));
     });
   }
   /* 改类别：写 styles.roles.<role>，并把同类块的对应字段本地覆盖清掉，

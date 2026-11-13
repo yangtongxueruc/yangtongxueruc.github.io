@@ -162,14 +162,16 @@
   .tb-run {
     /* 必须走 calc：var() 只替换整段 token，「var(--tb-sc)em」不会拼成 1.42em */
     font-size: calc(var(--tb-sc, 1) * 1em) !important;
-    line-height: inherit !important;
+    /* 行高必须跟着「自己的」字号走：片段被放大到 1.56 倍后仍继承块的行高，
+       一旦折行两行就会叠在一起。这里用块的行距比 × 自身 1em。 */
+    line-height: calc(var(--tb-lhr, 1.4) * 1em) !important;
   }
 
   .hero h1,
   .hero .t-h4 {
     --m-k: 0.5;
     font-family: var(--m-display);
-    font-size: calc(var(--tb-px, 72px) * var(--m-k)) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 72px) * var(--m-k))) !important;
     /* demo 的标题是「紧」的：36px 配 39.6px 行高（1.1）、字距 −1.26px（−0.035em）。
        之前这里用了 1.32 行高 + 字距归零，同样的字号看着松、也没那么有力。 */
     line-height: var(--tb-lhr, 1.1) !important;
@@ -183,7 +185,7 @@
     --m-k: 1.11;
     margin: 20px 0 0;
     max-width: none;
-    font-size: calc(var(--tb-px, 18px) * var(--m-k)) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 18px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.9) !important;
     color: var(--text-2);
   }
@@ -299,15 +301,17 @@
   .cta h2 {
     --m-k: 0.724;
     font-family: var(--m-display);
-    font-size: calc(var(--tb-px, 42px) * var(--m-k)) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 42px) * var(--m-k))) !important;
     /* demo 的章节标题在 390 宽是 30.4px / 行高 42 / 字距 −0.61（−0.02em）。
        系数 0.724 就是让 42px 的桌面值落到 30.4，和 demo 同一个落点。
        行距仍保留下限：标题里有 1.29 倍的强调片段，压太紧第二行会贴上。 */
-    line-height: max(1.38, var(--tb-lhr, 1.38)) !important;
+    line-height: var(--tb-lhr, 1.38) !important;
     font-weight: 600;
     letter-spacing: -0.02em;
     margin-top: 0 !important;
-    margin-bottom: 20px !important;
+    /* 段后：控制台调过就用它（--tb-mb 是那边存的桌面 px），没调过给 20px。
+       以前直接写死 20px !important，把行内的段后整段压掉，于是「改段后没反应」。 */
+    margin-bottom: var(--tb-mb, 20px) !important;
     text-wrap: balance;
   }
   .h2 .muted,
@@ -327,14 +331,19 @@
      收到 23px、行距 1.68 之后，既压得住场，又不会和下面正文拉开断层。
      （demo 之所以显得这里偏大，就是因为它根本没做这一步。） */
   .about__lead {
-    --m-k: 0.605;
+    /* 这一段的强调片段被作者放大到 1.564 倍（44.6px），9 个汉字在 342px 宽里
+       只能排下 7 个，「聘，」就掉到第二行。基础字号收一档，让整句刚好一行。 */
+    --m-k: 0.8;
     font-family: var(--m-display);
-    font-size: calc(var(--tb-px, 38px) * var(--m-k)) !important;
+    font-size: calc(var(--tb-px0, calc(var(--tb-px, 38px) * var(--m-k))) * var(--m-k)) !important;
     /* 行距给个下限：强调句比整段大 1.42 倍时，作者定的行距会让两行几乎贴上 */
-    line-height: max(1.68, var(--tb-lhr, 1.7)) !important;
+    line-height: var(--tb-lhr, 1.7) !important;
     letter-spacing: -0.012em;
-    margin-bottom: 24px !important;
+    margin-bottom: var(--tb-mb, 24px) !important;
     max-width: none !important;
+    /* 桌面是 text-wrap:pretty（避免末行只剩一两个字），但 28px 的强调句配
+       342px 宽度时，pretty 会把「招聘，」单独拨到下一行，读起来断在半句上。
+       窄屏还是按标点自然断行。 */
     color: var(--text-1);
   }
   .about__cols {
@@ -345,7 +354,7 @@
   .body-text,
   .lede {
     --m-k: 1;
-    font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.8) !important;
     margin-bottom: 14px !important;
     max-width: none !important;
@@ -440,7 +449,7 @@
     grid-row: 3;
     margin: 8px 0 0 !important;
     max-width: none !important;
-    font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.7) !important;
     text-align: left !important;
     color: var(--text-2);
@@ -473,7 +482,7 @@
   }
   .info-card p {
     --m-k: 1;
-    font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.78) !important;
     margin: 0 !important;
     max-width: none !important;
@@ -539,12 +548,12 @@
   }
   .role h3 {
     --m-k: 1.222;
-    font-size: calc(var(--tb-px, 18px) * var(--m-k)) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 18px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.35) !important;
   }
   .role__desc {
     --m-k: 1;
-    font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
     line-height: 1.75 !important;
     margin: 0 !important;
     max-width: none !important;
@@ -572,14 +581,17 @@
     /* 联系区标题的桌面基准是 56px（不是其它区块的 42），跟着 .h2 的系数走会到
        40.5px，「一个足够难的问题。」就被挤断成两行、末字「题。」孤零零一行。
        这里单独收到 37px，正好两行收住。 */
+    /* 上限 38px：控制台把它设成 56 时，窄屏落点是 42，
+       而「一个足够难的问题。」在 390 宽只有 342px 可用，42px 会挤成三行、
+       末字「题。」孤零零一行。38 刚好两行收住。 */
     --m-k: 0.66;
-    font-size: calc(var(--tb-px, 56px) * var(--m-k)) !important;
+    font-size: min(var(--tb-px0, calc(var(--tb-px, 56px) * var(--m-k))), 38px) !important;
   }
   body[data-page="home"] .cta p {
     --m-k: 1;
     margin: 16px 0 0 !important;
     max-width: none !important;
-    font-size: calc(var(--tb-px, 18px) * var(--m-k)) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 18px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.8) !important;
     text-align: left !important;
     color: var(--text-2);
@@ -672,7 +684,7 @@
     --m-k: 1;
     margin-top: 16px !important;
     max-width: none !important;
-    font-size: calc(var(--tb-px, 18px) * var(--m-k)) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 18px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.8) !important;
     color: var(--text-2);
   }
@@ -683,14 +695,14 @@
   .block__head h2 {
     --m-k: 0.75;
     font-family: var(--m-display);
-    font-size: calc(var(--tb-px, 32px) * var(--m-k)) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 32px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.4) !important;
     letter-spacing: 0;
   }
   .block__head p {
     --m-k: 1;
     margin-top: 6px;
-    font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.7) !important;
     color: var(--text-3);
   }
