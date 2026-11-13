@@ -690,7 +690,11 @@
     letter-spacing: -0.02em;
     margin-top: 10px;
   }
-  .pagehead h1 span {
+  /* 这两行原本是为了让页头标题的上下两句各自成行。但选择器是泛指 span，
+     片段 .tb-run 也是 span，而它特异性更高，font-size: inherit !important
+     会把用户给标题片段设的字号整个压回父块 —— 选文字改字号永远没反应。
+     只作用于「非片段」的换行 span；片段自己的字号/行距交给 .tb-run。 */
+  .pagehead h1 span:not(.tb-run) {
     display: block;
     font-size: inherit !important;
     line-height: inherit !important;

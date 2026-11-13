@@ -3748,8 +3748,27 @@
             : st.wrap === "balance" ? "折行时各行更均匀。" : "宽度不够才折行。");
       }
     }
+    /* 桌面基准 → 手机实际，两个域并排写出来。
+       片段面板没有 metrics 行，所以这件事必须独立成一个函数，
+       放在 syncMetrics() 的早退之前，否则片段改字号时读数永远空白。 */
+    function syncPhoneSize() {
+      var ps = q("phonesize");
+      if (!ps) return;
+      if (window.innerWidth > 720) { ps.style.display = "none"; return; }
+      /* 片段面板的 el 可能是整块（新片段还没包 span），也可能已经是片段本身。
+         改完后优先量生成出来的 .tb-run，读数才是用户看到的那几个字。 */
+      var target = el;
+      if (el.dataset && el.dataset.tb) {
+        var s = el.querySelector(".tb-run");
+        if (s) target = s;
+      }
+      var actual = Math.round(parseFloat(getComputedStyle(target).fontSize) || 0);
+      ps.style.display = "";
+      ps.innerHTML = "<span>桌面基准 " + st.size + "px</span><b>手机实际 " + actual + "px</b>";
+    }
     /* 实时把「这一改到底会不会折行 / 会不会被裁掉」说出来，不用靠肉眼数 */
     function syncMetrics() {
+      syncPhoneSize();
       var m = q("metrics");
       if (!m) return;
       var wNow = Math.round(el.getBoundingClientRect().width);
@@ -3772,16 +3791,6 @@
       m.innerHTML = "<span>" + lines + " 行" + (brs ? "（含 " + brs + " 处手动换行）" : "") +
         " · 宽 " + wNow + "px · " + refTxt + "</span>" +
         (note ? "<b>" + note + "</b>" : "");
-      /* 必须在 push() 之后量：这时候 DOM 才是改完的样子。
-         桌面基准 → 手机实际两个域并排显示，避免「数字改了但看不出变化」。 */
-      var ps = q("phonesize");
-      if (ps) {
-        if (window.innerWidth <= 720) {
-          var actual = Math.round(parseFloat(getComputedStyle(el).fontSize) || 0);
-          ps.style.display = "";
-          ps.innerHTML = "<span>桌面基准 " + st.size + "px</span><b>手机实际 " + actual + "px</b>";
-        } else ps.style.display = "none";
-      }
     }
     function syncWeight() {
       Array.prototype.forEach.call(seg.querySelectorAll("button"), function (b) {
@@ -4119,16 +4128,27 @@
           delete style.size;
         }
         var has = Object.keys(style).length > 0;
+        /* collect() 只给「本次动过的字段」。以前拿这个增量直接重建 item，
+           于是先改字号、再改粗细，字号就被抹回默认值；反过来也一样，
+           看起来就是「改了不生效 / 互相打架」。先把这个片段原有的设置读回来。 */
+        var prev = null;
+        var runsMap = (state.content && state.content.styles &&
+          state.content.styles.runs) || {};
+        (runsMap[id] || []).forEach(function (r) { if (r.text === text) prev = r; });
+        var item = { text: text };
+        Object.keys(prev || {}).forEach(function (k) {
+          if (k !== "text") item[k] = prev[k];
+        });
+        Object.keys(style).forEach(function (k) {
+          if (style[k] === "" || style[k] == null) delete item[k];
+          else item[k] = style[k];
+        });
         /* 1) 先落到数据，重绘后还能长回来 */
         if (state.content) {
           state.content.styles = state.content.styles || {};
           state.content.styles.runs = state.content.styles.runs || {};
           var arr = (state.content.styles.runs[id] || []).filter(function (r) { return r.text !== text; });
-          if (has) {
-            var item = { text: text };
-            Object.keys(style).forEach(function (k) { item[k] = style[k]; });
-            arr.push(item);
-          }
+          if (has) arr.push(item);
           if (arr.length) state.content.styles.runs[id] = arr;
           else delete state.content.styles.runs[id];
           if (!Object.keys(state.content.styles.runs).length) delete state.content.styles.runs;
@@ -4143,9 +4163,13 @@
           }
         } else {
           var payload = { text: text };
-          Object.keys(style).forEach(function (k) { payload[k] = style[k]; });
+          Object.keys(item).forEach(function (k) { payload[k] = item[k]; });
           if (span) applyRunStyle(span, payload);
-          else wrapRun(blockEl, payload);
+          else if (!wrapRun(blockEl, payload)) {
+            /* 选区跨了 <br> 或已经属于另一个片段时，按文字找不到单一文本节点，
+               以前会静默失败：面板照开、滑块照拖、预览一动不动。 */
+            toastIn("这段文字跨了换行或属于别的片段，请只选同一行里的连续文字");
+          }
         }
         pushStyles();
       }
