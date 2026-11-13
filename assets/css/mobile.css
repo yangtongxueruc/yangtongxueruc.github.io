@@ -156,7 +156,8 @@
      「桌面缩水版」：26px 的标题配 52px 行高，一段话占掉半屏。
      —— 但归一不能写死 px。写死之后控制台「调字号」在手机上就再也调不动了
      （改了没反应，看起来像坏了）。所以这里的规矩是：
-       · 块字号 = calc(桌面目标字号 × 角色系数)，系数 --m-k 只在本层定义；
+       · 块字号一律 = var(--tb-px0, 默认px)：--tb-px0 是控制台桌面字号 × 0.75，
+         所有模块共用同一条公式，不再各自乘角色系数 --m-k；
        · 片段字号 = 相对父级的倍数（em），强调的比例在任何宽度都一致；
        · 行距 = 无单位比值（--tb-lhr），字号变小行高自己跟着收。 */
   .tb-run {
@@ -169,9 +170,8 @@
 
   .hero h1,
   .hero .t-h4 {
-    --m-k: 0.5;
     font-family: var(--m-display);
-    font-size: var(--tb-px0, calc(var(--tb-px, 72px) * var(--m-k))) !important;
+    font-size: var(--tb-px0, 36px) !important;
     /* demo 的标题是「紧」的：36px 配 39.6px 行高（1.1）、字距 −1.26px（−0.035em）。
        之前这里用了 1.32 行高 + 字距归零，同样的字号看着松、也没那么有力。 */
     line-height: var(--tb-lhr, 1.1) !important;
@@ -183,10 +183,9 @@
   .mask-line { display: block; }
 
   .hero__sub {
-    --m-k: 1.11;
     margin: 20px 0 0;
     max-width: none;
-    font-size: var(--tb-px0, calc(var(--tb-px, 18px) * var(--m-k))) !important;
+    font-size: var(--tb-px0, 19.98px) !important;
     line-height: var(--tb-lhr, 1.9) !important;
     color: var(--text-2);
   }
@@ -295,17 +294,16 @@
   .rail::after { display: none; }
   .rail .idx { display: none; }
 
-  /* 章节标题：衬线，约为桌面 42px 的 0.6 倍（390 宽 ≈ 25px）。
-     系数而不是绝对值，所以控制台把 H2 调到 48 时手机上跟着到 29。 */
+  /* 章节标题：衬线。没设过字号时保留 demo 的 30.408px 落点；
+     一旦控制台设了字号，一律走 --tb-px0（桌面值 × 0.75），
+     和首页主标题、正文、联系区标题完全同一条公式。 */
   .h2,
   .pin__head .h2,
   .cta h2 {
-    --m-k: 0.724;
     font-family: var(--m-display);
-    font-size: var(--tb-px0, calc(var(--tb-px, 42px) * var(--m-k))) !important;
+    font-size: var(--tb-px0, 30.408px) !important;
     /* demo 的章节标题在 390 宽是 30.4px / 行高 42 / 字距 −0.61（−0.02em）。
-       系数 0.724 就是让 42px 的桌面值落到 30.4，和 demo 同一个落点。
-       行距仍保留下限：标题里有 1.29 倍的强调片段，压太紧第二行会贴上。 */
+       字距和行距比保留；字号本身不再乘任何角色系数。 */
     line-height: var(--tb-lhr, 1.38) !important;
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -327,16 +325,13 @@
   .only-wide { display: inline; }
 
   /* ---------- 关于 ---------- */
-  /* 这一段是整页唯一「必须收」的地方：它的字号是作者在控制台里按桌面手调的
-     38px / 52px 行高，原样搬到 390 宽就是 28.5px 配 1.82 行距，一句话占四行。
-     收到 23px、行距 1.68 之后，既压得住场，又不会和下面正文拉开断层。
-     （demo 之所以显得这里偏大，就是因为它根本没做这一步。） */
+  /* 没设过字号时保留 demo 的 24.32px 落点。
+     这里原来写成 calc(var(--tb-px0, …) * 0.8)：控制台设了字号还要额外再乘一次，
+     于是「关于」引导语填 48 只有 28.8px，别的模块同样填 48 是 36px —— 这是
+     作者反复看到「关于字号和其它模块对不上」的根因。现在和其它块完全同口径。 */
   .about__lead {
-    /* 这一段的强调片段被作者放大到 1.564 倍（44.6px），9 个汉字在 342px 宽里
-       只能排下 7 个，「聘，」就掉到第二行。基础字号收一档，让整句刚好一行。 */
-    --m-k: 0.8;
     font-family: var(--m-display);
-    font-size: calc(var(--tb-px0, calc(var(--tb-px, 38px) * var(--m-k))) * var(--m-k)) !important;
+    font-size: var(--tb-px0, 24.32px) !important;
     /* 行距给个下限：强调句比整段大 1.42 倍时，作者定的行距会让两行几乎贴上 */
     line-height: var(--tb-lhr, 1.7) !important;
     letter-spacing: -0.012em;
@@ -354,8 +349,7 @@
   }
   .body-text,
   .lede {
-    --m-k: 1;
-    font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
+    font-size: var(--tb-px0, 16px) !important;
     line-height: var(--tb-lhr, 1.8) !important;
     /* 段后必须读控制台的 --tb-mb：早先写死 14px !important，
        内联的 --tb-mb / margin-bottom 全被压掉，正文「改段后」永远没反应。 */
@@ -449,13 +443,12 @@
     color: var(--text-3);
   }
   .tl-item__desc {
-    --m-k: 1;
     grid-column: 2 / -1;
     grid-row: 3;
     margin-top: 8px !important;
     margin-bottom: var(--tb-mb, 0) !important;
     max-width: none !important;
-    font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
+    font-size: var(--tb-px0, 16px) !important;
     line-height: var(--tb-lhr, 1.7) !important;
     text-align: left !important;
     color: var(--text-2);
@@ -487,8 +480,7 @@
     margin-bottom: 8px;
   }
   .info-card p {
-    --m-k: 1;
-    font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
+    font-size: var(--tb-px0, 16px) !important;
     line-height: var(--tb-lhr, 1.78) !important;
     margin-top: 0 !important;
     margin-bottom: var(--tb-mb, 0) !important;
@@ -554,13 +546,11 @@
     scroll-snap-align: start;
   }
   .role h3 {
-    --m-k: 1.222;
-    font-size: var(--tb-px0, calc(var(--tb-px, 18px) * var(--m-k))) !important;
+    font-size: var(--tb-px0, 21.996px) !important;
     line-height: var(--tb-lhr, 1.35) !important;
   }
   .role__desc {
-    --m-k: 1;
-    font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
+    font-size: var(--tb-px0, 16px) !important;
     line-height: var(--tb-lhr, 1.75) !important;
     margin-top: 0 !important;
     margin-bottom: var(--tb-mb, 0) !important;
@@ -586,24 +576,19 @@
   }
   body[data-page="home"] .cta h2 {
     margin-top: 10px;
-    /* 联系区标题的桌面基准是 56px（不是其它区块的 42），跟着 .h2 的系数走会到
-       40.5px，「一个足够难的问题。」就被挤断成两行、末字「题。」孤零零一行。
-       这里单独收到 37px，正好两行收住。 */
-    /* 字号完全交给控制台（之前压了 38px 上限，往上调完全没反应）。
+    /* 没设过字号时保留 demo 的 36.96px 落点；设过之后与其它块一样直接读 --tb-px0。
        这句标题中间有一个 <br>，balance 遇到强制断行不生效，
-       改用 pretty 把「问题。」从孤字拉成整行。 */
-    --m-k: 0.66;
-    font-size: var(--tb-px0, calc(var(--tb-px, 56px) * var(--m-k))) !important;
+       用 pretty 把「问题。」从孤字拉成整行。 */
+    font-size: var(--tb-px0, 36.96px) !important;
     text-wrap: pretty;
   }
   body[data-page="home"] .cta p {
-    --m-k: 1;
     /* 只写上边距。写成 margin: 16px 0 0 会把段后一起写死，
        控制台调「段后」就没反应了。 */
     margin-top: 16px !important;
     margin-bottom: var(--tb-mb, 0) !important;
     max-width: none !important;
-    font-size: var(--tb-px0, calc(var(--tb-px, 18px) * var(--m-k))) !important;
+    font-size: var(--tb-px0, 18px) !important;
     line-height: var(--tb-lhr, 1.8) !important;
     text-align: left !important;
     color: var(--text-2);
@@ -700,10 +685,9 @@
     line-height: inherit !important;
   }
   .pagehead .lead {
-    --m-k: 1;
     margin-top: 16px !important;
     max-width: none !important;
-    font-size: var(--tb-px0, calc(var(--tb-px, 18px) * var(--m-k))) !important;
+    font-size: var(--tb-px0, 18px) !important;
     line-height: var(--tb-lhr, 1.8) !important;
     color: var(--text-2);
   }
@@ -712,16 +696,14 @@
     border-top: 1px solid var(--m-hair);
   }
   .block__head h2 {
-    --m-k: 0.75;
     font-family: var(--m-display);
-    font-size: var(--tb-px0, calc(var(--tb-px, 32px) * var(--m-k))) !important;
+    font-size: var(--tb-px0, 24px) !important;
     line-height: var(--tb-lhr, 1.4) !important;
     letter-spacing: 0;
   }
   .block__head p {
-    --m-k: 1;
     margin-top: 6px;
-    font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
+    font-size: var(--tb-px0, 16px) !important;
     line-height: var(--tb-lhr, 1.7) !important;
     color: var(--text-3);
   }
