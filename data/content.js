@@ -1,9 +1,9 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/13 18:58:01
+   导出时间：2026/11/13 19:00:39
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 105,
+  "version": 106,
   "updatedAt": "2026-11-13",
   "styles": {
     "blocks": {
@@ -340,35 +340,17 @@ window.V2_CONTENT = {
         "mb": 2,
         "weight": "400"
       },
-      "exp-role-2": {
-        "size": 16,
-        "lh": 22,
-        "mb": 0,
-        "weight": "700"
-      },
       "exp-desc-2": {
         "size": 16,
         "lh": 28,
         "mb": 2,
         "weight": "400"
       },
-      "exp-role-3": {
-        "size": 16,
-        "lh": 22,
-        "mb": 0,
-        "weight": "700"
-      },
       "exp-desc-3": {
         "size": 16,
         "lh": 28,
         "mb": 2,
         "weight": "400"
-      },
-      "exp-role-4": {
-        "size": 16,
-        "lh": 22,
-        "mb": 0,
-        "weight": "700"
       },
       "exp-desc-4": {
         "size": 16,
@@ -721,32 +703,28 @@ window.V2_CONTENT = {
           "weight": "400"
         }
       ],
-      "exp-role-1": [
-        {
-          "text": "北京研发中心校招负责人",
-          "color": "#ffffff",
-          "scale": 0.8
-        }
-      ],
       "exp-role-2": [
         {
           "text": "HR",
           "color": "#ffffff",
-          "scale": 0.8
+          "scale": 1,
+          "weight": "600"
         }
       ],
       "exp-role-3": [
         {
           "text": "校招HR",
           "color": "#ffffff",
-          "scale": 0.8
+          "scale": 1,
+          "weight": "600"
         }
       ],
       "exp-role-4": [
         {
           "text": "人力资源管理",
           "color": "#ffffff",
-          "scale": 0.8
+          "scale": 1,
+          "weight": "600"
         }
       ],
       "exp-org-0": [
@@ -783,12 +761,6 @@ window.V2_CONTENT = {
         {
           "text": "在招岗位",
           "weight": "400"
-        }
-      ],
-      "exp-role-0": [
-        {
-          "text": "校招负责人",
-          "color": "#ffffff"
         }
       ],
       "cta-lead-0": [
@@ -831,6 +803,20 @@ window.V2_CONTENT = {
         {
           "text": "我在找的岗位",
           "scale": 1.185
+        }
+      ],
+      "exp-role-0": [
+        {
+          "text": "校招负责人",
+          "color": "#ffffff",
+          "weight": "600"
+        }
+      ],
+      "exp-role-1": [
+        {
+          "text": "北京研发中心校招负责人",
+          "weight": "600",
+          "color": "#ffffff"
         }
       ]
     }
