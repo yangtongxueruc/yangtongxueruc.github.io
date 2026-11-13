@@ -1,9 +1,9 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/13 15:59:04
+   导出时间：2026/11/13 18:04:46
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 100,
+  "version": 101,
   "updatedAt": "2026-11-13",
   "styles": {
     "blocks": {
@@ -13,13 +13,15 @@ window.V2_CONTENT = {
       },
       "cta-title-0": {
         "mb": 36,
-        "lh": 58,
-        "size": 48
+        "lh": 60,
+        "size": 50
       },
       "cta-lead-0": {
         "mb": 48,
         "w": 876,
-        "weight": "400"
+        "weight": "400",
+        "size": 17,
+        "lh": 29
       },
       "company-title-0": {
         "mb": 36,
@@ -27,19 +29,21 @@ window.V2_CONTENT = {
         "lh": 52
       },
       "about-lead-0": {
-        "mb": 36
+        "mb": 36,
+        "w": 688,
+        "lh": 41
       }
     },
     "runs": {
       "about-lead-0": [
         {
-          "text": "而是一起探索未来3-5年值得投入的事情。",
-          "scale": 0.912
-        },
-        {
           "text": "我不是仅为了招聘，",
           "weight": "600",
-          "scale": 1.564
+          "scale": 3.125
+        },
+        {
+          "text": "而是一起探索未来3-5年值得投入的事情。",
+          "scale": 2.25
         }
       ],
       "exp-title-0": [
@@ -143,7 +147,7 @@ window.V2_CONTENT = {
       "cta-lead-0": [
         {
           "text": "告诉我你最近在解决什么、卡在哪一步，对未来有什么想法，剩下的我们聊聊看。",
-          "scale": 1
+          "scale": 1.353
         }
       ],
       "links-page-title-0": [
@@ -275,20 +279,20 @@ window.V2_CONTENT = {
       },
       "about-lead-0": {
         "size": 16,
-        "lh": 27.01,
-        "mb": 36,
+        "lh": 21,
+        "mb": 28,
         "weight": "400"
       },
       "about-p-0": {
         "size": 16,
         "lh": 28,
-        "mb": 2,
+        "mb": 10,
         "weight": "400"
       },
       "about-p-1": {
         "size": 16,
         "lh": 28,
-        "mb": 2,
+        "mb": 10,
         "weight": "400"
       },
       "about-p-2": {
@@ -668,13 +672,13 @@ window.V2_CONTENT = {
     "runs": {
       "about-lead-0": [
         {
-          "text": "而是一起探索未来3-5年值得投入的事情。",
-          "scale": 0.912
-        },
-        {
           "text": "我不是仅为了招聘，",
           "weight": "600",
-          "scale": 1.564
+          "scale": 2.25
+        },
+        {
+          "text": "而是一起探索未来3-5年值得投入的事情。",
+          "scale": 1.5
         }
       ],
       "exp-title-0": [
@@ -690,13 +694,13 @@ window.V2_CONTENT = {
       ],
       "company-title-0": [
         {
-          "text": "把「不确定」当成原材料。",
-          "weight": "400",
-          "scale": 0.857
+          "text": "我所在的团队，",
+          "scale": 1.143
         },
         {
-          "text": "我所在的团队，",
-          "scale": 1.185
+          "text": "把「不确定」当成原材料。",
+          "weight": "400",
+          "scale": 0.762
         }
       ],
       "stat-label-0": [
@@ -785,23 +789,24 @@ window.V2_CONTENT = {
         {
           "text": "给对量化感兴趣的人",
           "color": "#ffffff",
-          "scale": 1.125
+          "scale": 1
         },
         {
           "text": "一份不那么水的地图",
-          "scale": 1
+          "scale": 0.833,
+          "weight": "400"
         }
       ],
       "gallery-page-title-0": [
         {
           "text": "有时候也会想多看看",
           "color": "#ffffff",
-          "scale": 1.125
+          "scale": 1
         },
         {
           "text": "这个美丽的世界",
           "weight": "400",
-          "scale": 1.125
+          "scale": 1
         }
       ],
       "exp-org-1": [
