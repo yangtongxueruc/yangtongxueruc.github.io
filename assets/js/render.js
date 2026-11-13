@@ -3226,6 +3226,23 @@
     root.style.setProperty("--breathe-lo", lo.toFixed(3));
     root.style.setProperty("--glow-size", size.toFixed(2));
     root.classList.toggle("no-breathe", !on);
+
+    /* 氛围层交给 hero-fx.js 收口：glow 默认 'css' 时它一个节点都不建，
+       桌面版与今天完全一致；切到 'motes' 才换成手机端那套随机光点。
+       字段名与手机 demo 同源，所以同一条控制台命令两端都能用。 */
+    if (window.HeroFx && window.HeroFx.set) {
+      window.HeroFx.set({
+        glow: a.glow || "css",
+        glowScale: a.moteSize,
+        countMin: a.moteCountMin,
+        countMax: a.moteCountMax,
+        peakMin: a.motePeakLo,
+        peakMax: a.motePeakHi,
+        glowDur: a.moteDur,
+        gapMin: a.moteGapMin,
+        gapMax: a.moteGapMax
+      });
+    }
   }
 
   /* 首屏点阵：字段都是字符串，这里统一转成 hero-dots.js 认的数字。

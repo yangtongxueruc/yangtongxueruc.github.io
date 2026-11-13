@@ -3,7 +3,7 @@
    导出时间：2026/11/12 14:12:00
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 78,
+  "version": 81,
   "updatedAt": "2026-11-12",
   "styles": {
     "blocks": {
@@ -613,10 +613,19 @@ window.V2_CONTENT = {
         }
       },
       "atmosphere": {
+        "glow": "css",
         "breathe": "true",
         "speed": "4",
         "depth": "62",
-        "size": "110"
+        "size": "110",
+        "moteSize": "90",
+        "moteCountMin": "1",
+        "moteCountMax": "5",
+        "motePeakLo": "22",
+        "motePeakHi": "68",
+        "moteDur": "3.2",
+        "moteGapMin": "900",
+        "moteGapMax": "2600"
       }
     },
     "links": {
