@@ -272,11 +272,12 @@ window.V2_SCHEMA = {
           label: "氛围层",
           type: "select",
           options: [
-            { v: "css",   label: "单一光斑（默认，现在的效果）" },
-            { v: "motes", label: "多点闪烁（手机端同款）" },
+            { v: "auto",  label: "自动（宽屏单一光斑 · 窄屏多点闪烁）" },
+            { v: "css",   label: "只用单一光斑（现在的桌面效果）" },
+            { v: "motes", label: "只用多点闪烁（手机端同款）" },
             { v: "off",   label: "关闭（干干净净的黑）" }
           ],
-          hint: "默认那团常驻光斑就是 css。切到 motes 后，下面「呼吸」三项失效，改用「光点」那一组参数。想回滚就切回 css，文件不用动。"
+          hint: "默认「自动」：宽屏保持原来那团常驻光斑，720px 以下换成手机端那套随机光点，两端各得其所。想全局统一就选固定的那两项，想回滚就选 css，文件不用动。"
         },
         {
           path: "pages.home.atmosphere.breathe",

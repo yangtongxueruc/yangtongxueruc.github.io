@@ -49,27 +49,25 @@ html[data-theme="light"] {
 
 /* 让位：开着光点（或明确关掉氛围）时，home.css 那两层单一光斑必须退场，
    否则两套光同色叠加会过曝，看起来像一块发白的雾。
-   —— 只在「允许动效」时让位：系统要求减少动态效果时 JS 不会点灯，
-   这时若把底光也让掉，首屏就变成纯黑，那是可访问性上的倒退。
-   所以 reduce 场景保留原来那团静止的光。 */
-@media (prefers-reduced-motion: no-preference) {
-  body[data-glowmode="motes"] .hero::before,
-  body[data-glowmode="motes"] .hero::after,
-  body[data-glowmode="off"] .hero::before,
-  body[data-glowmode="off"] .hero::after {
-    opacity: 0 !important;
-    animation: none !important;
-  }
+   data-glowmode 只在光点层真的建起来之后才写，所以这条规则等同于
+   「JS 接管了才让位」——JS 没跑或出错时，底光还在，首屏不会变黑。 */
+body[data-glowmode="motes"] .hero::before,
+body[data-glowmode="motes"] .hero::after,
+body[data-glowmode="off"] .hero::before,
+body[data-glowmode="off"] .hero::after {
+  opacity: 0 !important;
+  animation: none !important;
 }
 
 /* 光点是相对 .hero 定位的；有些页面的 .hero 没有 position:relative
    （只有挂点阵的 .hero--dots 才加），这里补上，避免光点跑到 body 上 */
 body[data-glowmode="motes"] .hero { position: relative; }
 
-/* 系统要求减少动态效果时不应闪：JS 那边已经不起轮次，这里再兜一层 */
+/* 系统要求减少动态效果时：不掐掉动画（掐掉就是一屏死光，iOS 上常被误读成
+   「特效坏了」），而是交给 JS 把峰值压到七成、时长拉长一半。
+   这里只再兜一层时长下限，防止哪个分支忘了减速。 */
 @media (prefers-reduced-motion: reduce) {
   .hero-mote.is-on {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
+    animation-duration: var(--mote-dur, 5s) !important;
   }
 }

@@ -26,12 +26,14 @@
 
   var root = document.documentElement;
   var body = document.body;
-  var LAYERS = 5;
+  var LAYERS = 6;   /* 至少 6 个格位：一轮最多亮 6 个点（手机 demo 的规格） */
   var EASE = "cubic-bezier(.22,1,.36,1)";
 
   /* 默认值按桌面尺寸给（手机 demo 有自己的一套默认值，键名相同、数值不同） */
   var DEFAULTS = {
-    glow: "css",        // css（单一光斑，现状）| motes（多点闪烁）| off
+    /* auto：宽屏走 css（单一光斑，和今天完全一样），窄屏走 motes（多点闪烁）。
+       光点是一组绝对定位节点，桌面不改就是零变化；手机上要的正是那一套。 */
+    glow: "auto",
     scale: 0.9,         // 光点尺寸系数
     min: 380,           // 基准直径区间（px），再乘 scale
     max: 700,
@@ -58,6 +60,15 @@
 
   function reduce() {
     return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+  /* 窄屏的门槛和 mobile.css 的媒体查询保持一致，两边不要各自写一套数字 */
+  function narrow() {
+    return !!(window.matchMedia && window.matchMedia("(max-width: 720px)").matches);
+  }
+  /* auto 在这里落地：只有这一处决定「这套屏幕该用哪一种光」 */
+  function resolveGlow(mode) {
+    if (mode === "auto") return narrow() ? "motes" : "css";
+    return mode === "motes" || mode === "off" ? mode : "css";
   }
   function num(v, def, lo, hi) {
     var n = parseFloat(v);
@@ -169,8 +180,12 @@
     timers.push(setTimeout(function () {
       if (!active || gen[i] !== my) return;
       place(g, cell, shrink);
-      g.style.setProperty("--mote-peak", (P.peakMin + Math.random() * (P.peakMax - P.peakMin)).toFixed(2));
-      var d = P.dur * (0.78 + Math.random() * 0.45);
+      /* 系统要求减少动态效果时不再「完全不亮」——那样首屏看着像坏了。
+         改成更暗、更长的一次淡入淡出：幅度小到不构成视觉冲击，但仍然活着。 */
+      var soft = reduce() ? 0.72 : 1;
+      var peak = (P.peakMin + Math.random() * (P.peakMax - P.peakMin)) * soft;
+      g.style.setProperty("--mote-peak", peak.toFixed(2));
+      var d = P.dur * (0.78 + Math.random() * 0.45) * (reduce() ? 1.5 : 1);
       g.style.setProperty("--mote-dur", d.toFixed(2) + "s");
       g.classList.remove("is-on");
       void g.offsetWidth;               /* 强制重排，同一元素才能再播一次 */
@@ -210,34 +225,33 @@
   }
 
   function setGlow(mode) {
-    if (mode !== "motes" && mode !== "off" && mode !== "css") mode = "css";
+    if (mode !== "motes" && mode !== "off" && mode !== "css" && mode !== "auto") mode = "auto";
+    /* P.glow 存「用户要的」，P.eff 存「这套屏幕实际该用的」。
+       auto 在窄屏解成 motes、宽屏解成 css，两者只在 resolveGlow 里换算。 */
+    var eff = resolveGlow(mode);
     /* 同模式重复下发是常态（每次内容热更新都会重放一遍），别重启轮次；
        但光点节点被内容重绘清掉时要重建，所以 motes 还要求节点还在。
        判据取 DOM 上真实的属性，reset() 改参数才不会漏掉收尾。 */
     var cur = body.getAttribute("data-glowmode") || "css";
-    if (mode === cur && (mode !== "motes" || (active && motes.length))) {
+    if (eff === cur && (eff !== "motes" || (active && motes.length))) {
       P.glow = mode;
+      P.eff = eff;
       return;
     }
     P.glow = mode;
-    if (mode === "css") {
+    P.eff = eff;
+    if (eff === "css") {
       active = false;
       body.removeAttribute("data-glowmode");
       clearMotes();
       destroyMotes();
       return;
     }
-    body.setAttribute("data-glowmode", mode);
-    if (mode === "off") {
+    body.setAttribute("data-glowmode", eff);
+    if (eff === "off") {
       active = false;
       clearMotes();
       destroyMotes();
-      return;
-    }
-    /* reduced-motion 下不点灯：只在 CSS 里留一层静态弱光，不动画 */
-    if (reduce()) {
-      active = false;
-      clearMotes();
       return;
     }
     if (!findHero()) { retryMotes(); return; }   /* 首屏还没渲染，稍后再来 */
@@ -249,9 +263,9 @@
   /* 首屏是 render.js 渲染出来的，可能比本文件晚；重试有上限，别无限轮询 */
   var tries = 0;
   function retryMotes() {
-    if (active || P.glow !== "motes" || tries++ > 40) return;
+    if (active || P.eff !== "motes" || tries++ > 40) return;
     setTimeout(function () {
-      if (active || P.glow !== "motes") return;
+      if (active || P.eff !== "motes") return;
       if (!findHero()) { retryMotes(); return; }
       buildMotes();
       active = true;
@@ -342,6 +356,7 @@
       dots: dots,
       glow: {
         mode: P.glow,
+        eff: P.eff,
         scale: P.scale,
         min: P.min,
         max: P.max,
@@ -359,8 +374,8 @@
   }
 
   function pulse() {
-    if (P.glow === "css") return "css 模式：光斑常驻呼吸，不需要 pulse";
-    if (P.glow === "off") return "off 模式：氛围已关";
+    if (P.eff === "css") return "css 模式：光斑常驻呼吸，不需要 pulse";
+    if (P.eff === "off") return "off 模式：氛围已关";
     if (!active) return "motes 未启用";
     stopRounds();
     round();
@@ -369,7 +384,7 @@
 
   function reset() {
     for (var k in DEFAULTS) if (DEFAULTS.hasOwnProperty(k)) P[k] = DEFAULTS[k];
-    setGlow("css");
+    setGlow(DEFAULTS.glow);
     return stats();
   }
 
@@ -406,7 +421,7 @@
       if (d.on !== undefined) dotState.on = !isOff(d.on);
     }
     set({
-      glow: a.glow || "css",
+      glow: a.glow || "auto",
       glowScale: num(a.moteSize, 90, 10, 200) / 100,
       countMin: num(a.moteCountMin, 1, 1, LAYERS),
       countMax: num(a.moteCountMax, 5, 1, LAYERS),
@@ -420,4 +435,16 @@
 
   findHero();
   bootstrap();
+
+  /* 跨过 720 这条线时 auto 要换答案（桌面↔手机预览、平板横竖屏）。
+     matchMedia 的 change 比 resize 稳：旋屏时 resize 会连发几次，
+     这里只在真正跨线的那一下触发。 */
+  if (window.matchMedia) {
+    var mqNarrow = window.matchMedia("(max-width: 720px)");
+    var onNarrowChange = function () {
+      if (P.glow === "auto") setGlow("auto");
+    };
+    if (mqNarrow.addEventListener) mqNarrow.addEventListener("change", onNarrowChange);
+    else if (mqNarrow.addListener) mqNarrow.addListener(onNarrowChange);
+  }
 })();

@@ -142,28 +142,23 @@
      控制台会给每一段、甚至每一小段写行内字号（桌面调过的 28.5px / 52px 行高、
      clamp 带 vw 的中间值），行内优先级高于任何选择器。窄屏上不归一，就是
      「桌面缩水版」：26px 的标题配 52px 行高，一段话占掉半屏。
-     做法分两步：
-       ① .tb-run（逐段/逐字）先全部退回继承，让整段回到同一个字号档次；
-       ② 再给文字角色定窄屏字号，用 !important 压过行内值。
-     代价：控制台「按块调字号」只在桌面生效。内容、颜色、粗细两端照常生效。 */
-  .hero h1 .tb-run,
-  .about__lead .tb-run,
-  .h2 .tb-run,
-  .cta h2 .tb-run,
-  .cta p .tb-run,
-  .body-text .tb-run,
-  .lede .tb-run,
-  .tl-item__desc .tb-run,
-  .role__desc .tb-run {
-    font-size: inherit !important;
+     —— 但归一不能写死 px。写死之后控制台「调字号」在手机上就再也调不动了
+     （改了没反应，看起来像坏了）。所以这里的规矩是：
+       · 块字号 = calc(桌面目标字号 × 角色系数)，系数 --m-k 只在本层定义；
+       · 片段字号 = 相对父级的倍数（em），强调的比例在任何宽度都一致；
+       · 行距 = 无单位比值（--tb-lhr），字号变小行高自己跟着收。 */
+  .tb-run {
+    /* 必须走 calc：var() 只替换整段 token，「var(--tb-sc)em」不会拼成 1.42em */
+    font-size: calc(var(--tb-sc, 1) * 1em) !important;
     line-height: inherit !important;
   }
 
   .hero h1,
   .hero .t-h4 {
+    --m-k: 0.5;
     font-family: var(--m-display);
-    font-size: clamp(30px, 9.2vw, 36px) !important;
-    line-height: 1.32 !important;
+    font-size: calc(var(--tb-px, 72px) * var(--m-k)) !important;
+    line-height: var(--tb-lhr, 1.32) !important;
     font-weight: 600;
     letter-spacing: 0;
     margin: 0 !important;
@@ -171,10 +166,11 @@
   .mask-line { display: block; }
 
   .hero__sub {
+    --m-k: 0.83;
     margin: 20px 0 0;
     max-width: none;
-    font-size: 15px !important;
-    line-height: 1.8 !important;
+    font-size: calc(var(--tb-px, 18px) * var(--m-k)) !important;
+    line-height: var(--tb-lhr, 1.8) !important;
     color: var(--text-2);
   }
   .hero__actions {
@@ -282,15 +278,16 @@
   .rail::after { display: none; }
   .rail .idx { display: none; }
 
-  /* 章节标题：衬线，26px（!important 的理由见上面「行内样式的窄屏归一」） */
+  /* 章节标题：衬线，约为桌面 42px 的 0.6 倍（390 宽 ≈ 25px）。
+     系数而不是绝对值，所以控制台把 H2 调到 48 时手机上跟着到 29。 */
   .h2,
   .pin__head .h2,
   .cta h2 {
+    --m-k: 0.6;
     font-family: var(--m-display);
-    /* 26px 在 390 宽只放得下 12 个字，「把「不确定」当成原材料。」正好差一点，
-       所以按视口微收，桌面端不受影响 */
-    font-size: clamp(23px, 6.4vw, 26px) !important;
-    line-height: 1.44 !important;
+    font-size: calc(var(--tb-px, 42px) * var(--m-k)) !important;
+    /* 标题里有 1.29 倍的强调片段，同样需要行距下限，否则第二行会被压上去 */
+    line-height: max(1.34, var(--tb-lhr, 1.44)) !important;
     font-weight: 600;
     letter-spacing: 0;
     margin-top: 0 !important;
@@ -309,9 +306,15 @@
   .only-wide { display: inline; }
 
   /* ---------- 关于 ---------- */
+  /* 衬线、约为桌面 38px 的一半。之前这里既丢了衬线、又把字号写死成 19px，
+     导致「我不是仅为了招聘」这句强调和正文一样大都变成了黑体。 */
   .about__lead {
-    font-size: 19px !important;
-    line-height: 1.62 !important;
+    --m-k: 0.5;
+    font-family: var(--m-display);
+    font-size: calc(var(--tb-px, 38px) * var(--m-k)) !important;
+    /* 行距给个下限：强调句比整段大 1.42 倍时，作者为桌面定的 1.37 倍行距
+       会让两行几乎贴上，所以取「作者值」和下限里大的那个 */
+    line-height: max(1.55, var(--tb-lhr, 1.62)) !important;
     letter-spacing: 0;
     margin-bottom: 24px !important;
     max-width: none !important;
@@ -324,8 +327,9 @@
   }
   .body-text,
   .lede {
-    font-size: 15px !important;
-    line-height: 1.8 !important;
+    --m-k: 0.94;
+    font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
+    line-height: var(--tb-lhr, 1.8) !important;
     margin-bottom: 14px !important;
     max-width: none !important;
     text-align: left !important;
@@ -414,12 +418,13 @@
     color: var(--text-3);
   }
   .tl-item__desc {
+    --m-k: 0.84;
     grid-column: 2 / -1;
     grid-row: 3;
     margin: 8px 0 0 !important;
     max-width: none !important;
-    font-size: 13.5px !important;
-    line-height: 1.7 !important;
+    font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
+    line-height: var(--tb-lhr, 1.7) !important;
     text-align: left !important;
     color: var(--text-2);
   }
@@ -450,8 +455,9 @@
     margin-bottom: 8px;
   }
   .info-card p {
-    font-size: 13.5px !important;
-    line-height: 1.78 !important;
+    --m-k: 0.84;
+    font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
+    line-height: var(--tb-lhr, 1.78) !important;
     margin: 0 !important;
     max-width: none !important;
     text-align: left !important;
@@ -514,9 +520,14 @@
     border-radius: 20px;
     scroll-snap-align: start;
   }
-  .role h3 { font-size: 17px !important; line-height: 1.4 !important; }
+  .role h3 {
+    --m-k: 0.94;
+    font-size: calc(var(--tb-px, 18px) * var(--m-k)) !important;
+    line-height: var(--tb-lhr, 1.4) !important;
+  }
   .role__desc {
-    font-size: 13.5px !important;
+    --m-k: 0.84;
+    font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
     line-height: 1.75 !important;
     margin: 0 !important;
     max-width: none !important;
@@ -541,10 +552,11 @@
   }
   body[data-page="home"] .cta h2 { margin-top: 10px; }
   body[data-page="home"] .cta p {
+    --m-k: 0.83;
     margin: 16px 0 0 !important;
     max-width: none !important;
-    font-size: 15px !important;
-    line-height: 1.8 !important;
+    font-size: calc(var(--tb-px, 18px) * var(--m-k)) !important;
+    line-height: var(--tb-lhr, 1.8) !important;
     text-align: left !important;
     color: var(--text-2);
   }
@@ -633,10 +645,11 @@
     line-height: inherit !important;
   }
   .pagehead .lead {
+    --m-k: 0.83;
     margin-top: 16px !important;
     max-width: none !important;
-    font-size: 15px !important;
-    line-height: 1.8 !important;
+    font-size: calc(var(--tb-px, 18px) * var(--m-k)) !important;
+    line-height: var(--tb-lhr, 1.8) !important;
     color: var(--text-2);
   }
   .block {
@@ -644,15 +657,17 @@
     border-top: 1px solid var(--m-hair);
   }
   .block__head h2 {
+    --m-k: 0.62;
     font-family: var(--m-display);
-    font-size: 20px !important;
-    line-height: 1.4 !important;
+    font-size: calc(var(--tb-px, 32px) * var(--m-k)) !important;
+    line-height: var(--tb-lhr, 1.4) !important;
     letter-spacing: 0;
   }
   .block__head p {
+    --m-k: 0.81;
     margin-top: 6px;
-    font-size: 13px !important;
-    line-height: 1.7 !important;
+    font-size: calc(var(--tb-px, 16px) * var(--m-k)) !important;
+    line-height: var(--tb-lhr, 1.7) !important;
     color: var(--text-3);
   }
 
