@@ -1,15 +1,15 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-13T14:49:42+08:00",
- "generated_at_human": "2026-11-13 14:49",
+ "generated_at": "2026-11-14T03:45:01+08:00",
+ "generated_at_human": "2026-11-14 03:45",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "stats": {
   "sources_total": 5,
   "sources_ok": 5,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 78,
-  "items_added": 6,
+  "items": 79,
+  "items_added": 1,
   "archive_max": 3000
  },
  "sources": [
@@ -22,7 +22,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1093,
+   "ms": 800,
    "http": 200
   },
   {
@@ -34,7 +34,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 263,
+   "ms": 267,
    "http": 200
   },
   {
@@ -42,11 +42,11 @@ window.SITE_FEED = {
    "name": "GitHub 量化开源",
    "type": "json",
    "kind": "开源",
-   "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-14&sort=updated&order=desc&per_page=10",
+   "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-15&sort=updated&order=desc&per_page=10",
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 511,
+   "ms": 728,
    "http": 200
   },
   {
@@ -58,7 +58,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 335,
+   "ms": 433,
    "http": 200
   },
   {
@@ -70,7 +70,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 891,
+   "ms": 596,
    "http": 200
   }
  ],
@@ -123,8 +123,26 @@ window.SITE_FEED = {
   {
    "title": "questdb/questdb",
    "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-13T14:29:22+08:00",
+   "date": "2026-11-14T03:17:15+08:00",
    "summary": "QuestDB is a high performance, open-source, time-series database",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "lballabio/QuantLib",
+   "url": "https://github.com/lballabio/QuantLib",
+   "date": "2026-11-14T03:02:19+08:00",
+   "summary": "The QuantLib C++ library",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "man-group/ArcticDB",
+   "url": "https://github.com/man-group/ArcticDB",
+   "date": "2026-11-14T03:01:25+08:00",
+   "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -132,8 +150,17 @@ window.SITE_FEED = {
   {
    "title": "Barca0412/Introduction-to-Quantitative-Finance",
    "url": "https://github.com/Barca0412/Introduction-to-Quantitative-Finance",
-   "date": "2026-11-13T12:56:36+08:00",
+   "date": "2026-11-14T02:05:24+08:00",
    "summary": "AI+金融（量化）：1.多因子股票量化框架开源教程 2.学界和业界的经典资料收录 3.AI + 金融的相关工作，包括LLM, Agent, benchmark(evaluation), etc.",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源"
+  },
+  {
+   "title": "skfolio/skfolio",
+   "url": "https://github.com/skfolio/skfolio",
+   "date": "2026-11-14T02:01:31+08:00",
+   "summary": "Python library for portfolio optimization, factor model construction, and risk management built on scikit-learn",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -170,24 +197,6 @@ window.SITE_FEED = {
    "url": "https://github.com/Lumiwealth/lumibot",
    "date": "2026-11-13T03:37:46+08:00",
    "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "man-group/ArcticDB",
-   "url": "https://github.com/man-group/ArcticDB",
-   "date": "2026-11-13T02:41:38+08:00",
-   "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "lballabio/QuantLib",
-   "url": "https://github.com/lballabio/QuantLib",
-   "date": "2026-11-13T02:17:32+08:00",
-   "summary": "The QuantLib C++ library",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -792,5 +801,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "72fa5aea041552724c1b6453e434204d"
+ "signature": "ed69c3ee070bebe3ad080cf8f590d298"
 };
