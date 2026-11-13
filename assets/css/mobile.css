@@ -177,7 +177,8 @@
     line-height: var(--tb-lhr, 1.1) !important;
     font-weight: 600;
     letter-spacing: -0.035em;
-    margin: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: var(--tb-mb, 0) !important;
   }
   .mask-line { display: block; }
 
@@ -447,7 +448,8 @@
     --m-k: 1;
     grid-column: 2 / -1;
     grid-row: 3;
-    margin: 8px 0 0 !important;
+    margin-top: 8px !important;
+    margin-bottom: var(--tb-mb, 0) !important;
     max-width: none !important;
     font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.7) !important;
@@ -484,7 +486,8 @@
     --m-k: 1;
     font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.78) !important;
-    margin: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: var(--tb-mb, 0) !important;
     max-width: none !important;
     text-align: left !important;
     color: var(--text-2);
@@ -554,8 +557,9 @@
   .role__desc {
     --m-k: 1;
     font-size: var(--tb-px0, calc(var(--tb-px, 16px) * var(--m-k))) !important;
-    line-height: 1.75 !important;
-    margin: 0 !important;
+    line-height: var(--tb-lhr, 1.75) !important;
+    margin-top: 0 !important;
+    margin-bottom: var(--tb-mb, 0) !important;
     max-width: none !important;
     text-align: left !important;
   }
@@ -581,15 +585,19 @@
     /* 联系区标题的桌面基准是 56px（不是其它区块的 42），跟着 .h2 的系数走会到
        40.5px，「一个足够难的问题。」就被挤断成两行、末字「题。」孤零零一行。
        这里单独收到 37px，正好两行收住。 */
-    /* 上限 38px：控制台把它设成 56 时，窄屏落点是 42，
-       而「一个足够难的问题。」在 390 宽只有 342px 可用，42px 会挤成三行、
-       末字「题。」孤零零一行。38 刚好两行收住。 */
+    /* 字号完全交给控制台（之前压了 38px 上限，往上调完全没反应）。
+       这句标题中间有一个 <br>，balance 遇到强制断行不生效，
+       改用 pretty 把「问题。」从孤字拉成整行。 */
     --m-k: 0.66;
-    font-size: min(var(--tb-px0, calc(var(--tb-px, 56px) * var(--m-k))), 38px) !important;
+    font-size: var(--tb-px0, calc(var(--tb-px, 56px) * var(--m-k))) !important;
+    text-wrap: pretty;
   }
   body[data-page="home"] .cta p {
     --m-k: 1;
-    margin: 16px 0 0 !important;
+    /* 只写上边距。写成 margin: 16px 0 0 会把段后一起写死，
+       控制台调「段后」就没反应了。 */
+    margin-top: 16px !important;
+    margin-bottom: var(--tb-mb, 0) !important;
     max-width: none !important;
     font-size: var(--tb-px0, calc(var(--tb-px, 18px) * var(--m-k))) !important;
     line-height: var(--tb-lhr, 1.8) !important;
