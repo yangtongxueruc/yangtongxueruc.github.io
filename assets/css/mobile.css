@@ -22,13 +22,37 @@
    · 首屏保留了人物头像，缩成 52px 圆形挪到标题上方（demo 里直接没有）。
    ========================================================================== */
 
+/* ---------- 标题衬线：自托管子集（只在这层用得到） ----------
+   之前写的是 "Songti SC"，桌面预览（Windows 落到 SimSun）看着是宋体，
+   真机上却不是：
+     · Android 没有任何内置中文衬线字体，`serif` 兜底 = Noto Sans CJK → 黑体；
+     · iOS 上 "Songti SC" 时灵时不灵（Chrome for iOS 尤其不稳定）。
+   所以把思源宋体的子集打进站里（只收站点实际用到的字，见 scripts/build_fonts.py），
+   两端渲同一份字形，跟系统装了什么字体彻底脱钩。
+   桌面的标题规则不引用这个字族，不会触发下载。 */
+@font-face {
+  font-family: "M Serif SC";
+  src: url("../fonts/serif-sc-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "M Serif SC";
+  src: url("../fonts/serif-sc-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 @media (max-width: 720px) {
   :root {
     --m-pad: 24px;
     --m-accent: var(--accent);
     --m-hair: var(--border);
-    --m-display: "Songti SC", "Source Han Serif SC", "Noto Serif CJK SC",
-      "SimSun", "Songti TC", Georgia, serif;
+    /* 自托管字族排第一；后面那串是没等到字体（或出现子集外的字）时的兜底 */
+    --m-display: "M Serif SC", "Songti SC", "Source Han Serif SC",
+      "Noto Serif CJK SC", "STSong", "SimSun", "Songti TC", Georgia, serif;
     --m-ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
@@ -54,6 +78,10 @@
     left: 0;
     right: 0;
     width: 100%;
+    /* base.css 给这粒「浮动胶囊」限了 max-width（≈ 100% - 32px），
+       窄屏改成贴顶通栏时必须一并放开，否则右边会短一截、
+       露出底下的点阵，看起来就是「banner 缺角」。 */
+    max-width: none;
     height: 52px;
     transform: none;
     padding: 0 var(--m-pad);
