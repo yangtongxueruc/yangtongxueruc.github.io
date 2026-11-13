@@ -563,6 +563,12 @@
   .pin__viewport {
     margin-inline: calc(-1 * var(--m-pad));
     padding-inline: var(--m-pad);
+    /* 卡片:hover 会上浮 4px（home.css 的 translateY(-4px)），而这个容器用
+       mask 做右端渐隐 —— mask 的绘制范围就是它的盒子，上浮的那 4px 正好被
+       裁掉，卡片顶部看起来缺一条。补 6px 上内边距给它余量，再用等量负外边距
+       抵消位移，视觉位置不变。 */
+    padding-top: 6px;
+    margin-top: -6px;
     cursor: auto;
     mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 40px), transparent 100%);
     -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 40px), transparent 100%);
@@ -586,7 +592,30 @@
     max-width: none !important;
     text-align: left !important;
   }
-  .role__foot { padding-top: 12px; }
+  /* 底部「地点 / 性质」这一行：控制台把这个块设成 16px，最长的一条
+     （上海 / 香港 · 实习 / 实习转正）要 193px，而卡片只剩 185px 给文字，
+     「转正」就被挤到第二行。手机端按控制台值的 0.78 缩放（16 → 12.5px），
+     一行放得下，控制台改大改小仍然跟得上；再禁止换行，真遇到更长的文案
+     宁可出省略号，也别把卡片撑破或在中间折行。 */
+  .role__foot {
+    padding-top: 12px;
+    gap: 10px;
+  }
+  .role__foot > span {
+    min-width: 0;
+    white-space: nowrap;
+    letter-spacing: 0;
+    font-size: calc(var(--tb-px0, 16px) * 0.78) !important;
+    line-height: 1.5 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .role__apply {
+    flex: none;
+    height: 22px;
+    padding: 0 8px;
+    font-size: 12px;
+  }
   .pin__hint { display: none; }
 
   /* ---------- 联系 ----------
