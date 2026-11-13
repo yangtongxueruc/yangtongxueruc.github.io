@@ -1,9 +1,9 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/13 21:58:19
+   导出时间：2026/11/13 22:20:06
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 110,
+  "version": 111,
   "updatedAt": "2026-11-13",
   "styles": {
     "blocks": {
@@ -1025,7 +1025,7 @@ window.V2_CONTENT = {
               "role": "北京研发中心校招负责人",
               "org": "小马智行Pony.ai",
               "logo": "assets/img/logos/pony-ai.png",
-              "logoH": "17",
+              "logoH": "19",
               "desc": "国内头部自动驾驶公司；\n从0搭建校招体系，顶尖技术人才招聘与大规模校招项目。"
             },
             {
@@ -1033,7 +1033,7 @@ window.V2_CONTENT = {
               "role": "HR",
               "org": "招商局漳州",
               "logo": "assets/img/logos/china-merchants-zhangzhou.png",
-              "logoH": "25",
+              "logoH": "28",
               "logoDY": 2,
               "desc": "一段有趣的老家经历"
             },
@@ -1050,7 +1050,7 @@ window.V2_CONTENT = {
               "role": "人力资源管理",
               "org": "中国人民大学",
               "logo": "assets/img/logos/ruc.png",
-              "logoH": "20",
+              "logoH": "21",
               "desc": "学校里的银杏叶和品园的糖葫芦，大概是我最难忘记的。"
             }
           ]
