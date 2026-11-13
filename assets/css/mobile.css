@@ -636,21 +636,35 @@
     text-align: left;
     padding-block: 56px 64px;
   }
+  /* 联系区的栏目标签和其它区块的 .rail 用同一套：12px / 常规字重 / 无字距 / 灰。
+     以前这里只盖了字号和字距，字体仍是 .mono 的等宽脸（Geist Mono），而且
+     紧接着下面那条 `.cta p` 正文规则是带 !important 的，会把 <p class="mono">
+     一起命中 —— 字号、行高、上下外边距全被正文值顶掉（18px / 1.8 / mt16 / mb0），
+     所以它比别的区块又大又贴标题。行内还写着 margin-bottom: --space-12，
+     别的区块是 6px，这里一并统一成 6px。 */
   body[data-page="home"] .cta .mono {
+    font-family: var(--font-sans);
     font-size: 12px;
-    letter-spacing: 0.04em;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0;
     text-transform: none;
     color: var(--text-3);
+    margin: 0 0 6px !important;
   }
   body[data-page="home"] .cta h2 {
-    margin-top: 10px;
+    /* 原来这里是 10px，是为了补偿上面被顶掉的标签段后；标签恢复 6px 段后后
+       这里归零，和 Experience / Company / Open Roles 的「标签→标题」间距一致。 */
+    margin-top: 0;
     /* 没设过字号时保留 demo 的 36.96px 落点；设过之后与其它块一样直接读 --tb-px0。
        这句标题中间有一个 <br>，balance 遇到强制断行不生效，
        用 pretty 把「问题。」从孤字拉成整行。 */
     font-size: var(--tb-px0, 36.96px) !important;
     text-wrap: pretty;
   }
-  body[data-page="home"] .cta p {
+  /* 只针对联系区的正文段落。必须排除 .mono —— 上面那条栏目标签也是 <p>，
+     被这条 !important 规则命中就会拿到正文的字号/行高/外边距。 */
+  body[data-page="home"] .cta p:not(.mono) {
     /* 只写上边距。写成 margin: 16px 0 0 会把段后一起写死，
        控制台调「段后」就没反应了。 */
     margin-top: 16px !important;
