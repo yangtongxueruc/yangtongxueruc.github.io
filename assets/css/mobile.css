@@ -512,8 +512,8 @@
     margin-top: 12px;
     text-align: left !important;
     max-width: none !important;
-    font-size: 13.5px !important;
-    line-height: 1.7 !important;
+    font-size: var(--tb-px0, 13.5px) !important;
+    line-height: var(--tb-lhr, 1.7) !important;
     color: var(--text-3);
   }
   /* 说明文字与翻页按钮分两行：并排时说明只有 130px 宽，一行放不下 6 个字 */
@@ -678,9 +678,12 @@
   .pagehead .kicker::before { display: none; }
   .pagehead h1 {
     font-family: var(--m-display);
-    font-size: clamp(24px, 7.4vw, 30px) !important;
-    line-height: 1.34 !important;
-    letter-spacing: 0;
+    /* 以前这里是写死的 clamp(24px,7.4vw,30px)：在 390 宽永远是 28.86px，
+       控制台把「页面标题」调大调小都没反应。改成读 --tb-px0，
+       没有设定值时才退回原来那条 clamp。 */
+    font-size: var(--tb-px0, clamp(24px, 7.4vw, 30px)) !important;
+    line-height: var(--tb-lhr, 1.34) !important;
+    letter-spacing: -0.02em;
     margin-top: 10px;
   }
   .pagehead h1 span {
