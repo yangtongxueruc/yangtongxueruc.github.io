@@ -200,12 +200,13 @@
     }
 
     /* ---------------- 主循环 ----------------
-       跑不跑只有一个判断：点阵开着、页面在前台、首屏在视口内、没要求减少动态效果。
-       以前这里有个 running 变量，切换标签页时会被置 false，而恢复只在
-       "首屏仍在视口内"时才会重新置 true —— 于是「先滚离首屏、再切走标签页、
-       切回来、再滚回首屏」这条路上，running 永远是 false，点阵就再也不动了。 */
+       跑不跑只有一个判断：点阵开着、页面在前台、首屏在视口内。
+       「系统要求减少动态效果」不在这里拦：以前拦了，iOS 上只要开了
+       辅助功能里的「减弱动态效果」（低电量模式也会连带影响观感），
+       首屏就只剩一帧静止的点，看着像坏了。改成在 loop 里把速度压到
+       三分之一 —— 慢到不构成视觉冲击，但仍然是活的。 */
     function canRun() {
-      return !off && !document.hidden && visible && !reduce;
+      return !off && !document.hidden && visible;
     }
     function loop(now) {
       raf = 0;
@@ -215,7 +216,7 @@
       last = now;
       try {
         var t0 = performance.now();
-        t += dt * P.speed;
+        t += dt * P.speed * (reduce ? 0.32 : 1);
         draw(t);
         var cost = performance.now() - t0;
 
@@ -246,6 +247,13 @@
        这种时候 raf 里还留着一个永远不会触发的 id，光看它有没有值判断不出来，
        所以按「最后一帧过去了多久」判断，超过 3 秒没动就重新拉起。 */
     setInterval(function () {
+      /* 观测器偶尔给出过期的 visible（iOS 从后台切回来时见过：仍然报 false，
+         于是 sync() 永远不开新循环）。这里用几何位置复核一次，代价可以忽略。 */
+      if (!document.hidden && !visible && hero) {
+        var r = hero.getBoundingClientRect();
+        var vh = window.innerHeight || 800;
+        if (r.bottom > 0 && r.top < vh) { visible = true; sync(); }
+      }
       if (!canRun()) return;
       if (raf && performance.now() - lastTick < 3000) return;
       raf = 0;
@@ -259,6 +267,10 @@
       rt = setTimeout(build, 180);
     });
     document.addEventListener("visibilitychange", function () { sync(); });
+    /* iOS Safari 从后台恢复、或从 bfcache 回来时不一定补发 visibilitychange，
+       raf 链可能停在半路。这两个事件补一次自检，代价只有一次属性读。 */
+    window.addEventListener("pageshow", function () { sync(); });
+    window.addEventListener("focus", function () { sync(); });
     /* 换主题要换点的颜色（白点/深点） */
     new MutationObserver(function () {
       atlas = null;
@@ -361,6 +373,8 @@
     } catch (e) {}
     window.HeroDots.apply(cfg || {});
 
-    if (reduce) draw(1.4);
+    /* 先出一帧：观测器还没回调时也别留白。之后循环自己会接着画 */
+    draw(t);
+    sync();
   }
 })();

@@ -1,0 +1,73 @@
+/* ============================================================================
+   HERO-MOTES.CSS — 首屏「光点」氛围层（可选）
+   ----------------------------------------------------------------------------
+   只有 body[data-glowmode="motes"] 时才会真的亮起来，默认一个节点都不存在。
+   配色跟 v2 的强调色走（青），而不是手机 demo 那套黄铜色：
+   桌面站的主光是 --glow-hero-dark: rgba(10,186,181,.38)，
+   光点必须同色相，否则两种色温叠在一起会显脏。
+
+   层级：.hero::before/::after（单一光斑，z 0）→ .hero-dots（z 0）
+        → .hero-mote（z 0，后挂载所以压在上面）→ .hero__grid（z 1，文字）
+   ========================================================================== */
+
+/* 末端 stop 必须用同色相零透明，不能写 transparent：
+   transparent 等于 rgba(0,0,0,0)，插值时会往黑里带一圈暗边 */
+:root {
+  --mote-c: rgba(10, 186, 181, 0.34);
+  --mote-core: rgba(10, 186, 181, 0.26);
+  --mote-c0: rgba(10, 186, 181, 0);
+}
+html[data-theme="light"] {
+  --mote-c: rgba(27, 76, 134, 0.20);
+  --mote-core: rgba(27, 76, 134, 0.15);
+  --mote-c0: rgba(27, 76, 134, 0);
+}
+
+.hero-mote {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0;
+  transform-origin: 50% 50%;
+  will-change: opacity, transform;
+  /* 双层：宽而淡的晕 + 小而亮的核。单层渐变只会得到一块「圆锥」，
+     在桌面这么大的画布上像一粒灰，不像一团光 */
+  background:
+    radial-gradient(circle at 50% 50%, var(--mote-core) 0%, var(--mote-c0) 34%),
+    radial-gradient(circle at 50% 50%, var(--mote-c) 0%, var(--mote-c0) 72%);
+}
+.hero-mote.is-on {
+  animation: moteBreathe var(--mote-dur, 3.2s) var(--ease, cubic-bezier(.22, 1, .36, 1)) both;
+}
+/* 一次出场只呼吸一下：起 → 亮 → 散。亮度走 --mote-peak，每点都不同 */
+@keyframes moteBreathe {
+  0%   { opacity: 0; transform: scale(0.92); }
+  42%  { opacity: var(--mote-peak, 0.4); transform: scale(1.04); }
+  100% { opacity: 0; transform: scale(1.18); }
+}
+
+/* 让位：开着光点（或明确关掉氛围）时，home.css 那两层单一光斑必须退场，
+   否则两套光同色叠加会过曝，看起来像一块发白的雾。
+   data-glowmode 只在光点层真的建起来之后才写，所以这条规则等同于
+   「JS 接管了才让位」——JS 没跑或出错时，底光还在，首屏不会变黑。 */
+body[data-glowmode="motes"] .hero::before,
+body[data-glowmode="motes"] .hero::after,
+body[data-glowmode="off"] .hero::before,
+body[data-glowmode="off"] .hero::after {
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+/* 光点是相对 .hero 定位的；有些页面的 .hero 没有 position:relative
+   （只有挂点阵的 .hero--dots 才加），这里补上，避免光点跑到 body 上 */
+body[data-glowmode="motes"] .hero { position: relative; }
+
+/* 系统要求减少动态效果时：不掐掉动画（掐掉就是一屏死光，iOS 上常被误读成
+   「特效坏了」），而是交给 JS 把峰值压到七成、时长拉长一半。
+   这里只再兜一层时长下限，防止哪个分支忘了减速。 */
+@media (prefers-reduced-motion: reduce) {
+  .hero-mote.is-on {
+    animation-duration: var(--mote-dur, 5s) !important;
+  }
+}

@@ -2733,6 +2733,13 @@
     var vw = (px / 14.4).toFixed(4); /* px / 1440 * 100 */
     return "clamp(" + min.toFixed(2) + "px, " + vw + "vw, " + px + "px)";
   }
+  /* 从 pxToCss 的结果里取回「1440 视口下的目标 px」。
+     窄屏那层要用它按角色系数换算，而不是直接把桌面 px 抄过去。 */
+  function clampPx(css) {
+    var m = /^clamp\(\s*[-\d.]+\s*px\s*,\s*[-\d.]+\s*vw\s*,\s*([-\d.]+)\s*px\s*\)$/.exec(String(css || "").trim());
+    return m ? parseFloat(m[1]) : 0;
+  }
+
   var naturalCache = new WeakMap();
   function naturalSize(el) {
     if (!el) return 0;
@@ -2915,6 +2922,15 @@
     el.style.lineHeight = o && o.lh ? Math.round(parseFloat(o.lh)) + "px" : "";
     el.style.marginBottom = o && o.mb ? Math.round(parseFloat(o.mb)) + "px" : "";
 
+    /* ---- 窄屏字号 / 行距的换算基准 ----
+       移动层不能把字号写死成 px：写死之后控制台「按角色调字号」「按块调字号」
+       在手机上就全部失效（改了没反应）。所以这里只留两个基准值 ——
+       桌面目标字号、行距比 —— 由移动层用 calc(基准 × 系数) 换算。
+       桌面不读这两个属性，两边互不干扰。 */
+    var target = clampPx(el.style.fontSize);
+    if (target > 0) el.style.setProperty("--tb-px", target + "px");
+    else el.style.removeProperty("--tb-px");
+
     /* ---- 宽度 / 对齐 / 换行 ----
        样式表里很多 max-width 用 ch，ch 跟着字号涨，字号一调就撑出栅格列，
        于是同类文字块的右边界各是各的。这里改成可显式指定的 px。
@@ -2975,19 +2991,27 @@
   }
   function pinLeadings() {
     var runsMap = (state.content && state.content.styles && state.content.styles.runs) || {};
+    /* 行距比：移动层把字号缩小后，行高不能还是桌面那串 px，
+       否则 19px 的字配 52px 的行，整段散架。留一个无单位比值给它。 */
+    function markLead(el, px) {
+      el.style.lineHeight = Math.round(px) + "px";
+      var base = parseFloat(el.style.getPropertyValue("--tb-px")) || 0;
+      if (base > 0 && px > 0) el.style.setProperty("--tb-lhr", (px / base).toFixed(3));
+      else el.style.removeProperty("--tb-lhr");
+    }
     Array.prototype.forEach.call(document.querySelectorAll("[data-tb]"), function (el) {
       var id = el.dataset.tb;
       var o = merged(id);
-      if (o.lh) { el.style.lineHeight = Math.round(parseFloat(o.lh)) + "px"; return; }
+      if (o.lh) { markLead(el, parseFloat(o.lh)); return; }
       var hasRuns = (runsMap[id] || []).some(function (r) { return r.size || r.scale; });
-      if (!o.size && !hasRuns) { el.style.lineHeight = ""; return; }
+      if (!o.size && !hasRuns) { el.style.lineHeight = ""; el.style.removeProperty("--tb-lhr"); return; }
       /* 行距跟着「这一段里最大的那个字号」走，大行不会被压扁 */
       var maxFs = parseFloat(getComputedStyle(el).fontSize) || 0;
       Array.prototype.forEach.call(el.querySelectorAll(".tb-run"), function (s) {
         var v = parseFloat(getComputedStyle(s).fontSize) || 0;
         if (v > maxFs) maxFs = v;
       });
-      if (maxFs > 0) el.style.lineHeight = Math.round(maxFs * naturalLeading(el)) + "px";
+      if (maxFs > 0) markLead(el, maxFs * naturalLeading(el));
     });
   }
   /* 改类别：写 styles.roles.<role>，并把同类块的对应字段本地覆盖清掉，
@@ -3089,6 +3113,12 @@
     span.style.fontSize = sizeValue(span, run);
     span.style.color = blockColor(run, light);
     span.style.fontWeight = run && run.weight ? String(run.weight).trim() : "";
+    /* 片段存的是「相对本段字号」的倍数。窄屏不能直接沿用桌面那条 clamp
+       （它的下限是按桌面字号算的，390 宽上会刚好卡在 min，强调句就只剩一点点大）：
+       把倍数留给移动层，用 em 相对父级重算，强调的比例在任何宽度都一样。 */
+    var sc = run && parseFloat(run.scale);
+    if (isFinite(sc) && sc > 0) span.style.setProperty("--tb-sc", String(sc));
+    else span.style.removeProperty("--tb-sc");
   }
   function applyRuns(root) {
     var runs = (state.content && state.content.styles && state.content.styles.runs) || {};
@@ -3226,6 +3256,23 @@
     root.style.setProperty("--breathe-lo", lo.toFixed(3));
     root.style.setProperty("--glow-size", size.toFixed(2));
     root.classList.toggle("no-breathe", !on);
+
+    /* 氛围层交给 hero-fx.js 收口：glow 默认 'css' 时它一个节点都不建，
+       桌面版与今天完全一致；切到 'motes' 才换成手机端那套随机光点。
+       字段名与手机 demo 同源，所以同一条控制台命令两端都能用。 */
+    if (window.HeroFx && window.HeroFx.set) {
+      window.HeroFx.set({
+        glow: a.glow || "auto",
+        glowScale: a.moteSize,
+        countMin: a.moteCountMin,
+        countMax: a.moteCountMax,
+        peakMin: a.motePeakLo,
+        peakMax: a.motePeakHi,
+        glowDur: a.moteDur,
+        gapMin: a.moteGapMin,
+        gapMax: a.moteGapMax
+      });
+    }
   }
 
   /* 首屏点阵：字段都是字符串，这里统一转成 hero-dots.js 认的数字。

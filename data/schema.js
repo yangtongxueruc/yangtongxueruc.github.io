@@ -265,8 +265,20 @@ window.V2_SCHEMA = {
       page: "home",
       section: "hero",
       icon: "A",
-      hint: "首屏左上角的青色光斑、以及 contact 文字背后的次光源，都用这一套参数。改完右侧预览即时生效。",
+      hint: "首屏左上角的青色光斑、以及 contact 文字背后的次光源，都用这一套参数。改完右侧预览即时生效。氛围层选「单一光斑」时与原来完全一致；选「多点闪烁」才换成手机端那套随机光点。",
       fields: [
+        {
+          path: "pages.home.atmosphere.glow",
+          label: "氛围层",
+          type: "select",
+          options: [
+            { v: "auto",  label: "自动（宽屏单一光斑 · 窄屏多点闪烁）" },
+            { v: "css",   label: "只用单一光斑（现在的桌面效果）" },
+            { v: "motes", label: "只用多点闪烁（手机端同款）" },
+            { v: "off",   label: "关闭（干干净净的黑）" }
+          ],
+          hint: "默认「自动」：宽屏保持原来那团常驻光斑，720px 以下换成手机端那套随机光点，两端各得其所。想全局统一就选固定的那两项，想回滚就选 css，文件不用动。"
+        },
         {
           path: "pages.home.atmosphere.breathe",
           label: "呼吸效果",
@@ -293,6 +305,56 @@ window.V2_SCHEMA = {
           label: "晕染范围（%）",
           type: "text",
           hint: "50–220，默认 110。数字越大，光晕覆盖的面积越大、越铺满整屏。"
+        },
+
+        /* ---- 光点组：只在上面的「氛围层」选 motes 时起作用 ---- */
+        {
+          path: "pages.home.atmosphere.moteSize",
+          label: "光点尺寸（%）",
+          type: "text",
+          hint: "10–200，默认 50。按 380–700px 的基准直径打折，50 约等于 190–350px 一团。"
+        },
+        {
+          path: "pages.home.atmosphere.moteCountMin",
+          label: "每轮最少光点数",
+          type: "text",
+          hint: "1–5，默认 1。"
+        },
+        {
+          path: "pages.home.atmosphere.moteCountMax",
+          label: "每轮最多光点数",
+          type: "text",
+          hint: "1–5，默认 5。手机端最多能到 6，桌面首屏更宽，用 5 就不会糊成一片。"
+        },
+        {
+          path: "pages.home.atmosphere.motePeakLo",
+          label: "最暗一颗的亮度（%）",
+          type: "text",
+          hint: "5–100，默认 18。和下面那项拉开差距，才有一明一暗的闪烁感。"
+        },
+        {
+          path: "pages.home.atmosphere.motePeakHi",
+          label: "最亮一颗的亮度（%）",
+          type: "text",
+          hint: "5–100，默认 62。"
+        },
+        {
+          path: "pages.home.atmosphere.moteDur",
+          label: "单颗呼吸时长（秒）",
+          type: "text",
+          hint: "0.5–14，默认 3.2。每颗会在此基础上随机 ±20%。"
+        },
+        {
+          path: "pages.home.atmosphere.moteGapMin",
+          label: "轮次间隔下限（毫秒）",
+          type: "text",
+          hint: "0–20000，默认 900。数字越小，新的一轮接得越紧。"
+        },
+        {
+          path: "pages.home.atmosphere.moteGapMax",
+          label: "轮次间隔上限（毫秒）",
+          type: "text",
+          hint: "0–20000，默认 2600。实际间隔在这两者之间随机。"
         }
       ]
     },
