@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-11-13T03:57:04+08:00",
-  "generated_at_human": "2026-11-13 03:57",
+  "generated_at": "2026-11-13T14:49:42+08:00",
+  "generated_at_human": "2026-11-13 14:49",
   "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
   "stats": {
     "sources_total": 5,
     "sources_ok": 5,
     "sources_failed": 0,
     "failed_sources": [],
-    "items": 72,
-    "items_added": 1,
+    "items": 78,
+    "items_added": 6,
     "archive_max": 3000
   },
   "sources": [
@@ -21,7 +21,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 1245,
+      "ms": 1093,
       "http": 200
     },
     {
@@ -33,7 +33,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 296,
+      "ms": 263,
       "http": 200
     },
     {
@@ -45,7 +45,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 660,
+      "ms": 511,
       "http": 200
     },
     {
@@ -57,7 +57,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 362,
+      "ms": 335,
       "http": 200
     },
     {
@@ -69,7 +69,7 @@
       "ok": true,
       "count": 20,
       "error": null,
-      "ms": 859,
+      "ms": 891,
       "http": 200
     }
   ],
@@ -120,19 +120,55 @@
       "kind": "算法竞赛"
     },
     {
-      "title": "Lumiwealth/lumibot",
-      "url": "https://github.com/Lumiwealth/lumibot",
-      "date": "2026-11-13T03:37:46+08:00",
-      "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+      "title": "questdb/questdb",
+      "url": "https://github.com/questdb/questdb",
+      "date": "2026-11-13T14:29:22+08:00",
+      "summary": "QuestDB is a high performance, open-source, time-series database",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源"
     },
     {
-      "title": "questdb/questdb",
-      "url": "https://github.com/questdb/questdb",
-      "date": "2026-11-13T03:31:58+08:00",
-      "summary": "QuestDB is a high performance, open-source, time-series database",
+      "title": "Barca0412/Introduction-to-Quantitative-Finance",
+      "url": "https://github.com/Barca0412/Introduction-to-Quantitative-Finance",
+      "date": "2026-11-13T12:56:36+08:00",
+      "summary": "AI+金融（量化）：1.多因子股票量化框架开源教程 2.学界和业界的经典资料收录 3.AI + 金融的相关工作，包括LLM, Agent, benchmark(evaluation), etc.",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源"
+    },
+    {
+      "title": "Fincept-Corporation/FinceptTerminal",
+      "url": "https://github.com/Fincept-Corporation/FinceptTerminal",
+      "date": "2026-11-13T12:42:41+08:00",
+      "summary": "FinceptTerminal is a modern finance application offering advanced market analytics, investment research, and economic data tools, designed for interactive ex…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源"
+    },
+    {
+      "title": "YichengYang-Ethan/oracle3-prediction-market-agent",
+      "url": "https://github.com/YichengYang-Ethan/oracle3-prediction-market-agent",
+      "date": "2026-11-13T10:31:11+08:00",
+      "summary": "Oracle3: open-source trading engine and MCP server for prediction markets. Finds fee-adjusted no-arbitrage violations across related event contracts and trad…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源"
+    },
+    {
+      "title": "openbq-org/OpenBB",
+      "url": "https://github.com/openbq-org/OpenBB",
+      "date": "2026-11-13T10:15:17+08:00",
+      "summary": "Open Data Platform for analysts, quants and AI agents.",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源"
+    },
+    {
+      "title": "Lumiwealth/lumibot",
+      "url": "https://github.com/Lumiwealth/lumibot",
+      "date": "2026-11-13T03:37:46+08:00",
+      "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源"
@@ -156,6 +192,15 @@
       "kind": "开源"
     },
     {
+      "title": "Improving Algorithmic Trading for BESS on Intraday Electricity Markets through Distributional Price Forecasts",
+      "url": "https://arxiv.org/abs/2611.17170v1",
+      "date": "2026-11-13T01:43:52+08:00",
+      "summary": "Grid-scale battery energy storage systems (BESS) are becoming increasingly important in short-term energy markets, where they help balance fluctuations in variable renewable generation. In many countr",
+      "source": "arxiv-qfin",
+      "source_name": "arXiv q-fin",
+      "kind": "研究"
+    },
+    {
       "title": "HKUDS/Vibe-Trading",
       "url": "https://github.com/HKUDS/Vibe-Trading",
       "date": "2026-11-13T01:34:48+08:00",
@@ -174,6 +219,15 @@
       "kind": "公众号"
     },
     {
+      "title": "Verifiable Settlement and Pricing for Local Energy Markets: Architecture and Deployment on Hyperledger Besu",
+      "url": "https://arxiv.org/abs/2611.16495v1",
+      "date": "2026-11-12T17:02:06+08:00",
+      "summary": "We implement privacy-preserving local electricity exchanges using an automated market maker on the Hyperledger Besu network under QBFT consensus. The proposed protocol operator collects individual ele",
+      "source": "arxiv-qfin",
+      "source_name": "arXiv q-fin",
+      "kind": "研究"
+    },
+    {
       "title": "ZhuLinsen/daily_stock_analysis",
       "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
       "date": "2026-11-12T14:11:19+08:00",
@@ -190,6 +244,15 @@
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源"
+    },
+    {
+      "title": "Optimal Trading Speed on Blockchain",
+      "url": "https://arxiv.org/abs/2611.13616v2",
+      "date": "2026-11-12T11:52:01+08:00",
+      "summary": "On blockchain-based exchanges, faster blocks weaken the priority-fee competition among arbitrageurs and shift rents from the block producer to them. Equilibrium liquidity peaks at an interior block sp",
+      "source": "arxiv-qfin",
+      "source_name": "arXiv q-fin",
+      "kind": "研究"
     },
     {
       "title": "facioquo/stock-indicators-dotnet",
@@ -288,15 +351,6 @@
       "url": "https://github.com/OpenByteInc/QuantDinger",
       "date": "2026-11-11T17:46:02+08:00",
       "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源"
-    },
-    {
-      "title": "openbq-org/OpenBB",
-      "url": "https://github.com/openbq-org/OpenBB",
-      "date": "2026-11-11T13:30:36+08:00",
-      "summary": "Open Data Platform for analysts, quants and AI agents.",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源"
@@ -737,5 +791,5 @@
       "kind": "公众号"
     }
   ],
-  "signature": "13f3326e6bfba5c9157cd4e407743a24"
+  "signature": "72fa5aea041552724c1b6453e434204d"
 }
