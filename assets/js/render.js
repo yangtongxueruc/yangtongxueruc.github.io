@@ -3755,11 +3755,13 @@
       var ps = q("phonesize");
       if (!ps) return;
       if (window.innerWidth > 720) { ps.style.display = "none"; return; }
-      /* 片段面板的 el 可能是整块（新片段还没包 span），也可能已经是片段本身。
-         改完后优先量生成出来的 .tb-run，读数才是用户看到的那几个字。 */
+      /* 只有「片段」面板才量片段本身：它的 el 可能是整块（新片段还没包 span），
+         也可能已经是片段 span。整块面板必须量块自身 —— 标题里常带 1.1~1.6 倍的
+         强调片段，量它的话「手机实际」会虚高到 43 / 56px，而真实整块只有 36px，
+         读数反而成了新的不一致来源。 */
       var target = el;
-      if (el.dataset && el.dataset.tb) {
-        var s = el.querySelector(".tb-run");
+      if (kind === "run" && el.dataset && el.dataset.tb) {
+        var s = (o.runText && findRun(el, o.runText)) || el.querySelector(".tb-run");
         if (s) target = s;
       }
       var actual = Math.round(parseFloat(getComputedStyle(target).fontSize) || 0);
@@ -4116,6 +4118,7 @@
     buildPanel({
       el: findRun(blockEl, text) || blockEl,
       kind: "run",
+      runText: text,
       own: cur || {},
       base: cur || {},
       title: "片段 · " + (ROLE_LABEL[roleOf(id)] || id),
