@@ -1,19 +1,16 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/12 14:12:00
+   导出时间：2026/11/13 11:27:58
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 82,
-  "updatedAt": "2026-11-12",
+  "version": 83,
+  "updatedAt": "2026-11-13",
   "styles": {
     "blocks": {
       "about-lead-0": {
         "size": 38,
         "wrap": "nowrap",
         "lh": 52,
-        "mb": 52
-      },
-      "company-lead-0": {
         "mb": 52
       },
       "exp-title-0": {
@@ -25,15 +22,13 @@ window.V2_CONTENT = {
       },
       "cta-lead-0": {
         "mb": 48,
-        "w": 876
+        "w": 876,
+        "weight": "500"
       },
       "company-title-0": {
         "mb": 52,
         "size": 42,
         "lh": 52
-      },
-      "role-desc-7": {
-        "align": "left"
       }
     },
     "runs": {
@@ -44,9 +39,8 @@ window.V2_CONTENT = {
           "weight": "500"
         },
         {
-          "text": "我不是仅为了招聘",
-          "scale": "1.42",
-          "weight": "700"
+          "text": "我不是仅为了招聘，",
+          "scale": 1.7
         }
       ],
       "exp-title-0": [
@@ -62,12 +56,12 @@ window.V2_CONTENT = {
       ],
       "company-title-0": [
         {
-          "text": "我所在的团队，",
-          "scale": 1.286
-        },
-        {
           "text": "把「不确定」当成原材料。",
           "scale": 0.857
+        },
+        {
+          "text": "我所在的团队，",
+          "scale": 1.28
         }
       ],
       "stat-label-0": [
@@ -188,6 +182,12 @@ window.V2_CONTENT = {
           "text": "小马智行Pony.ai",
           "colorLight": "#52b7c6"
         }
+      ],
+      "roles-title-0": [
+        {
+          "text": "我在找的岗位",
+          "scale": 1.28
+        }
       ]
     },
     "roles": {
@@ -195,7 +195,8 @@ window.V2_CONTENT = {
         "w": "587",
         "mb": 2,
         "lh": 28,
-        "align": "justify"
+        "align": "justify",
+        "weight": "400"
       },
       "meta": {
         "weight": "700",

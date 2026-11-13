@@ -1465,10 +1465,7 @@
      看到的就是别人（或换一台设备）打开时真正会看到的东西。 */
   function previewSrc(page) {
     var s = page === "home" ? "index.html" : page + ".html";
-    /* 尾巴上那个时间戳是必要的：预览的 iframe 原来只写 index.html，不带任何
-       版本戳，浏览器连「文档本身」都缓存住。改了页面结构（比如新加一张样式表）
-       之后预览还是旧的那份，看起来就像改动没生效。 */
-    return (S.pubView ? s + "?file=1&_=" : s + "?_=") + Date.now();
+    return S.pubView ? s + "?file=1" : s;
   }
 
   function setPubView(on) {
