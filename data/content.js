@@ -1,18 +1,12 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/13 13:08:03
+   导出时间：2026/11/13 13:33:26
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 88,
+  "version": 89,
   "updatedAt": "2026-11-13",
   "styles": {
     "blocks": {
-      "about-lead-0": {
-        "size": 38,
-        "wrap": "nowrap",
-        "lh": 52,
-        "mb": 52
-      },
       "exp-title-0": {
         "lh": 42
       },
@@ -30,41 +24,44 @@ window.V2_CONTENT = {
         "mb": 52,
         "size": 42,
         "lh": 52
+      },
+      "about-lead-0": {
+        "mb": 6,
+        "lh": 16
       }
     },
     "runs": {
       "about-lead-0": [
         {
           "text": "而是一起探索未来3-5年值得投入的事情。",
-          "scale": "0.95",
-          "weight": "500"
+          "scale": 0.912
         },
         {
           "text": "我不是仅为了招聘，",
           "weight": "600",
-          "scale": 1.421
+          "scale": 1.564
         }
       ],
       "exp-title-0": [
         {
           "text": "十年，四个阶段，",
-          "scale": "1.29"
+          "scale": 1.185
         },
         {
           "text": "一条主线。",
-          "scale": "1.29",
-          "weight": "500"
+          "weight": "400",
+          "scale": 1.185
         }
       ],
       "company-title-0": [
         {
-          "text": "我所在的团队，",
-          "scale": 1.28
-        },
-        {
           "text": "把「不确定」当成原材料。",
           "weight": "400",
           "scale": 0.857
+        },
+        {
+          "text": "我所在的团队，",
+          "scale": 1.185
         }
       ],
       "stat-label-0": [
@@ -146,8 +143,7 @@ window.V2_CONTENT = {
       "cta-lead-0": [
         {
           "text": "告诉我你最近在解决什么、卡在哪一步，对未来有什么想法，剩下的我们聊聊看。",
-          "weight": "400",
-          "scale": 1.074
+          "scale": 1
         }
       ],
       "links-page-title-0": [
@@ -190,7 +186,7 @@ window.V2_CONTENT = {
       "roles-title-0": [
         {
           "text": "我在找的岗位",
-          "scale": 1.28
+          "scale": 1.185
         }
       ]
     },
@@ -213,6 +209,9 @@ window.V2_CONTENT = {
       },
       "pageTitle": {
         "lh": 66
+      },
+      "h1": {
+        "size": 53
       }
     }
   },
