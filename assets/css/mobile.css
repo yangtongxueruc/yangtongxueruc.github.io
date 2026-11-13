@@ -429,7 +429,11 @@
     grid-column: 2;
     grid-row: 2;
     align-self: center;
-    height: 20px;
+    /* 高度读控制台的 logoH（每家公司单独调的光学尺寸），不再写死 20px ——
+       写死之后手机端和桌面端完全脱钩，用户在控制台把某张 logo 调大调小，
+       手机上一个像素都不会动。窄屏的宽度上限交给 logo 列（--tl-logo-w）
+       和 object-fit: contain：超宽字标放不下时按列宽等比缩，不会压到公司名。 */
+    height: var(--logo-h, var(--tl-logo-h));
     justify-self: start;
     margin: 0;
   }
