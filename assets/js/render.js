@@ -3643,6 +3643,9 @@
       (kind === "block"
         ? '<div class="tpc is-info" data-k="metrics"></div>'
         : "") +
+      /* 手机预览里桌面基准会被缩到 0.75 倍，只盯着数字框容易以为"改了没反应"。
+         把两个域的值并排写出来，改一格就能看到手机实际 px 跟着动。 */
+      '<div class="tpc is-info" data-k="phonesize" style="display:none"></div>' +
       '<div class="prow"><span class="pk">字号</span>' +
         '<button class="stp" type="button" data-k="minus" title="小 1px">−</button>' +
         '<input class="rg" type="range" data-k="size" min="12" max="96" step="1">' +
@@ -3769,6 +3772,16 @@
       m.innerHTML = "<span>" + lines + " 行" + (brs ? "（含 " + brs + " 处手动换行）" : "") +
         " · 宽 " + wNow + "px · " + refTxt + "</span>" +
         (note ? "<b>" + note + "</b>" : "");
+      /* 必须在 push() 之后量：这时候 DOM 才是改完的样子。
+         桌面基准 → 手机实际两个域并排显示，避免「数字改了但看不出变化」。 */
+      var ps = q("phonesize");
+      if (ps) {
+        if (window.innerWidth <= 720) {
+          var actual = Math.round(parseFloat(getComputedStyle(el).fontSize) || 0);
+          ps.style.display = "";
+          ps.innerHTML = "<span>桌面基准 " + st.size + "px</span><b>手机实际 " + actual + "px</b>";
+        } else ps.style.display = "none";
+      }
     }
     function syncWeight() {
       Array.prototype.forEach.call(seg.querySelectorAll("button"), function (b) {
@@ -3838,6 +3851,22 @@
       push();
     }
 
+    /* 数字框原来只认 change：在框里打字时预览纹丝不动，按回车或点别处才跳一下，
+       手机上那一跳还被 0.75 倍缩放吃掉一截，很容易被当成「改了没反应」。
+       input 也接上，加一点防抖；空值 / "-" 这类输入中间态直接忽略。 */
+    var numTimer = 0;
+    function liveNumber(input, run) {
+      if (!input) return;
+      input.addEventListener("input", function () {
+        var raw = String(input.value).trim();
+        if (raw === "" || raw === "-" || raw === ".") return;
+        clearTimeout(numTimer);
+        numTimer = setTimeout(run, 140);
+      });
+    }
+    liveNumber(q("numbox"), function () {
+      setSize(parseInt(q("numbox").value, 10) || st.size, false);
+    });
     q("size").addEventListener("input", function () {
       setSize(parseInt(q("size").value, 10) || 12, true);
     });
@@ -3859,6 +3888,12 @@
         syncText();
         push();
       });
+      liveNumber(q("lhn"), function () {
+        st.lh = Math.max(16, Math.min(140, parseInt(q("lhn").value, 10) || st.lh));
+        dirtyLh = true;
+        syncText();
+        push();
+      });
       q("mb").addEventListener("input", function () {
         st.mb = parseInt(q("mb").value, 10) || 0;
         dirtyMb = true;
@@ -3866,6 +3901,12 @@
         push();
       });
       q("mbn").addEventListener("change", function () {
+        st.mb = Math.max(0, Math.min(80, parseInt(q("mbn").value, 10) || 0));
+        dirtyMb = true;
+        syncText();
+        push();
+      });
+      liveNumber(q("mbn"), function () {
         st.mb = Math.max(0, Math.min(80, parseInt(q("mbn").value, 10) || 0));
         dirtyMb = true;
         syncText();

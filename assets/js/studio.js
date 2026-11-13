@@ -1479,7 +1479,17 @@
       b.setAttribute("aria-pressed", String(S.pubView));
     }
     var hint = $("#preview-hint");
-    if (hint) hint.textContent = S.pubView ? "发布态 · 只读" : "实时";
+    if (hint) hint.textContent = S.pubView ? "发布态 · 只读（不能改样式）" : "实时";
+    /* 发布态加载的是 ?file=1 只读快照，草稿改动一概不进来。
+       以前开关开着时样式控件照常可点，用户改字号完全没反应，
+       还以为是渲染坏了。这里直接禁用并写明原因。 */
+    ["#pick", "#type-open"].forEach(function (sel) {
+      var el = $(sel);
+      if (!el) return;
+      el.disabled = S.pubView;
+      el.classList.toggle("is-disabled", S.pubView);
+      el.title = S.pubView ? "发布态是只读快照；点「发布态」切回实时后才能改样式" : "";
+    });
     var iframe = $("#preview");
     if (iframe) iframe.setAttribute("src", previewSrc(S.previewPage || "home"));
   }
@@ -2172,9 +2182,21 @@
     if (!w) return;
     try { w.postMessage({ __v2: true, type: "type-request" }, "*"); } catch (e) {}
   }
+  /* 手机预览里这里填的是「1440 基准 px」，窄屏会按 0.75 落到更小的字号。
+     不写清楚的话，用户把 56 改成 60、手机只从 42 变到 45，会以为没生效。 */
+  function typeHint() {
+    var h = $("#ty-hint");
+    if (!h) return;
+    var narrow = false;
+    try { narrow = (previewWin().innerWidth || 1440) <= 720; } catch (e) {}
+    h.textContent = narrow
+      ? "手机预览 · 填的是桌面基准 px，手机实际 = 基准 × 0.75 · 边输边生效"
+      : "数据来自当前预览页 · 字号 / 宽度不一致会标红 · 手动换行始终保留";
+  }
   function openType() {
     $("#type").hidden = false;
     $("#ty-rows").innerHTML = '<div class="ty__empty">正在读取当前页的排版 …</div>';
+    typeHint();
     requestReport();
     sendGuides(guideShown);
   }
@@ -2614,6 +2636,7 @@
         $$("#devices button").forEach(function (x) { x.classList.toggle("is-on", x === b); });
         fit();
         setPreviewHint();
+        if (!$("#type").hidden) typeHint();
         try { $("#preview").contentWindow.scrollTo(0, 0); } catch (e) {}
       });
     });
@@ -2749,13 +2772,23 @@
           if (guideShown) toast("参考线已开：虚线是文字块边界，竖线是最常见的左右边界");
         });
       }
-      $("#ty-rows").addEventListener("change", function (e) {
-        var row = e.target.closest(".ty__row");
-        var k = e.target.dataset ? e.target.dataset.k : "";
+      /* 数字框原来只认 change：在框里打字时预览一动不动，非得按回车或点别处
+         才突然跳一下；手机上还有 0.75 倍缩放，那一跳更小，很容易被当成
+         「改字号没反应」。input 也接上，加一点防抖，输入中间态忽略。 */
+      var tyTimer = 0, tyLast = "";
+      function applyTyEdit(target) {
+        typeHint();
+        if (S.pubView) { toast("发布态是只读快照，先点「发布态」切回实时"); return; }
+        var row = target.closest(".ty__row");
+        var k = target.dataset ? target.dataset.k : "";
         if (!row || !k || k === "reset") return;
+        var v = target.value;
+        if (v === "" || v === "-" || v === ".") return;
+        var sig = row.dataset.role + "|" + k + "|" + v;
+        if (sig === tyLast) return;
+        tyLast = sig;
         /* 只发用户动过的那一列。整行一起发会把没动过的段后/粗细也钉成当前值，
            统一字号的同时顺手把标题下方留白改成 0 —— 那不是用户要的。 */
-        var v = e.target.value;
         var patch = {};
         if (k === "size") { patch.size = parseInt(v, 10) || 0; patch.px = patch.size; }
         else if (k === "lh") patch.lh = parseInt(v, 10) || 0;
@@ -2766,6 +2799,16 @@
         else if (k === "weight") patch.weight = v;
         if (!Object.keys(patch).length) return;
         sendRoleEdit(row.dataset.role, patch);
+      }
+      $("#ty-rows").addEventListener("input", function (e) {
+        if (e.target.tagName === "SELECT") return;
+        var t = e.target;
+        clearTimeout(tyTimer);
+        tyTimer = setTimeout(function () { applyTyEdit(t); }, 140);
+      });
+      $("#ty-rows").addEventListener("change", function (e) {
+        clearTimeout(tyTimer);
+        applyTyEdit(e.target);
       });
       $("#ty-rows").addEventListener("click", function (e) {
         var b = e.target.closest('[data-k="reset"]');
