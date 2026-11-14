@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-15T02:07:43+08:00",
- "generated_at_human": "2026-11-15 02:07",
+ "generated_at": "2026-11-15T06:27:45+08:00",
+ "generated_at_human": "2026-11-15 06:27",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -19,7 +19,7 @@ window.SITE_FEED = {
   "sources_failed": 0,
   "failed_sources": [],
   "items": 84,
-  "items_added": 4,
+  "items_added": 0,
   "archive_max": 3000
  },
  "sources": [
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 998,
+   "ms": 905,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 338,
+   "ms": 277,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 496,
+   "ms": 486,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 503,
+   "ms": 463,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 233,
+   "ms": 330,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 887,
+   "ms": 735,
    "http": 200
   }
  ],
@@ -158,10 +158,30 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
-   "title": "coding-kitties/investing-algorithm-framework",
-   "url": "https://github.com/coding-kitties/investing-algorithm-framework",
-   "date": "2026-11-15T01:38:49+08:00",
-   "summary": "Framework for quantitative trading. Complete framework for development, backtesting, and deploying automated trading algorithms and trading bots.",
+   "title": "wilsonfreitas/awesome-quant",
+   "url": "https://github.com/wilsonfreitas/awesome-quant",
+   "date": "2026-11-15T06:26:34+08:00",
+   "summary": "A curated list of insanely awesome libraries, packages and resources for Quants (Quantitative Finance)",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Lumiwealth/lumibot",
+   "url": "https://github.com/Lumiwealth/lumibot",
+   "date": "2026-11-15T06:21:40+08:00",
+   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "facioquo/stock-indicators-dotnet",
+   "url": "https://github.com/facioquo/stock-indicators-dotnet",
+   "date": "2026-11-15T05:49:33+08:00",
+   "summary": "Stock Indicators for .NET is a C# NuGet package that transforms raw equity, commodity, forex, or cryptocurrency financial market price quotes into technical …",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -170,8 +190,18 @@ window.SITE_FEED = {
   {
    "title": "questdb/questdb",
    "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-15T01:23:18+08:00",
+   "date": "2026-11-15T02:56:09+08:00",
    "summary": "QuestDB is a high performance, open-source, time-series database",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "coding-kitties/investing-algorithm-framework",
+   "url": "https://github.com/coding-kitties/investing-algorithm-framework",
+   "date": "2026-11-15T02:42:55+08:00",
+   "summary": "Framework for quantitative trading. Complete framework for development, backtesting, and deploying automated trading algorithms and trading bots.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -232,8 +262,8 @@ window.SITE_FEED = {
    "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
    "date": "2026-11-14T22:48:39+08:00",
    "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -248,30 +278,10 @@ window.SITE_FEED = {
    "family": "wechat-19884288"
   },
   {
-   "title": "facioquo/stock-indicators-dotnet",
-   "url": "https://github.com/facioquo/stock-indicators-dotnet",
-   "date": "2026-11-14T14:23:03+08:00",
-   "summary": "Stock Indicators for .NET is a C# NuGet package that transforms raw equity, commodity, forex, or cryptocurrency financial market price quotes into technical …",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "OpenByteInc/QuantDinger",
    "url": "https://github.com/OpenByteInc/QuantDinger",
    "date": "2026-11-14T14:12:05+08:00",
    "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "Lumiwealth/lumibot",
-   "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-14T14:07:25+08:00",
-   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -454,15 +464,6 @@ window.SITE_FEED = {
    "url": "https://github.com/alpacahq/alpaca-py",
    "date": "2026-11-11T21:07:58+08:00",
    "summary": "The Official Python SDK for Alpaca API",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "wilsonfreitas/awesome-quant",
-   "url": "https://github.com/wilsonfreitas/awesome-quant",
-   "date": "2026-11-11T09:02:24+08:00",
-   "summary": "A curated list of insanely awesome libraries, packages and resources for Quants (Quantitative Finance)",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -920,5 +921,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "87457673ae68212ca1f8d298da3bd394"
+ "signature": "f6d55db473ccf83be442945fd653cc83"
 };
