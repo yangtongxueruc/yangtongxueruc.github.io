@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-14T11:46:20+08:00",
- "generated_at_human": "2026-11-14 11:46",
+ "generated_at": "2026-11-14T14:28:40+08:00",
+ "generated_at_human": "2026-11-14 14:28",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -18,8 +18,8 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 79,
-  "items_added": 0,
+  "items": 80,
+  "items_added": 1,
   "archive_max": 3000
  },
  "sources": [
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1023,
+   "ms": 956,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 309,
+   "ms": 287,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 614,
+   "ms": 523,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 558,
+   "ms": 474,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 364,
+   "ms": 272,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 904,
+   "ms": 856,
    "http": 200
   }
  ],
@@ -148,9 +148,39 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
+   "title": "facioquo/stock-indicators-dotnet",
+   "url": "https://github.com/facioquo/stock-indicators-dotnet",
+   "date": "2026-11-14T14:23:03+08:00",
+   "summary": "Stock Indicators for .NET is a C# NuGet package that transforms raw equity, commodity, forex, or cryptocurrency financial market price quotes into technical …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "qusong0627/QuantMind",
+   "url": "https://github.com/qusong0627/QuantMind",
+   "date": "2026-11-14T14:17:31+08:00",
+   "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "OpenByteInc/QuantDinger",
+   "url": "https://github.com/OpenByteInc/QuantDinger",
+   "date": "2026-11-14T14:12:05+08:00",
+   "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
    "title": "Lumiwealth/lumibot",
    "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-14T11:44:27+08:00",
+   "date": "2026-11-14T14:07:25+08:00",
    "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
@@ -158,10 +188,10 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "facioquo/stock-indicators-dotnet",
-   "url": "https://github.com/facioquo/stock-indicators-dotnet",
-   "date": "2026-11-14T11:42:30+08:00",
-   "summary": "Stock Indicators for .NET is a C# NuGet package that transforms raw equity, commodity, forex, or cryptocurrency financial market price quotes into technical …",
+   "title": "ArturSepp/QuantInvestStrats",
+   "url": "https://github.com/ArturSepp/QuantInvestStrats",
+   "date": "2026-11-14T13:56:29+08:00",
+   "summary": "Performance analytics, portfolio backtesting, risk analysis, and factsheet reporting in Python",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -170,7 +200,7 @@ window.SITE_FEED = {
   {
    "title": "ZhuLinsen/daily_stock_analysis",
    "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
-   "date": "2026-11-14T11:42:18+08:00",
+   "date": "2026-11-14T13:03:48+08:00",
    "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
@@ -361,15 +391,6 @@ window.SITE_FEED = {
    "kind": "开源"
   },
   {
-   "title": "ArturSepp/QuantInvestStrats",
-   "url": "https://github.com/ArturSepp/QuantInvestStrats",
-   "date": "2026-11-12T03:31:34+08:00",
-   "summary": "Performance analytics, portfolio backtesting, risk analysis, and factsheet reporting in Python",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
    "title": "HiThink-Tech/Financial-API",
    "url": "https://github.com/HiThink-Tech/Financial-API",
    "date": "2026-11-11T21:41:41+08:00",
@@ -392,15 +413,6 @@ window.SITE_FEED = {
    "url": "https://github.com/JerBouma/FinanceToolkit",
    "date": "2026-11-11T18:39:20+08:00",
    "summary": "Transparent and Efficient Financial Analysis",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "OpenByteInc/QuantDinger",
-   "url": "https://github.com/OpenByteInc/QuantDinger",
-   "date": "2026-11-11T17:46:02+08:00",
-   "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -867,5 +879,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "347ea421714a88c69a4a28eb61d6e003"
+ "signature": "c8a85a6c5ef49a01e77ac2988646bbec"
 };
