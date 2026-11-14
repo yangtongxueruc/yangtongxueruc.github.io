@@ -1,15 +1,25 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-14T03:45:01+08:00",
- "generated_at_human": "2026-11-14 03:45",
+ "generated_at": "2026-11-14T11:46:20+08:00",
+ "generated_at_human": "2026-11-14 11:46",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
+ "families": {
+  "wechat-llmquant": "wechat-llmquant",
+  "arxiv-qfin": "arxiv-qfin",
+  "github-quant": "github",
+  "github-quant-new": "github",
+  "codeforces": "codeforces",
+  "tianchi": "tianchi",
+  "rsshub-example": "rsshub-example",
+  "wechat-19884288": "wechat-19884288"
+ },
  "stats": {
-  "sources_total": 5,
-  "sources_ok": 5,
+  "sources_total": 6,
+  "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
   "items": 79,
-  "items_added": 1,
+  "items_added": 0,
   "archive_max": 3000
  },
  "sources": [
@@ -22,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 800,
+   "ms": 1023,
    "http": 200
   },
   {
@@ -34,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 267,
+   "ms": 309,
    "http": 200
   },
   {
@@ -46,7 +56,19 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 728,
+   "ms": 614,
+   "http": 200
+  },
+  {
+   "id": "github-quant-new",
+   "name": "GitHub 新项目",
+   "type": "json",
+   "kind": "开源",
+   "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-14+stars%3A%3E50&sort=updated&order=desc&per_page=10",
+   "ok": true,
+   "count": 4,
+   "error": null,
+   "ms": 558,
    "http": 200
   },
   {
@@ -58,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 433,
+   "ms": 364,
    "http": 200
   },
   {
@@ -70,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 596,
+   "ms": 904,
    "http": 200
   }
  ],
@@ -82,7 +104,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "codeforces",
    "source_name": "Codeforces",
-   "kind": "算法竞赛"
+   "kind": "算法竞赛",
+   "family": "codeforces"
   },
   {
    "title": "Kotlin Heroes: Practice 15",
@@ -91,7 +114,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "codeforces",
    "source_name": "Codeforces",
-   "kind": "算法竞赛"
+   "kind": "算法竞赛",
+   "family": "codeforces"
   },
   {
    "title": "Codeforces Round (Div. 1)",
@@ -100,7 +124,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "codeforces",
    "source_name": "Codeforces",
-   "kind": "算法竞赛"
+   "kind": "算法竞赛",
+   "family": "codeforces"
   },
   {
    "title": "Codeforces Round (Div. 2)",
@@ -109,7 +134,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "codeforces",
    "source_name": "Codeforces",
-   "kind": "算法竞赛"
+   "kind": "算法竞赛",
+   "family": "codeforces"
   },
   {
    "title": "Codeforces Round 1135 (Div. 2)",
@@ -118,13 +144,104 @@ window.SITE_FEED = {
    "summary": "",
    "source": "codeforces",
    "source_name": "Codeforces",
-   "kind": "算法竞赛"
+   "kind": "算法竞赛",
+   "family": "codeforces"
+  },
+  {
+   "title": "Lumiwealth/lumibot",
+   "url": "https://github.com/Lumiwealth/lumibot",
+   "date": "2026-11-14T11:44:27+08:00",
+   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "facioquo/stock-indicators-dotnet",
+   "url": "https://github.com/facioquo/stock-indicators-dotnet",
+   "date": "2026-11-14T11:42:30+08:00",
+   "summary": "Stock Indicators for .NET is a C# NuGet package that transforms raw equity, commodity, forex, or cryptocurrency financial market price quotes into technical …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZhuLinsen/daily_stock_analysis",
+   "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
+   "date": "2026-11-14T11:42:18+08:00",
+   "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "openbq-org/OpenBB",
+   "url": "https://github.com/openbq-org/OpenBB",
+   "date": "2026-11-14T10:25:38+08:00",
+   "summary": "Open Data Platform for analysts, quants and AI agents.",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Barca0412/Introduction-to-Quantitative-Finance",
+   "url": "https://github.com/Barca0412/Introduction-to-Quantitative-Finance",
+   "date": "2026-11-14T09:19:36+08:00",
+   "summary": "AI+金融（量化）：1.多因子股票量化框架开源教程 2.学界和业界的经典资料收录 3.AI + 金融的相关工作，包括LLM, Agent, benchmark(evaluation), etc.",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
   },
   {
    "title": "questdb/questdb",
    "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-14T03:17:15+08:00",
+   "date": "2026-11-14T08:44:16+08:00",
    "summary": "QuestDB is a high performance, open-source, time-series database",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Blave-TW/blave-agent",
+   "url": "https://github.com/Blave-TW/blave-agent",
+   "date": "2026-11-14T08:28:17+08:00",
+   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZhuLinsen/alphasift",
+   "url": "https://github.com/ZhuLinsen/alphasift",
+   "date": "2026-11-14T06:34:50+08:00",
+   "summary": "Full-market stock discovery for AI agents: A-shares plus US/HK/JP/KR/TW/IN, auditable YAML strategies, optional LLM ranking, sector-diversified picks, and tr…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "pengpengyi92/dsh-quant",
+   "url": "https://github.com/pengpengyi92/dsh-quant",
+   "date": "2026-11-14T05:05:59+08:00",
+   "summary": "\"🐳 Dsh-Quant: The Everything-Plugin Ai native Quant OS \"",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "man-group/ArcticDB",
+   "url": "https://github.com/man-group/ArcticDB",
+   "date": "2026-11-13T02:41:38+08:00",
+   "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -132,71 +249,8 @@ window.SITE_FEED = {
   {
    "title": "lballabio/QuantLib",
    "url": "https://github.com/lballabio/QuantLib",
-   "date": "2026-11-14T03:02:19+08:00",
+   "date": "2026-11-13T02:17:32+08:00",
    "summary": "The QuantLib C++ library",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "man-group/ArcticDB",
-   "url": "https://github.com/man-group/ArcticDB",
-   "date": "2026-11-14T03:01:25+08:00",
-   "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "Barca0412/Introduction-to-Quantitative-Finance",
-   "url": "https://github.com/Barca0412/Introduction-to-Quantitative-Finance",
-   "date": "2026-11-14T02:05:24+08:00",
-   "summary": "AI+金融（量化）：1.多因子股票量化框架开源教程 2.学界和业界的经典资料收录 3.AI + 金融的相关工作，包括LLM, Agent, benchmark(evaluation), etc.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "skfolio/skfolio",
-   "url": "https://github.com/skfolio/skfolio",
-   "date": "2026-11-14T02:01:31+08:00",
-   "summary": "Python library for portfolio optimization, factor model construction, and risk management built on scikit-learn",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "Fincept-Corporation/FinceptTerminal",
-   "url": "https://github.com/Fincept-Corporation/FinceptTerminal",
-   "date": "2026-11-13T12:42:41+08:00",
-   "summary": "FinceptTerminal is a modern finance application offering advanced market analytics, investment research, and economic data tools, designed for interactive ex…",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "YichengYang-Ethan/oracle3-prediction-market-agent",
-   "url": "https://github.com/YichengYang-Ethan/oracle3-prediction-market-agent",
-   "date": "2026-11-13T10:31:11+08:00",
-   "summary": "Oracle3: open-source trading engine and MCP server for prediction markets. Finds fee-adjusted no-arbitrage violations across related event contracts and trad…",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "openbq-org/OpenBB",
-   "url": "https://github.com/openbq-org/OpenBB",
-   "date": "2026-11-13T10:15:17+08:00",
-   "summary": "Open Data Platform for analysts, quants and AI agents.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "Lumiwealth/lumibot",
-   "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-13T03:37:46+08:00",
-   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -208,7 +262,8 @@ window.SITE_FEED = {
    "summary": "Grid-scale battery energy storage systems (BESS) are becoming increasingly important in short-term energy markets, where they help balance fluctuations in variable renewable generation. In many countr",
    "source": "arxiv-qfin",
    "source_name": "arXiv q-fin",
-   "kind": "研究"
+   "kind": "研究",
+   "family": "arxiv-qfin"
   },
   {
    "title": "HKUDS/Vibe-Trading",
@@ -226,7 +281,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "Verifiable Settlement and Pricing for Local Energy Markets: Architecture and Deployment on Hyperledger Besu",
@@ -235,16 +291,8 @@ window.SITE_FEED = {
    "summary": "We implement privacy-preserving local electricity exchanges using an automated market maker on the Hyperledger Besu network under QBFT consensus. The proposed protocol operator collects individual ele",
    "source": "arxiv-qfin",
    "source_name": "arXiv q-fin",
-   "kind": "研究"
-  },
-  {
-   "title": "ZhuLinsen/daily_stock_analysis",
-   "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
-   "date": "2026-11-12T14:11:19+08:00",
-   "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
+   "kind": "研究",
+   "family": "arxiv-qfin"
   },
   {
    "title": "georgezouq/awesome-ai-in-finance",
@@ -262,16 +310,8 @@ window.SITE_FEED = {
    "summary": "On blockchain-based exchanges, faster blocks weaken the priority-fee competition among arbitrageurs and shift rents from the block producer to them. Equilibrium liquidity peaks at an interior block sp",
    "source": "arxiv-qfin",
    "source_name": "arXiv q-fin",
-   "kind": "研究"
-  },
-  {
-   "title": "facioquo/stock-indicators-dotnet",
-   "url": "https://github.com/facioquo/stock-indicators-dotnet",
-   "date": "2026-11-12T09:37:07+08:00",
-   "summary": "Stock Indicators for .NET is a C# NuGet package that transforms raw equity, commodity, forex, or cryptocurrency financial market price quotes into technical …",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
+   "kind": "研究",
+   "family": "arxiv-qfin"
   },
   {
    "title": "jundizhou/easy-stock",
@@ -381,7 +421,8 @@ window.SITE_FEED = {
    "summary": "We analyze the solution map of a optimal execution problem in which price dynamics are subject to a general transient impact kernel. Given the structure of the optimal trading strategy derived by Abi ",
    "source": "arxiv-qfin",
    "source_name": "arXiv q-fin",
-   "kind": "研究"
+   "kind": "研究",
+   "family": "arxiv-qfin"
   },
   {
    "title": "Fine-Tuning an Order-Flow Foundation Model for Sub-Second Forecasting",
@@ -390,7 +431,8 @@ window.SITE_FEED = {
    "summary": "Generative models have become the standard approach in language and vision. These models are typically pretrained first and then fine-tuned. Recent work demonstrates how to pretrain an autoregressive ",
    "source": "arxiv-qfin",
    "source_name": "arXiv q-fin",
-   "kind": "研究"
+   "kind": "研究",
+   "family": "arxiv-qfin"
   },
   {
    "title": "Jane Street 开源：竟然是一个“只提问”的 AI",
@@ -399,7 +441,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "jesse-ai/jesse",
@@ -464,7 +507,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "Citadel Securities：如何构建持续更新的世界模型",
@@ -501,7 +545,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-llmquant",
    "source_name": "LLMQuant",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-llmquant"
   },
   {
    "title": "The End-of-Day Reversal After 2019: A Pre-Registered Test on S&P 500 Stocks Excluding Heavily Traded Names",
@@ -519,7 +564,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "OpenAI：如何打造真正能用的金融 AI",
@@ -538,7 +584,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-llmquant",
    "source_name": "LLMQuant",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-llmquant"
   },
   {
    "title": "Jump Trading：算力交易如何成为下一个金融市场？",
@@ -557,7 +604,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "Optiver：为什么交易中的机器学习是一场与市场的博弈？",
@@ -586,7 +634,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "XTX 研究总监：金融市场的递归自我改进（RSI）究竟是什么",
@@ -615,7 +664,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-llmquant",
    "source_name": "LLMQuant",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-llmquant"
   },
   {
    "title": "Two Sigma：深度学习如何建模金融市场",
@@ -644,7 +694,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-llmquant",
    "source_name": "LLMQuant",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-llmquant"
   },
   {
    "title": "把策略公开，也没人会照做：40 年 Trend Following 的几个教训",
@@ -653,7 +704,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-llmquant",
    "source_name": "LLMQuant",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-llmquant"
   },
   {
    "title": "牛津大学｜因子有效却不赚钱？机器学习端到端链式归因与增强",
@@ -662,7 +714,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "做了一个没人用的金融 Agent 之后",
@@ -671,7 +724,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "传统因子与深度学习如何结合？基于LeCun世界模型JEPA的预测框架",
@@ -680,7 +734,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "Citadel Securities 总裁：如何将订单流转化为竞争优势",
@@ -699,7 +754,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "情绪指标的非对称陷阱：来自百万新闻的证据",
@@ -708,7 +764,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "华尔街顶级阵容联手：如何评测金融大模型",
@@ -717,7 +774,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "易方达｜预测次日收益，模型一定要用次日收益做标签吗？",
@@ -726,7 +784,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "黑翼资产｜告别固定窗口：自适应时序架构 RAVEN",
@@ -735,7 +794,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "英伟达 | 聚合订单簿下的微观区间识别与 FIFO 排队偏差",
@@ -744,7 +804,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "AI 对冲基金的Alpha为何消失？",
@@ -753,7 +814,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "谷歌 x 剑桥 | AutoScientist-Quant：面向量化的自动研究智能体",
@@ -762,7 +824,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "因子—图投资组合分散化模型",
@@ -771,7 +834,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "市场状态识别下的多轴交易信号",
@@ -780,7 +844,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "AQR白皮书：学术 Alpha 如何变成真实 Alpha",
@@ -789,7 +854,8 @@ window.SITE_FEED = {
    "summary": "",
    "source": "wechat-19884288",
    "source_name": "QuantML · 论文",
-   "kind": "公众号"
+   "kind": "公众号",
+   "family": "wechat-19884288"
   },
   {
    "title": "AI时代的Alpha衰减",
@@ -801,5 +867,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "ed69c3ee070bebe3ad080cf8f590d298"
+ "signature": "347ea421714a88c69a4a28eb61d6e003"
 };

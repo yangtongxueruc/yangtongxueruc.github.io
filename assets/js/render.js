@@ -1321,6 +1321,11 @@
      这类高频源会一次占掉八九条，页面读起来就不像「动态」而像那个源的列表。
      归档页（feed.html）不受这个限制 —— 那里本来就是「翻过去发过什么」。*/
   var FEED_HOME_PER_SOURCE = 3;
+  /* 同一个「家族」在首页最多占几条。GitHub 拆成「活跃库 / 新项目」两条查询之后，
+     只按展示名配额的话两组合计能占到 6-8 条，还是会让人觉得这是 GitHub 列表。
+     家族由数据里的 family 字段给出（sources.json 配），没配就退回展示名，
+     也就是「一条源一个家族」，和以前的行为一致。*/
+  var FEED_HOME_PER_FAMILY = 5;
   /* 首页末尾给「还没发生」的条目留几个位置。Codeforces 这类源给的是开赛时间
      （11-15、11-21、12-08…），整源都是未来日程 —— 早先直接按 isAhead 整条滤掉，
      等于把这个源从首页抹掉，一条也看不到。现在不丢：挪到列表尾巴，只留最近 3 条。*/
@@ -1334,16 +1339,43 @@
     return isFinite(t) && t > Date.now() + FEED_AHEAD_GRACE_MS;
   }
 
-  /* 按「每个源最多 per 条」扫一遍，够 cap 条就停。日期顺序原样保留。*/
+  /* 条目所属家族：优先用条目自带的 family，老条目没有就查数据里的
+     families（源 id → 家族），最后退回展示名。存档是逐次合并累积的，
+     里面还留着加这个字段之前的记录，不能只认条目自己的字段。*/
+  var FEED_FAMILIES = {};
+  function feedGroup(it) {
+    return (it.family || FEED_FAMILIES[it.source] || it.source_name || it.source || "?");
+  }
+
+  /* 按「每个源最多 per 条、每个家族最多 perFam 条」扫一遍，够 cap 条就停。*/
   function takeBalanced(pool, per, cap) {
-    var seen = {}, out = [];
+    var seen = {}, seenFam = {}, out = [];
     for (var i = 0; i < pool.length && out.length < cap; i++) {
-      /* 用展示名当分组键，不用 source id：手动加的条目共用 "wechat-manual"
-         这个伪源，按 id 分组会把两个不同的号算成一家。*/
       var key = pool[i].source_name || pool[i].source || "?";
+      var fam = feedGroup(pool[i]);
       if ((seen[key] || 0) >= per) continue;
+      if ((seenFam[fam] || 0) >= FEED_HOME_PER_FAMILY) continue;
       seen[key] = (seen[key] || 0) + 1;
+      seenFam[fam] = (seenFam[fam] || 0) + 1;
       out.push(pool[i]);
+    }
+    return spaceOut(out);
+  }
+
+  /* 同一家族的行不要挨在一起。
+     日期倒序 + 配额的真实结果是：某个源的仓库今天都更新过，连着几条都是它，
+     页面上看起来就是「前四条全是 GitHub 量化开源」。这里做一次贪心重排 ——
+     每次优先取第一条与上一行不同家族的，实在没有才退回最早那条。整体仍按
+     时间先后，只是把同类的行错开。*/
+  function spaceOut(rows) {
+    var rest = rows.slice(), out = [];
+    while (rest.length) {
+      var prev = out.length ? feedGroup(out[out.length - 1]) : null;
+      var pick = 0;
+      for (var i = 0; i < rest.length; i++) {
+        if (feedGroup(rest[i]) !== prev) { pick = i; break; }
+      }
+      out.push(rest.splice(pick, 1)[0]);
     }
     return out;
   }
@@ -1450,6 +1482,7 @@
     }
 
     var all = feed.items || [];
+    FEED_FAMILIES = feed.families || {};
     var st = feed.stats || {};
     status.innerHTML = "";
     [
