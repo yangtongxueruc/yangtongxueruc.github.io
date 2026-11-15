@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-15T21:08:41+08:00",
- "generated_at_human": "2026-11-15 21:08",
+ "generated_at": "2026-11-15T21:14:55+08:00",
+ "generated_at_human": "2026-11-15 21:14",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -18,8 +18,8 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 87,
-  "items_added": 2,
+  "items": 88,
+  "items_added": 0,
   "archive_max": 3000
  },
  "sources": [
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 900,
+   "ms": 784,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 340,
+   "ms": 115,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 516,
+   "ms": 603,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 545,
+   "ms": 569,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 251,
+   "ms": 418,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 938,
+   "ms": 690,
    "http": 200
   }
  ],
@@ -158,22 +158,22 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
+   "title": "ZhuLinsen/daily_stock_analysis",
+   "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
+   "date": "2026-11-15T21:14:36+08:00",
+   "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
    "title": "OpenByteInc/QuantDinger",
    "url": "https://github.com/OpenByteInc/QuantDinger",
    "date": "2026-11-15T21:05:51+08:00",
    "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "ZhuLinsen/daily_stock_analysis",
-   "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
-   "date": "2026-11-15T21:05:32+08:00",
-   "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
    "kind": "开源",
    "family": "github"
   },
@@ -206,6 +206,17 @@ window.SITE_FEED = {
    "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
+  },
+  {
+   "title": "Jain Global联手Millennium后，已招聘20多位PM",
+   "url": "https://mp.weixin.qq.com/s/mmV41CUqP9oetiJvYVskdA",
+   "date": "2026-11-15T19:29:06+08:00",
+   "summary": "2026年11月13日，Jain Global创始人兼CEO/CIO Bobby Jain接受了Bloomberg记者Nishant Kumar的专访。 在这场长达83分钟的对话中，他详细分享了Jain Global与Millennium合",
+   "source": "wechat-manual",
+   "source_name": "公众号",
+   "kind": "公众号",
+   "manual": true,
+   "mid": "2247484761"
   },
   {
    "title": "qusong0627/QuantMind",
@@ -955,5 +966,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "14d58b390873d5438fbc4e337252c439"
+ "signature": "82920dd3e00d90b397d030d5f9d0142d"
 };
