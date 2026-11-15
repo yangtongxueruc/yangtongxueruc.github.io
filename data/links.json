@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-15T14:37:57+08:00",
-  "generated_at_human": "2026-11-15 14:37",
+  "generated_at": "2026-11-15T21:08:41+08:00",
+  "generated_at_human": "2026-11-15 21:08",
   "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
   "families": {
     "wechat-llmquant": "wechat-llmquant",
@@ -17,8 +17,8 @@
     "sources_ok": 6,
     "sources_failed": 0,
     "failed_sources": [],
-    "items": 84,
-    "items_added": 0,
+    "items": 87,
+    "items_added": 2,
     "archive_max": 3000
   },
   "sources": [
@@ -31,7 +31,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 806,
+      "ms": 900,
       "http": 200
     },
     {
@@ -43,7 +43,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 344,
+      "ms": 340,
       "http": 200
     },
     {
@@ -55,7 +55,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 444,
+      "ms": 516,
       "http": 200
     },
     {
@@ -67,7 +67,7 @@
       "ok": true,
       "count": 4,
       "error": null,
-      "ms": 434,
+      "ms": 545,
       "http": 200
     },
     {
@@ -79,7 +79,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 414,
+      "ms": 251,
       "http": 200
     },
     {
@@ -91,7 +91,7 @@
       "ok": true,
       "count": 20,
       "error": null,
-      "ms": 785,
+      "ms": 938,
       "http": 200
     }
   ],
@@ -157,9 +157,29 @@
       "family": "codeforces"
     },
     {
+      "title": "OpenByteInc/QuantDinger",
+      "url": "https://github.com/OpenByteInc/QuantDinger",
+      "date": "2026-11-15T21:05:51+08:00",
+      "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ZhuLinsen/daily_stock_analysis",
+      "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
+      "date": "2026-11-15T21:05:32+08:00",
+      "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
       "title": "Lumiwealth/lumibot",
       "url": "https://github.com/Lumiwealth/lumibot",
-      "date": "2026-11-15T14:14:38+08:00",
+      "date": "2026-11-15T20:56:31+08:00",
       "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
@@ -169,7 +189,7 @@
     {
       "title": "HKUDS/Vibe-Trading",
       "url": "https://github.com/HKUDS/Vibe-Trading",
-      "date": "2026-11-15T13:43:59+08:00",
+      "date": "2026-11-15T20:31:41+08:00",
       "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
@@ -177,12 +197,42 @@
       "family": "github"
     },
     {
+      "title": "gammagrid/gammagrid",
+      "url": "https://github.com/gammagrid/gammagrid",
+      "date": "2026-11-15T19:29:08+08:00",
+      "summary": "Open-source options gamma exposure (GEX) & positioning dashboard — dealer GEX, max pain, open interest, IV surface. Self-hosted, Docker, no coding required.",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
       "title": "qusong0627/QuantMind",
       "url": "https://github.com/qusong0627/QuantMind",
-      "date": "2026-11-15T12:48:32+08:00",
+      "date": "2026-11-15T18:30:06+08:00",
       "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
       "source": "github-quant-new",
       "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "Cliff Asness｜因子回撤与瓦肯人悖论",
+      "url": "https://mp.weixin.qq.com/s?__biz=Mzg2MzAwNzM0NQ==&mid=2247494892&idx=1&sn=99150fd806828be99dd28b9afd927e4f&chksm=ce7d8bf2f90a02e44faf74806be458a486c6387b6450564e02dfce1e20d3f0f0689f4cfe8c8a#rd",
+      "date": "2026-11-15T17:58:09+08:00",
+      "summary": "",
+      "source": "wechat-19884288",
+      "source_name": "QuantML · 论文",
+      "kind": "公众号",
+      "family": "wechat-19884288"
+    },
+    {
+      "title": "man-group/ArcticDB",
+      "url": "https://github.com/man-group/ArcticDB",
+      "date": "2026-11-15T16:15:44+08:00",
+      "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
       "kind": "开源",
       "family": "github"
     },
@@ -205,6 +255,17 @@
       "source_name": "GitHub 量化开源",
       "kind": "开源",
       "family": "github"
+    },
+    {
+      "title": "Bridgewater：一亿份文档背后的 AI 投研系统",
+      "url": "https://mp.weixin.qq.com/s/bqOGYz70R-aNrtXo0Cmn5g",
+      "date": "2026-11-15T09:00:00+08:00",
+      "summary": "演讲来源：AI Engineer 分享者：Sam Green，Bridgewater 应用人工智能团队负责人；Aaron Linsky，产品工程负责人 Sam Green 与 Aaron Linsky 分别负责 Bridgewater 的应",
+      "source": "wechat-manual",
+      "source_name": "狄奥尼索斯之歌",
+      "kind": "公众号",
+      "manual": true,
+      "mid": "2247484890"
     },
     {
       "title": "rolling-panda-san/notebooks",
@@ -277,16 +338,6 @@
       "family": "github"
     },
     {
-      "title": "ZhuLinsen/daily_stock_analysis",
-      "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
-      "date": "2026-11-14T22:48:39+08:00",
-      "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "Alpha的容量",
       "url": "https://mp.weixin.qq.com/s?__biz=Mzg2MzAwNzM0NQ==&mid=2247494887&idx=1&sn=d07be4161a13d2bc719b3c2abfafa570&chksm=ce7d8bf9f90a02efd386b8b2d1523f79d0baf276f56026a6dea465d458847b3f273368bc48bd#rd",
       "date": "2026-11-14T20:32:05+08:00",
@@ -295,16 +346,6 @@
       "source_name": "QuantML · 论文",
       "kind": "公众号",
       "family": "wechat-19884288"
-    },
-    {
-      "title": "OpenByteInc/QuantDinger",
-      "url": "https://github.com/OpenByteInc/QuantDinger",
-      "date": "2026-11-14T14:12:05+08:00",
-      "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
     },
     {
       "title": "ArturSepp/QuantInvestStrats",
@@ -345,15 +386,6 @@
       "source_name": "GitHub 新项目",
       "kind": "开源",
       "family": "github"
-    },
-    {
-      "title": "man-group/ArcticDB",
-      "url": "https://github.com/man-group/ArcticDB",
-      "date": "2026-11-13T02:41:38+08:00",
-      "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源"
     },
     {
       "title": "lballabio/QuantLib",
@@ -922,5 +954,5 @@
       "kind": "公众号"
     }
   ],
-  "signature": "8dd78552ba1be558fa8df951a144342d"
+  "signature": "14d58b390873d5438fbc4e337252c439"
 }
