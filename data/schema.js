@@ -110,6 +110,12 @@ window.V2_SCHEMA = {
           type: "image",
           hint: "点「选择图片」从本机上传，选完自动压缩并即时预览。图片会内嵌进内容文件，点「发布」后随文案一起写入仓库，换设备也能显示。建议 JPG / PNG / WebP，单个不超过 12 MB。线稿类图片建议直接填仓库内路径（如 assets/img/portrait-scratch.jpg），避免 JPEG 重压让细线起毛边。"
         },
+        {
+          path: "pages.home.sections.hero.portrait.signature",
+          label: "框内下方的手写字",
+          type: "text",
+          hint: "写在人像框底部、线团下方的那句话，默认「I feel like this.」。留空就整条不显示。**只在桌面端出现** —— 手机 / 平板看的是原照片，那句话本来就印在照片上，再叠一层会重影，所以那里永远不显示这条文字。"
+        },
 
         /* ---- 首屏可选项（改完右侧预览即时生效）---- */
         {

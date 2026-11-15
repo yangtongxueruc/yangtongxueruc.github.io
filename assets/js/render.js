@@ -228,6 +228,14 @@
       ["tl", "tr", "bl", "br"].forEach(function (c) {
         box.appendChild(el("span", "portrait__corner portrait__corner--" + c, { "aria-hidden": "true" }));
       });
+      /* 框内下方那句手写字（原图底部原本就有，被 canvas 盖掉后在这里补回来）。
+         只在乱线团生效时才显示 —— 手机 / 平板看的是原照片，那句话本来就印在
+         照片上，再叠一层就重影了。详见 index.html 里配套的那段 CSS。*/
+      if (d.portrait.signature) {
+        var sig = el("span", "portrait__signature", { "aria-hidden": "true" });
+        sig.textContent = d.portrait.signature;
+        box.appendChild(sig);
+      }
       wrapP.appendChild(box);
 
       if (d.portrait.badgeText) {

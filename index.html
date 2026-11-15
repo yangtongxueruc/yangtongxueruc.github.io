@@ -32,17 +32,17 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/base.css?v=124">
-<link rel="stylesheet" href="assets/css/pages.css?v=124">
-<link rel="stylesheet" href="assets/css/home.css?v=124">
+<link rel="stylesheet" href="assets/css/base.css?v=125">
+<link rel="stylesheet" href="assets/css/pages.css?v=125">
+<link rel="stylesheet" href="assets/css/home.css?v=125">
 <!-- 首屏可选项（由内容控制台字段驱动） -->
-<link rel="stylesheet" href="assets/css/options.css?v=124">
+<link rel="stylesheet" href="assets/css/options.css?v=125">
 <!-- 全页排版精修（含手机端修正，必须压在最后） -->
-<link rel="stylesheet" href="assets/css/refine.css?v=124">
+<link rel="stylesheet" href="assets/css/refine.css?v=125">
 <!-- 首屏流动点阵背景（canvas 由 hero-dots.js 插入） -->
-<link rel="stylesheet" href="assets/css/hero-dots.css?v=124">
-<link rel="stylesheet" href="assets/css/hero-motes.css?v=124">
-<link rel="stylesheet" href="assets/css/mobile.css?v=124">
+<link rel="stylesheet" href="assets/css/hero-dots.css?v=125">
+<link rel="stylesheet" href="assets/css/hero-motes.css?v=125">
+<link rel="stylesheet" href="assets/css/mobile.css?v=125">
 <!-- 窄屏标题用的衬线子集：只在窄屏预热，桌面不下载也不加载 -->
 <link rel="preload" as="font" type="font/woff2" crossorigin media="(max-width: 720px)"
       href="assets/fonts/serif-sc-600.woff2">
@@ -51,6 +51,13 @@
      data-pfx 由 portrait-fx.js 画出首帧后才置位；脚本没跑起来就一直是空的，
      照片照常显示 —— 所以这里只「让位」，不做任何不可逆的隐藏。 -->
 <style>
+  /* 这句手写字（原图底部本来就有）默认永远不显示，写在媒体查询外面是有意的：
+     .portrait 是 flex 容器，span 子项会被块化成 block，只靠「媒体查询不匹配」
+     兜不住 —— 它照样会占位、照样能被看见。手机 / 平板看的是原照片，那句话
+     本来就印在照片上，再叠一层就是重影。下面媒体查询里只有 canvas 真正生效
+     （data-pfx 置位）时，才把它放出来。 */
+  .portrait > .portrait__signature { display: none; }
+
   @media (min-width: 941px) and (hover: hover) and (pointer: fine) {
     html[data-pfx] .portrait > img { opacity: 0 !important; }
     .portrait > canvas.pfx {
@@ -67,6 +74,41 @@
     /* 0.74 对齐原照片在 dim 模式下的 opacity: .58 —— 亮度压在同一档，
        密集处靠 canvas 内部叠加变实，稀疏处自然淡下去 */
     html[data-pfx="on"] .portrait > canvas.pfx { opacity: .74; }
+
+    /* 文字本体 + 一圈同色系的柔光衬底：线条会从字缝里穿过去，
+       没有这层衬底时字读起来发花。深色底用暗晕、浅色底用亮晕。*/
+    html[data-pfx] body {
+      --pfx-sign: #eef2f8;
+      --pfx-sign-halo: rgba(5, 7, 7, .92);
+    }
+    html[data-pfx][data-theme="light"] body,
+    html[data-pfx] body[data-fx="paper"] {
+      --pfx-sign: #1a1d22;
+      --pfx-sign-halo: rgba(255, 255, 255, .92);
+    }
+    html[data-pfx] .portrait > .portrait__signature {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 8.6%;
+      z-index: 4;
+      text-align: center;
+      font-family: Georgia, "Times New Roman", "Songti SC", "SimSun", serif;
+      font-size: clamp(17px, 1.55vw, 23px);
+      line-height: 1;
+      letter-spacing: 0.012em;
+      color: var(--pfx-sign);
+      /* 柔光衬底收得很紧（2px / 6px 两层）：再大就糊成一团暗斑了。
+         线团是流动的，字压在它上面必须有自己的一点点底，否则笔画穿字时读不出字。*/
+      text-shadow: 0 0 2px var(--pfx-sign-halo), 0 0 6px var(--pfx-sign-halo);
+      opacity: 0;
+      transition: opacity 700ms cubic-bezier(.22, 1, .36, 1) 220ms;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    html[data-pfx="on"] .portrait > .portrait__signature { opacity: .9; }
   }
 </style>
 <script>
@@ -84,7 +126,7 @@
         if (html.getAttribute("data-pfx")) return;
         html.setAttribute("data-pfx", "boot");
         var s = document.createElement("script");
-        s.src = "assets/js/portrait-fx.js?v=124";
+        s.src = "assets/js/portrait-fx.js?v=125";
         s.async = true;
         s.onerror = function () { html.removeAttribute("data-pfx"); };
         document.head.appendChild(s);
@@ -129,9 +171,9 @@
 <footer class="footer" id="footer-root"></footer>
 <nav class="tabbar" id="tab-root" aria-label="页面导航"></nav>
 
-<script src="data/content.js?v=124"></script>
-<script src="assets/js/render.js?v=124"></script>
-<script src="assets/js/hero-dots.js?v=124"></script>
-<script src="assets/js/hero-fx.js?v=124"></script>
+<script src="data/content.js?v=125"></script>
+<script src="assets/js/render.js?v=125"></script>
+<script src="assets/js/hero-dots.js?v=125"></script>
+<script src="assets/js/hero-fx.js?v=125"></script>
 </body>
 </html>
