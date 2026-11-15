@@ -3411,6 +3411,13 @@
       postHeight();
       return true;
     }
+    /* 只改了乱线团参数：不动 DOM，直接把数值推给 PortraitFX。
+       否则拖一次滑块就 patchSection 重建一次 hero，画布会跟着重插、闪一下。*/
+    if (sec === "__pfx") {
+      var home = state.content.pages && state.content.pages[PAGE];
+      applyPortraitFx(home && home.sections && home.sections.hero);
+      return true;
+    }
     var patched = false;
     if (sec) patched = patchSection(sec);
     renderNav(state.content);
@@ -3490,6 +3497,14 @@
      控制台改字段 → applyContent / patchSection → 这里重放一次，
      所以选项在预览里是即时生效的，不需要整页刷新。
      ------------------------------------------------------------------ */
+  function applyPortraitFx(hero) {
+    /* 只在桌面端加载了 portrait-fx.js 时才有这个对象。手机 / 平板没有，
+       于是无论内容文件里写了什么参数，手机上都一个字都不会变。*/
+    var api = window.PortraitFX;
+    if (!api || !api.apply) return;
+    api.apply((hero && hero.portraitFx) || {});
+  }
+
   function applyHomeOptions(c) {
     if (PAGE !== "home") return;
     var home = c && c.pages && c.pages.home;
@@ -3514,6 +3529,11 @@
 
     /* 首屏背景点阵：控制台改字段 → 这里把配置推给 hero-dots.js */
     applyHeroDots(hero.dots || {});
+
+    /* 首屏人像乱线团：参数全部来自内容文件。手机端根本不加载那个脚本，
+       window.PortraitFX 不存在，这里一行就返回了 —— 两端的配置天然隔离，
+       无论在控制台怎么调，都不可能影响手机上的呈现。*/
+    applyPortraitFx(hero);
 
     var wrap = document.querySelector(".portrait-wrap");
     if (!wrap) return;

@@ -259,6 +259,207 @@ window.V2_SCHEMA = {
         { path: "pages.home.sections.hero.scrollHint", label: "滚动提示文字", type: "text" }
       ]
     },
+    /* ---------------- 首屏乱线团（只影响桌面端） ----------------
+       这一组的值写在 content.js 的 hero.portraitFx 里，由 portrait-fx.js 读取。
+       那个脚本只在 (min-width:941px) and (hover:hover) and (pointer:fine)
+       下才会被加载，所以这一整组参数**对手机端零影响** —— 手机上始终是
+       原来的静态照片，改这里什么都不会变。
+       section 用 "__pfx"：改动只把数值推给画布，不重建 DOM，
+       所以拖滑块时预览是连续的，不会一卡一闪。 */
+    {
+      id: "pfx-shape",
+      label: "乱线团 · 形态",
+      page: "home",
+      section: "__pfx",
+      icon: "1",
+      hint: "决定这团线「长什么样」。笔迹条数、长笔触、采样点是重建类参数（改完会重新生成一团），其余只影响渲染。想换一团完全不同的乱麻，改「随机种子」即可。",
+      fields: [
+        {
+          path: "pages.home.sections.hero.portraitFx.on",
+          label: "启用动态线团",
+          type: "select",
+          options: [
+            { v: "true",  label: "开启（桌面显示动态线团）" },
+            { v: "false", label: "关闭（恢复原来的静态照片）" }
+          ],
+          hint: "关掉后照片照常显示，与这个脚本上线前完全一样。手机端不受此项影响 —— 它本来就不加载这个脚本。"
+        },
+        {
+          path: "pages.home.sections.hero.portraitFx.strokes",
+          label: "短笔迹条数", type: "number", min: 10, max: 200, step: 1,
+          hint: "10–200，默认 108。另有 4 条固定长笔触。调到 40 左右会变得疏朗透气，150 以上接近涂满。", def: 108 },
+        {
+          path: "pages.home.sections.hero.portraitFx.longStrokes",
+          label: "连续长笔触条数", type: "number", min: 1, max: 8, step: 1,
+          hint: "1–8，默认 4。长笔触是「一只手不停绕圈、一笔到底」的那几条，是线团骨架。太少会散，太多会糊成一个球。", def: 4 },
+        {
+          path: "pages.home.sections.hero.portraitFx.longPointsMin",
+          label: "长笔触采样点（下限）", type: "number", min: 80, max: 1200, step: 10,
+          hint: "80–1200，默认 380。点数决定曲线的圆滑程度，不是密度。低于 150 会明显看到折角。", def: 380 },
+        {
+          path: "pages.home.sections.hero.portraitFx.longPointsMax",
+          label: "长笔触采样点（上限）", type: "number", min: 80, max: 1600, step: 10,
+          hint: "80–1600，默认 620。每条长笔触在上下限之间随机取一个值。", def: 620 },
+        {
+          path: "pages.home.sections.hero.portraitFx.pointsMin",
+          label: "短笔迹采样点（下限）", type: "number", min: 6, max: 80, step: 1,
+          hint: "6–80，默认 16。短笔迹是小环、穿心长弧与惯性折返，点数少就更「碎」、多为短促笔触。", def: 16 },
+        {
+          path: "pages.home.sections.hero.portraitFx.pointsMax",
+          label: "短笔迹采样点（上限）", type: "number", min: 6, max: 120, step: 1,
+          hint: "6–120，默认 36。", def: 36 },
+        {
+          path: "pages.home.sections.hero.portraitFx.radius",
+          label: "线团半径", type: "number", min: 0.2, max: 0.6, step: 0.01,
+          hint: "0.20–0.60，默认 0.46，单位是人像框短边的比例。调小线团缩在中间、四周留白；调到 0.55 以上会顶到边框的渐隐带。", def: 0.46 },
+        {
+          path: "pages.home.sections.hero.portraitFx.seed",
+          label: "随机种子（换一团）", type: "number", min: 0, max: 4294967295, step: 1,
+          hint: "0–4294967295，默认 20261115。同一个种子永远生成同一团线；随手改成别的整数就是另外一团。想复现某次效果就把那个数字记下来。", def: 20261115 }
+      ]
+    },
+    {
+      id: "pfx-motion",
+      label: "乱线团 · 动态",
+      page: "home",
+      section: "__pfx",
+      icon: "2",
+      hint: "决定这团线「怎么动」。全部是倍率：1.0 是默认手感，0 等于关掉这一项。这几项改完是即时生效的，拖滑块就能看到预览在变。",
+      fields: [
+        {
+          path: "pages.home.sections.hero.portraitFx.speed",
+          label: "整体速度", type: "number", min: 0, max: 2, step: 0.05,
+          hint: "0–2，默认 1.0。0 就完全静止（省电，但鼠标交互还在）。系统开启「减少动态效果」时会自动压到 35%。", def: 1.0 },
+        {
+          path: "pages.home.sections.hero.portraitFx.wobble",
+          label: "扰动幅度", type: "number", min: 0, max: 2, step: 0.05,
+          hint: "0–2，默认 1.0。线条被「揉动」的强度。调太大会让整团像在发抖，1.5 以上开始失去手绘感。", def: 1.0 },
+        {
+          path: "pages.home.sections.hero.portraitFx.lively",
+          label: "灵动度", type: "number", min: 0, max: 2, step: 0.05,
+          hint: "0–2，默认 1.0。控制沿线条传播的行波、偶发「抽动」和微抖。调高更活、更有生命感，调低更沉稳。", def: 1.0 },
+        {
+          path: "pages.home.sections.hero.portraitFx.float",
+          label: "漂浮感", type: "number", min: 0, max: 2, step: 0.05,
+          hint: "0–2，默认 1.0。整团重心缓慢漂移 + 每条笔迹的视差 + 外圈呼吸外扩。这是「悬在空气里」那个感觉的来源。", def: 1.0 },
+        {
+          path: "pages.home.sections.hero.portraitFx.twist",
+          label: "扭曲度", type: "number", min: 0, max: 2, step: 0.05,
+          hint: "0–2，默认 1.0。沿线条缓慢传播的角度扭转，直接改变曲线形状。0 是舒展长弧，0.6–1.2 舒展而仍有缠绕（推荐），1.5 以上明显扭动。注意它只管单条曲线的弯度，「扰动幅度」管整团揉动。", def: 1.0 },
+        {
+          path: "pages.home.sections.hero.portraitFx.spin",
+          label: "整体旋转速度", type: "number", min: 0, max: 0.1, step: 0.002,
+          hint: "0–0.1，默认 0.014，单位是弧度/秒。这是很慢的基础转动，叠了两个慢波，避免机械感。调到 0.05 以上会开始晕。", def: 0.014 },
+        {
+          path: "pages.home.sections.hero.portraitFx.lineWidth",
+          label: "线宽倍率", type: "number", min: 0.2, max: 3, step: 0.05,
+          hint: "0.2–3，默认 1.10。每条笔迹自身的粗细还会在其上浮动 0.5–1.12 倍。调到 2 以上是马克笔的效果。", def: 1.10 },
+        {
+          path: "pages.home.sections.hero.portraitFx.alphaScale",
+          label: "浓淡", type: "number", min: 0, max: 1.5, step: 0.05,
+          hint: "0–1.5，默认 1.0。画布内部每笔迹的透明度上限。图像整体亮度另外由 CSS 压到 0.74（对齐原来照片的 0.58），所以这里调到 1.5 也不会刺眼，只是密集处更实。", def: 1.0 },
+        {
+          path: "pages.home.sections.hero.portraitFx.fadeInner",
+          label: "渐隐内圈", type: "number", min: 0, max: 0.6, step: 0.01,
+          hint: "0–0.6，默认 0.30，单位是框短边的比例。这个半径以内完全不透明，往外才开始变淡。调大 = 中心更实、边缘更早开始消失。", def: 0.30 },
+        {
+          path: "pages.home.sections.hero.portraitFx.fadeOuter",
+          label: "渐隐外沿", type: "number", min: 0.4, max: 1.3, step: 0.01,
+          hint: "0.4–1.3，默认 1.0。外沿 = 对角线的一半 × 这个系数。1.0 时四角也在渐变范围内；调到 0.7 会收成一个圆。", def: 1.0 },
+        {
+          path: "pages.home.sections.hero.portraitFx.edgeFade",
+          label: "贴边渐隐带", type: "number", min: 0, max: 0.4, step: 0.01,
+          hint: "0–0.4，默认 0.13。人像框是 overflow:hidden，这条带子把贴到边框的一圈像素擦干净，看不到硬裁切口。调 0 会在框边看到明显的切割线。", def: 0.13 }
+      ]
+    },
+    {
+      id: "pfx-pointer",
+      label: "乱线团 · 鼠标力场",
+      page: "home",
+      section: "__pfx",
+      icon: "3",
+      hint: "鼠标靠近时线条怎么让开、怎么跟。近场是排斥（把线拨开），远场是吸引 + 速度拖曳（让线跟着走）。全部改动即时生效，把鼠标移到右侧预览的人像框上试。",
+      fields: [
+        {
+          path: "pages.home.sections.hero.portraitFx.interact",
+          label: "交互总强度", type: "number", min: 0, max: 2, step: 0.05,
+          hint: "0–2，默认 1.0。一次乘到下面所有力上。填 0 等于完全关掉鼠标交互，线团照常自己动。", def: 1.0 },
+        {
+          path: "pages.home.sections.hero.portraitFx.near",
+          label: "近场半径", type: "number", min: 0.05, max: 0.6, step: 0.01,
+          hint: "0.05–0.6，默认 0.26，单位是框短边的比例。这个距离以内线条被推开，形成那个「空洞」。", def: 0.26 },
+        {
+          path: "pages.home.sections.hero.portraitFx.far",
+          label: "远场半径", type: "number", min: 0.1, max: 1, step: 0.01,
+          hint: "0.1–1.0，默认 0.60。这个距离以内线条被吸引并跟随鼠标速度。超过 0.7 基本整个框都在影响范围内，整团会被拖着走。", def: 0.60 },
+        {
+          path: "pages.home.sections.hero.portraitFx.push",
+          label: "推开力度", type: "number", min: 0, max: 0.25, step: 0.002,
+          hint: "0–0.25，默认 0.072，单位是框短边的比例。这是弹簧的稳态位移，0.072 在 380px 的框里约等于推开 27px。", def: 0.072 },
+        {
+          path: "pages.home.sections.hero.portraitFx.pull",
+          label: "吸引力度", type: "number", min: 0, max: 0.12, step: 0.002,
+          hint: "0–0.12，默认 0.026。远场把线往鼠标那边拉。它和「推开力度」方向相反，两者叠加才形成「拨开又跟随」的手感。", def: 0.026 },
+        {
+          path: "pages.home.sections.hero.portraitFx.drag",
+          label: "速度拖曳", type: "number", min: 0, max: 0.2, step: 0.002,
+          hint: "0–0.2，默认 0.055，单位是秒。鼠标移动越快，线条被带得越远。调高会明显「追手」，调 0 就只剩静态推开。", def: 0.055 },
+        {
+          path: "pages.home.sections.hero.portraitFx.maxVel",
+          label: "速度上限", type: "number", min: 0.3, max: 5, step: 0.1,
+          hint: "0.3–5，默认 2.0，单位是「框短边/秒」。快速甩动鼠标时给速度封顶，防止形变瞬间过大。这是稳定性保护，一般不用动。", def: 2.0 }
+      ]
+    },
+    {
+      id: "pfx-tune",
+      label: "乱线团 · 手感与性能",
+      page: "home",
+      section: "__pfx",
+      icon: "4",
+      hint: "跟手程度、回弹手感，以及性能兜底。弹簧阻尼默认是 ζ≈0.72 的欠阻尼 —— 松手后会柔和地回弹、几乎不过冲。把「弹簧刚度」调高、「阻尼」调低会更「弹」，反过来更「肉」。",
+      fields: [
+        {
+          path: "pages.home.sections.hero.portraitFx.follow",
+          label: "跟手程度", type: "number", min: 0.05, max: 0.9, step: 0.01,
+          hint: "0.05–0.9，默认 0.32。指针位置的低通系数，按 60fps 归一化。越大越灵敏跟手，越小越「拖泥带水」。", def: 0.32 },
+        {
+          path: "pages.home.sections.hero.portraitFx.velSmooth",
+          label: "速度平滑", type: "number", min: 0.05, max: 0.9, step: 0.01,
+          hint: "0.05–0.9，默认 0.28。指针速度的低通系数。调低会让拖曳更平滑但更迟钝。", def: 0.28 },
+        {
+          path: "pages.home.sections.hero.portraitFx.inRate",
+          label: "进入上升速率", type: "number", min: 0.5, max: 30, step: 0.5,
+          hint: "0.5–30，默认 9.0，单位是 1/秒。鼠标进入时力场从 0 涨到 1 有多快。调小会有一段「慢慢聚过来」的过程。", def: 9.0 },
+        {
+          path: "pages.home.sections.hero.portraitFx.outRate",
+          label: "离开衰减速率", type: "number", min: 0.5, max: 30, step: 0.5,
+          hint: "0.5–30，默认 5.0，单位是 1/秒。鼠标离开时力场衰减有多快。它比「进入」慢，正是「跟得紧、松得缓」那个不对称手感。", def: 5.0 },
+        {
+          path: "pages.home.sections.hero.portraitFx.k",
+          label: "弹簧刚度", type: "number", min: 10, max: 300, step: 5,
+          hint: "10–300，默认 70，单位 1/秒²。每个采样点回弹的硬度。调高回弹更快更「脆」。", def: 70 },
+        {
+          path: "pages.home.sections.hero.portraitFx.c",
+          label: "阻尼", type: "number", min: 2, max: 40, step: 1,
+          hint: "2–40，默认 12，单位 1/秒。ζ = c / (2√k)，默认约 0.72 —— 欠阻尼，会柔和地回弹一次、几乎不过冲。调到 2√k 以上变成过阻尼，就是「黏住慢慢挪回去」。", def: 12 },
+        {
+          path: "pages.home.sections.hero.portraitFx.maxDt",
+          label: "弹簧步长上限（毫秒）", type: "number", min: 8, max: 60, step: 1,
+          hint: "8–60，默认 33（即 1/30 秒）。单帧积分步长的封顶，保证快速移动时数值不发散。这是稳定性保护，调到 50 以上在低帧率环境里可能抖。", def: 33 },
+        {
+          path: "pages.home.sections.hero.portraitFx.maxDpr",
+          label: "像素比上限", type: "number", min: 1, max: 3, step: 0.5,
+          hint: "1–3，默认 2。Retina 屏按 2 倍渲染线更细。调到 1 会明显发虚但省一半像素；3 只在高分屏上看得出差别。", def: 2 },
+        {
+          path: "pages.home.sections.hero.portraitFx.costBudget",
+          label: "单帧耗时预算（毫秒）", type: "number", min: 4, max: 30, step: 1,
+          hint: "4–30，默认 8。超过这个耗时就会自动减少笔迹条数，保住 60fps。宁可少几条线也不掉帧。", def: 8 },
+        {
+          path: "pages.home.sections.hero.portraitFx.minStrokes",
+          label: "性能降级下限", type: "number", min: 10, max: 100, step: 5,
+          hint: "10–100，默认 20。自适应降级最多减到这么多条就不再减了，保证不会空成一片。", def: 20 }
+      ]
+    },
     {
       id: "atmosphere",
       label: "光晕与呼吸",

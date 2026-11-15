@@ -833,3 +833,34 @@ select.inp { cursor: pointer; }
   line-height: 1.6;
   color: var(--warn, #e0663f);
 }
+
+/* ---------- 数值字段：滑块 + 数字框 ---------- */
+/* 滑块用来找手感，右边的数字框用来精确落值。两者宽度分工固定，
+   避免拖动时数字框位置跳动导致误点。 */
+.numrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+.numrow .rng {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.numrow .numin {
+  flex: none;
+  width: 92px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+/* 隐藏 number 输入框的上下三角：它会挤压宽度，而且拖动滑块时看着跳 */
+.numrow .numin::-webkit-outer-spin-button,
+.numrow .numin::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.numrow .numin { -moz-appearance: textfield; appearance: textfield; }

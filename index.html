@@ -32,17 +32,17 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/base.css?v=122">
-<link rel="stylesheet" href="assets/css/pages.css?v=122">
-<link rel="stylesheet" href="assets/css/home.css?v=122">
+<link rel="stylesheet" href="assets/css/base.css?v=123">
+<link rel="stylesheet" href="assets/css/pages.css?v=123">
+<link rel="stylesheet" href="assets/css/home.css?v=123">
 <!-- 首屏可选项（由内容控制台字段驱动） -->
-<link rel="stylesheet" href="assets/css/options.css?v=122">
+<link rel="stylesheet" href="assets/css/options.css?v=123">
 <!-- 全页排版精修（含手机端修正，必须压在最后） -->
-<link rel="stylesheet" href="assets/css/refine.css?v=122">
+<link rel="stylesheet" href="assets/css/refine.css?v=123">
 <!-- 首屏流动点阵背景（canvas 由 hero-dots.js 插入） -->
-<link rel="stylesheet" href="assets/css/hero-dots.css?v=122">
-<link rel="stylesheet" href="assets/css/hero-motes.css?v=122">
-<link rel="stylesheet" href="assets/css/mobile.css?v=122">
+<link rel="stylesheet" href="assets/css/hero-dots.css?v=123">
+<link rel="stylesheet" href="assets/css/hero-motes.css?v=123">
+<link rel="stylesheet" href="assets/css/mobile.css?v=123">
 <!-- 窄屏标题用的衬线子集：只在窄屏预热，桌面不下载也不加载 -->
 <link rel="preload" as="font" type="font/woff2" crossorigin media="(max-width: 720px)"
       href="assets/fonts/serif-sc-600.woff2">
@@ -74,21 +74,38 @@
      触屏设备、窄屏、以及 ?pfx=0 都不会产生这一次请求。 */
   (function () {
     try {
-      var mq = window.matchMedia("(min-width: 941px) and (hover: hover) and (pointer: fine)");
-      if (!mq.matches) return;
       if (new URLSearchParams(location.search).get("pfx") === "0") return;
       var html = document.documentElement;
-      /* boot：照片先让位，避免「先看到照片、再突然变成线团」的闪烁。
-         脚本加载失败立即回滚，2.5s 没画出首帧也回滚。 */
-      html.setAttribute("data-pfx", "boot");
-      var s = document.createElement("script");
-      s.src = "assets/js/portrait-fx.js?v=122";
-      s.async = true;
-      s.onerror = function () { html.removeAttribute("data-pfx"); };
-      document.head.appendChild(s);
-      setTimeout(function () {
-        if (html.getAttribute("data-pfx") === "boot") html.removeAttribute("data-pfx");
-      }, 2500);
+      var MQ = "(min-width: 941px) and (hover: hover) and (pointer: fine)";
+
+      function inject() {
+        /* boot：照片先让位，避免「先看到照片、再突然变成线团」的闪烁。
+           脚本加载失败立即回滚，2.5s 没画出首帧也回滚。 */
+        if (html.getAttribute("data-pfx")) return;
+        html.setAttribute("data-pfx", "boot");
+        var s = document.createElement("script");
+        s.src = "assets/js/portrait-fx.js?v=123";
+        s.async = true;
+        s.onerror = function () { html.removeAttribute("data-pfx"); };
+        document.head.appendChild(s);
+        setTimeout(function () {
+          if (html.getAttribute("data-pfx") === "boot") html.removeAttribute("data-pfx");
+        }, 2500);
+      }
+
+      var mq = window.matchMedia(MQ);
+      if (mq.matches) { inject(); return; }
+
+      /* 首帧不匹配时不能就此放弃：内容控制台的预览是个 iframe，它以
+         默认 300px 宽加载，之后才被撑到 1440px —— 那时再看是真的宽屏了。
+         视口一变匹配就补上，否则控制台里永远看不到线团。
+         手机 / 平板无论怎么转屏都不会匹配（pointer:fine 那一项过不去）。*/
+      var onChange = function (e) {
+        if (!e.matches) return;
+        mq.removeEventListener("change", onChange);
+        inject();
+      };
+      if (mq.addEventListener) mq.addEventListener("change", onChange);
     } catch (e) {}
   })();
 </script>
@@ -112,9 +129,9 @@
 <footer class="footer" id="footer-root"></footer>
 <nav class="tabbar" id="tab-root" aria-label="页面导航"></nav>
 
-<script src="data/content.js?v=122"></script>
-<script src="assets/js/render.js?v=122"></script>
-<script src="assets/js/hero-dots.js?v=122"></script>
-<script src="assets/js/hero-fx.js?v=122"></script>
+<script src="data/content.js?v=123"></script>
+<script src="assets/js/render.js?v=123"></script>
+<script src="assets/js/hero-dots.js?v=123"></script>
+<script src="assets/js/hero-fx.js?v=123"></script>
 </body>
 </html>

@@ -1159,6 +1159,54 @@
       });
       sel.addEventListener("change", function () { commit(abs, sel.value); });
       wrap.appendChild(sel);
+    } else if (field.type === "number") {
+      /* 滑块 + 数字框：滑块用来找手感，数字框用来精确落值。
+         两者共用一个 commit，拖滑块时数字框同步跟随，反之亦然。
+         内容里没这个字段时（val 为空）滑块停在 field.def，数字框留空
+         并把默认值挂成 placeholder —— 一动才写入，不动就不污染内容。*/
+      var lo = field.min != null ? field.min : 0;
+      var hi = field.max != null ? field.max : 100;
+      var stp = field.step != null ? field.step : 1;
+      var nrow = document.createElement("div");
+      nrow.className = "numrow";
+      var rng = document.createElement("input");
+      rng.type = "range";
+      rng.className = "rng";
+      rng.min = lo; rng.max = hi; rng.step = stp;
+      var nbox = document.createElement("input");
+      nbox.type = "number";
+      nbox.className = "inp numin";
+      nbox.min = lo; nbox.max = hi; nbox.step = stp;
+      nbox.placeholder = field.def != null ? String(field.def) : "";
+
+      var nv = (val === undefined || val === null || val === "") ? null : parseFloat(val);
+      if (nv === null || !isFinite(nv)) {
+        rng.value = field.def != null ? field.def : lo;
+        nbox.value = "";
+        nbox.classList.add("is-ph");
+      } else {
+        rng.value = nv;
+        nbox.value = String(val);
+      }
+
+      rng.addEventListener("input", function () {
+        nbox.value = rng.value;
+        nbox.classList.remove("is-ph");
+        commit(abs, Number(rng.value));
+      });
+      nbox.addEventListener("input", function () {
+        var raw = nbox.value.trim();
+        if (raw === "") { nbox.classList.add("is-ph"); commit(abs, ""); return; }
+        var num = parseFloat(raw);
+        if (!isFinite(num)) return;
+        nbox.classList.remove("is-ph");
+        rng.value = num;
+        commit(abs, num);
+      });
+
+      nrow.appendChild(rng);
+      nrow.appendChild(nbox);
+      wrap.appendChild(nrow);
     } else if (field.type === "color") {
       /* 取色器 + 十六进制输入；清空即恢复默认色 */
       var crow = document.createElement("div");

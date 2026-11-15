@@ -30,8 +30,14 @@
   /* ---------------- 可调参数 ----------------
      尺寸基准：框只有 ~380px（手机端 120px 左右但不加载），是独立 demo
      620px 画布的 1/2.7 面积。笔迹数、采样点数、线宽都按这个比例收紧，
-     否则同一套参数搬过来会密成一团钢丝球。*/
-  var CONFIG = {
+     否则同一套参数搬过来会密成一团钢丝球。
+
+     **这些值只是默认值**。真正生效的值来自内容文件
+     `pages.home.sections.hero.portraitFx`（控制台「首屏乱线团」几组字段），
+     由 render.js 的 applyHomeOptions → PortraitFX.apply() 推下来。
+     字段清空 / 没填就落回这里，所以删掉整块 portraitFx 也是安全的。*/
+  var DEFAULTS = {
+    on: true,            // 总开关：关掉就回滚成原来的照片
     strokes: 108,        // 短笔迹条数（另有固定长笔触）
     longStrokes: 4,      // 连续长笔触：一只手不停绕圈，是线团主体
     longPointsMin: 380,
@@ -74,6 +80,110 @@
     minStrokes: 20,      // 自适应下限
     seed: 20261115
   };
+
+  /* 取值范围。控制台滑块用的是同一组上下限（schema.js 里另有副本，
+     两边必须一致），这里再 clamp 一次 —— 有人直接改 content.js 写进
+     离谱数字时不会把画面搞崩。*/
+  var LIMITS = {
+    strokes: [10, 200], longStrokes: [1, 8],
+    longPointsMin: [80, 1200], longPointsMax: [80, 1600],
+    pointsMin: [6, 80], pointsMax: [6, 120],
+    wobble: [0, 2], lively: [0, 2], float: [0, 2], twist: [0, 2],
+    alphaScale: [0, 1.5], interact: [0, 2], speed: [0, 2],
+    lineWidth: [0.2, 3], spin: [0, 0.1], radius: [0.2, 0.6],
+    fadeInner: [0, 0.6], fadeOuter: [0.4, 1.3], edgeFade: [0, 0.4],
+    maxDpr: [1, 3], costBudget: [4, 30], minStrokes: [10, 100],
+    seed: [0, 4294967295]
+  };
+  var PTR_LIMITS = {
+    near: [0.05, 0.6], far: [0.1, 1.0], push: [0, 0.25], pull: [0, 0.12],
+    drag: [0, 0.2], follow: [0.05, 0.9], velSmooth: [0.05, 0.9],
+    maxVel: [0.3, 5], inRate: [0.5, 30], outRate: [0.5, 30],
+    k: [10, 300], c: [2, 40], maxDtMs: [8, 60]
+  };
+
+  function cloneCfg(o) {
+    var out = {};
+    for (var k in o) {
+      if (!o.hasOwnProperty(k)) continue;
+      out[k] = (o[k] && typeof o[k] === "object") ? cloneCfg(o[k]) : o[k];
+    }
+    return out;
+  }
+
+  var CONFIG = cloneCfg(DEFAULTS);
+  var enabled = true;
+
+  function clampNum(v, lim) {
+    var n = parseFloat(v);
+    if (!isFinite(n)) return null;
+    if (lim) { if (n < lim[0]) n = lim[0]; if (n > lim[1]) n = lim[1]; }
+    return n;
+  }
+
+  /* 把内容文件里的 portraitFx 推下来。字段名与 CONFIG 同名（指针那些
+     用扁平名 near / far / ...），值可以是数字也可以是字符串 —— 控制台
+     存的一律是字符串，直接改 content.js 时又常写成数字。
+     只有真正变化时才做重建，避免控制台拖滑块时反复 rebuild 顿卡。*/
+  function applyConfig(cfg) {
+    if (!cfg) return CONFIG;
+    var needRebuild = false, needGrad = false, needMask = false, needDraw = false, needResize = false;
+
+    /* 总开关 */
+    if (cfg.on !== undefined) {
+      var on = !(cfg.on === false || cfg.on === "false" || cfg.on === "off" || cfg.on === 0 || cfg.on === "0");
+      if (on !== enabled) { setEnabled(on); needDraw = true; }
+    }
+
+    function take(key) {
+      if (cfg[key] === undefined || cfg[key] === null || cfg[key] === "") return;
+      var n = clampNum(cfg[key], LIMITS[key]);
+      if (n === null) return;
+      if (key === "seed") n = Math.round(n);
+      if (CONFIG[key] === n) return;
+      CONFIG[key] = n;
+      needDraw = true;
+      if (/^(strokes|longStrokes|longPoints(Min|Max)|points(Min|Max)|seed)$/.test(key)) needRebuild = true;
+      else if (key === "fadeInner" || key === "fadeOuter") needGrad = true;
+      else if (key === "edgeFade") needMask = true;
+      else if (key === "maxDpr") needResize = true;
+    }
+    ["strokes", "longStrokes", "longPointsMin", "longPointsMax", "pointsMin", "pointsMax",
+     "wobble", "lively", "float", "twist", "interact", "alphaScale", "speed", "lineWidth",
+     "spin", "radius", "fadeInner", "fadeOuter", "edgeFade", "maxDpr", "costBudget",
+     "minStrokes", "seed"].forEach(take);
+
+    /* 指针力场：扁平字段 → CONFIG.ptr */
+    for (var pk in PTR_LIMITS) {
+      if (!PTR_LIMITS.hasOwnProperty(pk)) continue;
+      var src = pk === "maxDtMs" ? "maxDt" : pk;
+      if (cfg[src] === undefined || cfg[src] === null || cfg[src] === "") continue;
+      var pv = clampNum(cfg[src], PTR_LIMITS[pk]);
+      if (pv === null) continue;
+      if (pk === "maxDtMs") pv = pv / 1000;
+      if (CONFIG.ptr[src] === pv) continue;
+      CONFIG.ptr[src] = pv;
+      needDraw = true;
+    }
+
+    if (!needDraw) return CONFIG;
+
+    if (needRebuild) rebuild(CONFIG.seed);
+    /* 还没布局好 / 换了 DPR：交给 resize 重新量尺寸并画首帧 */
+    if (needResize || !host || cssW < 8) { resize(); return CONFIG; }
+    if (needGrad) buildGradient();
+    if (needMask) buildMask();
+    if (needRebuild) activeCount = all.length;
+    draw(t, 0);
+    return CONFIG;
+  }
+
+  /* 读内容文件里的配置；读不到就全用默认值 */
+  function readContent() {
+    try {
+      return window.V2_CONTENT.pages.home.sections.hero.portraitFx || {};
+    } catch (e) { return {}; }
+  }
 
   var TAU = Math.PI * 2;
 
@@ -595,10 +705,24 @@
   /* ======================== 生命周期 ======================== */
 
   function reveal() {
-    if (revealed) return;
-    revealed = true;
     /* 首帧画完了才置位：脚本一旦失败，照片照旧（引导脚本 2.5s 后也会回滚）*/
-    root.setAttribute("data-pfx", "on");
+    if (!enabled || !all.length || !host) return;
+    if (root.getAttribute("data-pfx") !== "on") root.setAttribute("data-pfx", "on");
+    revealed = true;
+  }
+
+  /* 总开关：控制台「开关」字段 / PortraitFX.set({on:false}) 都走这里。
+     不销毁 canvas、不重建笔迹 —— 只是停循环 + 让 data-pfx 消失，
+     照片淡回来、canvas 淡出去，再打开是连续的，不会有「重新生成一版」的跳变。*/
+  function setEnabled(on) {
+    enabled = !!on;
+    if (!enabled) {
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+      root.removeAttribute("data-pfx");
+      return;
+    }
+    if (all.length) { draw(t, 0); reveal(); }
+    sync();
   }
 
   var io = null, ro = null, resizeTimer = 0;
@@ -669,38 +793,36 @@
   reduce = !!(mq && mq.matches);
   if (mq && mq.addEventListener) mq.addEventListener("change", function (e) { reduce = e.matches; });
 
-  /* ---------------- 对外接口 ---------------- */
-  function num(v, def, lo, hi) {
-    var n = parseFloat(v);
-    if (!isFinite(n)) n = def;
-    return n < lo ? lo : n > hi ? hi : n;
-  }
-
+  /* ---------------- 对外接口 ----------------
+     apply(cfg) 是控制台走的正式入口：字段名与内容文件一致、带上下限 clamp，
+     只有真变化才重建。set() 是同一件事的别名，保留给老调用方与手动调试。*/
   window.PortraitFX = {
-    set: function (o) {
-      o = o || {};
+    apply: function (cfg) {
       if (!ensure()) return CONFIG;
-      if (o.strokes !== undefined) {
-        CONFIG.strokes = Math.round(num(o.strokes, CONFIG.strokes, 10, 200));
-        rebuild(CONFIG.seed);
-      }
-      if (o.twist !== undefined) CONFIG.twist = num(o.twist, CONFIG.twist, 0, 2);
-      if (o.interact !== undefined) CONFIG.interact = num(o.interact, CONFIG.interact, 0, 2);
-      if (o.lively !== undefined) CONFIG.lively = num(o.lively, CONFIG.lively, 0, 2);
-      if (o.float !== undefined) CONFIG.float = num(o.float, CONFIG.float, 0, 2);
-      if (o.wobble !== undefined) CONFIG.wobble = num(o.wobble, CONFIG.wobble, 0, 2);
-      if (o.lineWidth !== undefined) CONFIG.lineWidth = num(o.lineWidth, CONFIG.lineWidth, 0.2, 3);
-      if (o.speed !== undefined) CONFIG.speed = num(o.speed, CONFIG.speed, 0, 3);
-      draw(t, 0);
+      applyConfig(cfg);
+      /* 关闭状态下也要能重新打开：applyConfig 已经处理了 on 切换 */
+      if (enabled && document.hidden === false) sync();
       return CONFIG;
     },
+    set: function (o) {
+      return window.PortraitFX.apply(o);
+    },
+    /* 只切换总开关，不动其他参数 */
+    toggle: function (on) { setEnabled(on); return enabled; },
+    /* 彻底拆掉：移除 canvas、恢复照片。再想启用需要重新加载页面 */
     off: function () {
-      sync();
       if (raf) { cancelAnimationFrame(raf); raf = 0; }
-      root.removeAttribute("data-pfx");
+      setEnabled(false);
       if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
       host = null; revealed = false;
     },
+    /* 当前完整参数快照，控制台「查看」用 */
+    config: function () {
+      var out = cloneCfg(CONFIG);
+      out.on = enabled;
+      return out;
+    },
+    defaults: function () { return cloneCfg(DEFAULTS); },
     stats: function () {
       /* deform：所有采样点当前偏移的均方根（px）。
          鼠标离开后它必须自己衰减到 0 —— 这是「阻尼回弹」唯一可靠的定量判据，
@@ -715,7 +837,7 @@
       }
       return {
         mounted: !!host, active: activeCount, total: all.length,
-        w: cssW, h: cssH, dpr: dpr, ink: ink,
+        w: cssW, h: cssH, dpr: dpr, ink: ink, enabled: enabled,
         running: !!raf, visible: visible, still: still, reduce: reduce,
         field: PTR.s, deform: cnt ? Math.sqrt(sum / cnt) : 0
       };
@@ -723,7 +845,11 @@
   };
 
   /* ---------------- 启动 ----------------
-     render.js 在 DOMContentLoaded 之后才建首屏，所以要轮询等它落位 */
+     内容文件里的参数先落地（这些是唯一真源，控制台改的就是它们），
+     再开始建画布 —— 否则会先用默认值画一帧、再被配置覆盖，白闪一下。*/
+  applyConfig(readContent());
+
+  /* render.js 在 DOMContentLoaded 之后才建首屏，所以要轮询等它落位 */
   if (still) {
     /* 定格模式：不跑循环，只画一帧；截图回归用它保证两侧完全一致 */
     var stillBoot = function () {
