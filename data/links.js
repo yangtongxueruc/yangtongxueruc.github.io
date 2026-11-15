@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-15T06:27:45+08:00",
- "generated_at_human": "2026-11-15 06:27",
+ "generated_at": "2026-11-15T14:37:57+08:00",
+ "generated_at_human": "2026-11-15 14:37",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 905,
+   "ms": 806,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 277,
+   "ms": 344,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 486,
+   "ms": 444,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 463,
+   "ms": 434,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 330,
+   "ms": 414,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 735,
+   "ms": 785,
    "http": 200
   }
  ],
@@ -158,9 +158,49 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
+   "title": "Lumiwealth/lumibot",
+   "url": "https://github.com/Lumiwealth/lumibot",
+   "date": "2026-11-15T14:14:38+08:00",
+   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "HKUDS/Vibe-Trading",
+   "url": "https://github.com/HKUDS/Vibe-Trading",
+   "date": "2026-11-15T13:43:59+08:00",
+   "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "qusong0627/QuantMind",
+   "url": "https://github.com/qusong0627/QuantMind",
+   "date": "2026-11-15T12:48:32+08:00",
+   "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Barca0412/Introduction-to-Quantitative-Finance",
+   "url": "https://github.com/Barca0412/Introduction-to-Quantitative-Finance",
+   "date": "2026-11-15T12:34:54+08:00",
+   "summary": "AI+金融（量化）：1.多因子股票量化框架开源教程 2.学界和业界的经典资料收录 3.AI + 金融的相关工作，包括LLM, Agent, benchmark(evaluation), etc.",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
    "title": "wilsonfreitas/awesome-quant",
    "url": "https://github.com/wilsonfreitas/awesome-quant",
-   "date": "2026-11-15T06:26:34+08:00",
+   "date": "2026-11-15T09:02:15+08:00",
    "summary": "A curated list of insanely awesome libraries, packages and resources for Quants (Quantitative Finance)",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
@@ -168,10 +208,10 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "Lumiwealth/lumibot",
-   "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-15T06:21:40+08:00",
-   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "title": "rolling-panda-san/notebooks",
+   "url": "https://github.com/rolling-panda-san/notebooks",
+   "date": "2026-11-15T08:27:48+08:00",
+   "summary": "Analysis on systematic trading strategies (e.g., trend-following, carry and mean-reversion). The result is regularly updated.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -214,26 +254,6 @@ window.SITE_FEED = {
    "summary": "Transparent and Efficient Financial Analysis",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "Barca0412/Introduction-to-Quantitative-Finance",
-   "url": "https://github.com/Barca0412/Introduction-to-Quantitative-Finance",
-   "date": "2026-11-15T00:54:16+08:00",
-   "summary": "AI+金融（量化）：1.多因子股票量化框架开源教程 2.学界和业界的经典资料收录 3.AI + 金融的相关工作，包括LLM, Agent, benchmark(evaluation), etc.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "qusong0627/QuantMind",
-   "url": "https://github.com/qusong0627/QuantMind",
-   "date": "2026-11-15T00:31:04+08:00",
-   "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -356,15 +376,6 @@ window.SITE_FEED = {
    "family": "arxiv-qfin"
   },
   {
-   "title": "HKUDS/Vibe-Trading",
-   "url": "https://github.com/HKUDS/Vibe-Trading",
-   "date": "2026-11-13T01:34:48+08:00",
-   "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
    "title": "NeurIPS 2026｜LiveOption：大模型会做期权交易吗",
    "url": "https://mp.weixin.qq.com/s?__biz=Mzg2MzAwNzM0NQ==&mid=2247494882&idx=1&sn=b27be62561fbcc01f400b391a3047d5b&chksm=ce7d8bfcf90a02eafdedf144e5a7a5467499c0bd166c1d361357a227a61b0ffd983998cd86fc#rd",
    "date": "2026-11-12T17:02:49+08:00",
@@ -408,15 +419,6 @@ window.SITE_FEED = {
    "url": "https://github.com/jundizhou/easy-stock",
    "date": "2026-11-12T09:36:28+08:00",
    "summary": "A股 AI 投研",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "rolling-panda-san/notebooks",
-   "url": "https://github.com/rolling-panda-san/notebooks",
-   "date": "2026-11-12T08:26:06+08:00",
-   "summary": "Analysis on systematic trading strategies (e.g., trend-following, carry and mean-reversion). The result is regularly updated.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -921,5 +923,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "f6d55db473ccf83be442945fd653cc83"
+ "signature": "8dd78552ba1be558fa8df951a144342d"
 };
