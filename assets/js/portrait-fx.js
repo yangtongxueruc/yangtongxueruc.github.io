@@ -816,13 +816,34 @@
       if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
       host = null; revealed = false;
     },
-    /* 当前完整参数快照，控制台「查看」用 */
+    /* 当前完整参数快照，控制台「查看」用。
+       返回的是**扁平**结构 —— 与 apply() 接受的字段名、与内容文件里
+       hero.portraitFx 的键名完全一致，所以「看到的名字」就是「能改的名字」。
+       内部为了绘制方便才把指针那些放在 CONFIG.ptr 下，这里摊平。*/
     config: function () {
       var out = cloneCfg(CONFIG);
+      var ptr = out.ptr || {};
+      delete out.ptr;
+      for (var k in ptr) {
+        if (!ptr.hasOwnProperty(k)) continue;
+        out[k] = ptr[k];
+      }
+      /* maxDt 内部是秒，对外统一成毫秒，与控制台字段一致 */
+      if (out.maxDt !== undefined) out.maxDt = Math.round(out.maxDt * 1000);
       out.on = enabled;
       return out;
     },
-    defaults: function () { return cloneCfg(DEFAULTS); },
+    defaults: function () {
+      var out = cloneCfg(DEFAULTS);
+      var ptr = out.ptr || {};
+      delete out.ptr;
+      for (var k in ptr) {
+        if (!ptr.hasOwnProperty(k)) continue;
+        out[k] = ptr[k];
+      }
+      if (out.maxDt !== undefined) out.maxDt = Math.round(out.maxDt * 1000);
+      return out;
+    },
     stats: function () {
       /* deform：所有采样点当前偏移的均方根（px）。
          鼠标离开后它必须自己衰减到 0 —— 这是「阻尼回弹」唯一可靠的定量判据，
