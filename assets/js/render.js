@@ -21,6 +21,14 @@
     return m.email ? String(m.email).trim() : "";
   }
 
+  /* 控制台页面在源仓本地预览里叫 studio.html，构建产物中改名 manage.html。
+     公开页面的页脚与草稿徽标都指向它，写死任何一个都会让另一边 404：
+     按当前页面是否位于 /v2/ 下判断，本地预览和线上就都能点开。
+     content.js 里存的是产物名 manage.html（唯一真源），这里只做运行时映射。*/
+  function consolePage() {
+    return /(^|\/)v2\//.test(location.pathname) ? "studio.html" : "manage.html";
+  }
+
   /* ---------------- 小工具 ---------------- */
   function el(tag, cls, attrs) {
     // 容错：允许 el(tag, {attrs}) 这种写法，避免把属性对象当成 class
@@ -208,7 +216,7 @@
       mono.textContent = d.portrait.mark || "";
       box.appendChild(mono);
       if (d.portrait.src) {
-        var img = el("img", null, { src: d.portrait.src, alt: "肖像照" });
+        var img = el("img", null, { src: d.portrait.src, alt: "肖像照", fetchpriority: "high" });
         img.addEventListener("error", function () {
           img.remove();
           box.classList.add("is-empty");
@@ -1262,6 +1270,9 @@
       (col.links || []).forEach(function (l) {
         var li = el("li");
         var href = l.href || "";
+        /* 控制台链接按运行环境落到正确的文件名（本地 studio / 线上 manage），
+           同时兼容旧数据里还写着 studio.html 的页脚。*/
+        if (/^(?:studio|manage)\.html$/i.test(href)) href = consolePage();
         /* 页脚里的 mailto 链接同样跟着「联系邮箱」走，别再存第二份地址 */
         if (/^mailto:/i.test(href)) {
           var addr = siteEmail(c);
@@ -1294,18 +1305,33 @@
   }
 
   /* ---------------- 动态数据：feed ---------------- */
-  /* 优先 fetch 最新 JSON（避免脚本缓存），失败时回退到已加载的 SITE_FEED（file:// 场景） */
+  /* 优先 fetch 最新 JSON（避免脚本缓存），失败时才加载 links.js 兜底（file:// / 断网场景） */
   function loadFeed(cb) {
     var done = false;
     function finish(data) { if (done) return; done = true; cb(data); }
+    /* 兜底数据来自 links.js（window.SITE_FEED）。以前页面一律同步预加载这份
+       40KB 脚本，而实际数据都从 links.json 取，等于每次访问都白下一份。
+       改成只在 JSON 失败 / 超时 / 浏览器无 fetch 时才注入脚本，行为不变。
+       源仓本地预览的页面在 /v2/ 下，脚本在上一级 data/，路径要跟着变。*/
+    function fallback() {
+      if (done) return;
+      if (window.SITE_FEED) { finish(window.SITE_FEED); return; }
+      var base = /(^|\/)v2\//.test(location.pathname) ? "data/" : "data/";
+      var ver = (window.V2_CONTENT && window.V2_CONTENT.version) || "";
+      var s = document.createElement("script");
+      s.src = base + "links.js?v=" + ver;
+      s.onload = function () { finish(window.SITE_FEED || null); };
+      s.onerror = function () { finish(null); };
+      document.head.appendChild(s);
+    }
     if (window.fetch) {
       fetch("data/links.json", { cache: "no-store" })
         .then(function (r) { if (!r.ok) throw new Error("http " + r.status); return r.json(); })
         .then(finish)
-        .catch(function () { finish(window.SITE_FEED || null); });
-      setTimeout(function () { finish(window.SITE_FEED || null); }, 2500);
+        .catch(fallback);
+      setTimeout(fallback, 2500);
     } else {
-      finish(window.SITE_FEED || null);
+      fallback();
     }
   }
 
@@ -2554,7 +2580,7 @@
     if (state.draft && window.parent === window) {
       var badge = document.createElement("div");
       badge.style.cssText = "position:fixed;left:16px;bottom:16px;z-index:120;display:flex;gap:8px;align-items:center;padding:6px 12px;border:1px solid var(--border-strong);border-radius:99px;background:var(--surface-1);font-size:12px;color:var(--text-3);font-family:var(--font-mono)";
-      badge.innerHTML = '草稿预览 · 未发布 <a href="studio.html" style="color:var(--accent);border-bottom:1px solid currentColor">去控制台</a>';
+      badge.innerHTML = '草稿预览 · 未发布 <a href="' + consolePage() + '" style="color:var(--accent);border-bottom:1px solid currentColor">去控制台</a>';
       document.body.appendChild(badge);
     }
 

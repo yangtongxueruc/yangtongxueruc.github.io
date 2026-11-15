@@ -871,7 +871,7 @@ window.V2_CONTENT = {
           },
           {
             "label": "内容控制台",
-            "href": "studio.html"
+            "href": "manage.html"
           }
         ]
       },
@@ -1554,7 +1554,7 @@ window.V2_CONTENT = {
               "title": "",
               "place": "",
               "caption": "",
-              "alt": "C++ / Python / 分布式 / ML / DL"
+              "alt": ""
             },
             {
               "src": "assets/img/gallery/photo-261110-184527.jpg",
