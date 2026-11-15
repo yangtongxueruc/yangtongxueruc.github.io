@@ -868,10 +868,6 @@ window.V2_CONTENT = {
           {
             "label": "Gallery",
             "href": "gallery.html"
-          },
-          {
-            "label": "内容控制台",
-            "href": "manage.html"
           }
         ]
       },
