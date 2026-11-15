@@ -1,9 +1,9 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/15 21:12:30
+   导出时间：2026/11/16 00:24:11
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 125,
+  "version": 126,
   "updatedAt": "2026-11-15",
   "styles": {
     "blocks": {
@@ -970,10 +970,10 @@ window.V2_CONTENT = {
           "_comment_portraitFx": "首屏人像乱线团的全部可调参数。只在桌面宽屏生效（脚本按 min-width:941px + hover:hover + pointer:fine 才加载），手机端读都不读，始终是上面那张静态照片。控制台「乱线团」四组里可以逐项查看修改。",
           "portraitFx": {
             "on": "true",
-            "strokes": 108,
-            "longStrokes": 4,
-            "longPointsMin": 380,
-            "longPointsMax": 620,
+            "strokes": 103,
+            "longStrokes": 3,
+            "longPointsMin": 350,
+            "longPointsMax": 610,
             "pointsMin": 16,
             "pointsMax": 36,
             "radius": 0.46,
@@ -989,15 +989,15 @@ window.V2_CONTENT = {
             "fadeInner": 0.3,
             "fadeOuter": 1,
             "edgeFade": 0.13,
-            "interact": 1,
-            "near": 0.26,
+            "interact": 1.55,
+            "near": 0.39,
             "far": 0.6,
-            "push": 0.072,
-            "pull": 0.026,
-            "drag": 0.055,
+            "push": 0.124,
+            "pull": 0.038,
+            "drag": 0.07,
             "maxVel": 2,
-            "follow": 0.32,
-            "velSmooth": 0.28,
+            "follow": 0.41,
+            "velSmooth": 0.38,
             "inRate": 9,
             "outRate": 5,
             "k": 70,
