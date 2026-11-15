@@ -32,20 +32,66 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/base.css?v=121">
-<link rel="stylesheet" href="assets/css/pages.css?v=121">
-<link rel="stylesheet" href="assets/css/home.css?v=121">
+<link rel="stylesheet" href="assets/css/base.css?v=122">
+<link rel="stylesheet" href="assets/css/pages.css?v=122">
+<link rel="stylesheet" href="assets/css/home.css?v=122">
 <!-- 首屏可选项（由内容控制台字段驱动） -->
-<link rel="stylesheet" href="assets/css/options.css?v=121">
+<link rel="stylesheet" href="assets/css/options.css?v=122">
 <!-- 全页排版精修（含手机端修正，必须压在最后） -->
-<link rel="stylesheet" href="assets/css/refine.css?v=121">
+<link rel="stylesheet" href="assets/css/refine.css?v=122">
 <!-- 首屏流动点阵背景（canvas 由 hero-dots.js 插入） -->
-<link rel="stylesheet" href="assets/css/hero-dots.css?v=121">
-<link rel="stylesheet" href="assets/css/hero-motes.css?v=121">
-<link rel="stylesheet" href="assets/css/mobile.css?v=121">
+<link rel="stylesheet" href="assets/css/hero-dots.css?v=122">
+<link rel="stylesheet" href="assets/css/hero-motes.css?v=122">
+<link rel="stylesheet" href="assets/css/mobile.css?v=122">
 <!-- 窄屏标题用的衬线子集：只在窄屏预热，桌面不下载也不加载 -->
 <link rel="preload" as="font" type="font/woff2" crossorigin media="(max-width: 720px)"
       href="assets/fonts/serif-sc-600.woff2">
+<!-- 首屏人像：乱线团替代层（仅桌面宽屏）。手机 / 平板不注入脚本，
+     下面这些规则也全都匹配不上，等于不存在。
+     data-pfx 由 portrait-fx.js 画出首帧后才置位；脚本没跑起来就一直是空的，
+     照片照常显示 —— 所以这里只「让位」，不做任何不可逆的隐藏。 -->
+<style>
+  @media (min-width: 941px) and (hover: hover) and (pointer: fine) {
+    html[data-pfx] .portrait > img { opacity: 0 !important; }
+    .portrait > canvas.pfx {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 700ms cubic-bezier(.22, 1, .36, 1);
+    }
+    /* 0.74 对齐原照片在 dim 模式下的 opacity: .58 —— 亮度压在同一档，
+       密集处靠 canvas 内部叠加变实，稀疏处自然淡下去 */
+    html[data-pfx="on"] .portrait > canvas.pfx { opacity: .74; }
+  }
+</style>
+<script>
+  /* 人像替代层的加载引导：宽屏 + 有精确指针（鼠标）才注入。
+     触屏设备、窄屏、以及 ?pfx=0 都不会产生这一次请求。 */
+  (function () {
+    try {
+      var mq = window.matchMedia("(min-width: 941px) and (hover: hover) and (pointer: fine)");
+      if (!mq.matches) return;
+      if (new URLSearchParams(location.search).get("pfx") === "0") return;
+      var html = document.documentElement;
+      /* boot：照片先让位，避免「先看到照片、再突然变成线团」的闪烁。
+         脚本加载失败立即回滚，2.5s 没画出首帧也回滚。 */
+      html.setAttribute("data-pfx", "boot");
+      var s = document.createElement("script");
+      s.src = "assets/js/portrait-fx.js?v=122";
+      s.async = true;
+      s.onerror = function () { html.removeAttribute("data-pfx"); };
+      document.head.appendChild(s);
+      setTimeout(function () {
+        if (html.getAttribute("data-pfx") === "boot") html.removeAttribute("data-pfx");
+      }, 2500);
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body data-page="home">
 
@@ -66,9 +112,9 @@
 <footer class="footer" id="footer-root"></footer>
 <nav class="tabbar" id="tab-root" aria-label="页面导航"></nav>
 
-<script src="data/content.js?v=121"></script>
-<script src="assets/js/render.js?v=121"></script>
-<script src="assets/js/hero-dots.js?v=121"></script>
-<script src="assets/js/hero-fx.js?v=121"></script>
+<script src="data/content.js?v=122"></script>
+<script src="assets/js/render.js?v=122"></script>
+<script src="assets/js/hero-dots.js?v=122"></script>
+<script src="assets/js/hero-fx.js?v=122"></script>
 </body>
 </html>
