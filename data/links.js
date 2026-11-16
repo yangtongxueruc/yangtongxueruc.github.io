@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-16T02:53:32+08:00",
- "generated_at_human": "2026-11-16 02:53",
+ "generated_at": "2026-11-16T14:34:43+08:00",
+ "generated_at_human": "2026-11-16 14:34",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -18,8 +18,8 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 90,
-  "items_added": 2,
+  "items": 93,
+  "items_added": 3,
   "archive_max": 3000
  },
  "sources": [
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 895,
+   "ms": 794,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 475,
+   "ms": 380,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 594,
+   "ms": 546,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 725,
+   "ms": 559,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 436,
+   "ms": 392,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 721,
+   "ms": 892,
    "http": 200
   }
  ],
@@ -150,18 +150,8 @@ window.SITE_FEED = {
   {
    "title": "Lumiwealth/lumibot",
    "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-16T02:28:32+08:00",
+   "date": "2026-11-16T14:03:05+08:00",
    "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "Barca0412/Introduction-to-Quantitative-Finance",
-   "url": "https://github.com/Barca0412/Introduction-to-Quantitative-Finance",
-   "date": "2026-11-16T01:53:52+08:00",
-   "summary": "AI+金融（量化）：1.多因子股票量化框架开源教程 2.学界和业界的经典资料收录 3.AI + 金融的相关工作，包括LLM, Agent, benchmark(evaluation), etc.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -170,10 +160,70 @@ window.SITE_FEED = {
   {
    "title": "questdb/questdb",
    "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-16T01:26:19+08:00",
+   "date": "2026-11-16T13:30:23+08:00",
    "summary": "QuestDB is a high performance, open-source, time-series database",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Barca0412/Introduction-to-Quantitative-Finance",
+   "url": "https://github.com/Barca0412/Introduction-to-Quantitative-Finance",
+   "date": "2026-11-16T12:42:21+08:00",
+   "summary": "AI+金融（量化）：1.多因子股票量化框架开源教程 2.学界和业界的经典资料收录 3.AI + 金融的相关工作，包括LLM, Agent, benchmark(evaluation), etc.",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "banbox/banbot",
+   "url": "https://github.com/banbox/banbot",
+   "date": "2026-11-16T12:37:54+08:00",
+   "summary": "a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading bot",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "pseudo-longinus/quant-buddy-skills",
+   "url": "https://github.com/pseudo-longinus/quant-buddy-skills",
+   "date": "2026-11-16T10:32:50+08:00",
+   "summary": "宽宝 QuantBuddy： 一整套面向Agent Invesment投资研究与决策的底层设施与能力的调用skill， 覆盖A股/港股/美股/期货/宏观/ETF的量化分析与计算。支持行情、估值、财务查询、选股筛选、因子计算、策略回测。A complete infrastructure for Agent base…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "qusong0627/QuantMind",
+   "url": "https://github.com/qusong0627/QuantMind",
+   "date": "2026-11-16T09:45:55+08:00",
+   "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "wilsonfreitas/awesome-quant",
+   "url": "https://github.com/wilsonfreitas/awesome-quant",
+   "date": "2026-11-16T09:04:25+08:00",
+   "summary": "A curated list of insanely awesome libraries, packages and resources for Quants (Quantitative Finance)",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Blave-TW/blave-agent",
+   "url": "https://github.com/Blave-TW/blave-agent",
+   "date": "2026-11-16T09:02:46+08:00",
+   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -182,8 +232,8 @@ window.SITE_FEED = {
    "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
    "date": "2026-11-15T23:47:25+08:00",
    "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -269,16 +319,6 @@ window.SITE_FEED = {
    "mid": "2247484761"
   },
   {
-   "title": "qusong0627/QuantMind",
-   "url": "https://github.com/qusong0627/QuantMind",
-   "date": "2026-11-15T18:30:06+08:00",
-   "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "Cliff Asness｜因子回撤与瓦肯人悖论",
    "url": "https://mp.weixin.qq.com/s?__biz=Mzg2MzAwNzM0NQ==&mid=2247494892&idx=1&sn=99150fd806828be99dd28b9afd927e4f&chksm=ce7d8bf2f90a02e44faf74806be458a486c6387b6450564e02dfce1e20d3f0f0689f4cfe8c8a#rd",
    "date": "2026-11-15T17:58:09+08:00",
@@ -293,16 +333,6 @@ window.SITE_FEED = {
    "url": "https://github.com/man-group/ArcticDB",
    "date": "2026-11-15T16:15:44+08:00",
    "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "wilsonfreitas/awesome-quant",
-   "url": "https://github.com/wilsonfreitas/awesome-quant",
-   "date": "2026-11-15T09:02:15+08:00",
-   "summary": "A curated list of insanely awesome libraries, packages and resources for Quants (Quantitative Finance)",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -410,16 +440,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "Blave-TW/blave-agent",
-   "url": "https://github.com/Blave-TW/blave-agent",
-   "date": "2026-11-14T08:28:17+08:00",
-   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "pengpengyi92/dsh-quant",
    "url": "https://github.com/pengpengyi92/dsh-quant",
    "date": "2026-11-14T05:05:59+08:00",
@@ -428,6 +448,26 @@ window.SITE_FEED = {
    "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
+  },
+  {
+   "title": "Who Should Be on the Panel? Task-Conditioned Persona Selection for LLM Trading Agents",
+   "url": "https://arxiv.org/abs/2611.18150v1",
+   "date": "2026-11-13T21:25:31+08:00",
+   "summary": "Multi-agent LLM systems are built by fixing a cast of roles and then designing how the cast coordinates. Which agents should make up the group for a given task is left to the designer, and the same ca",
+   "source": "arxiv-qfin",
+   "source_name": "arXiv q-fin",
+   "kind": "研究",
+   "family": "arxiv-qfin"
+  },
+  {
+   "title": "A Push Down the Mountain: Framing Effects and Internal State Interventions on Collusive Behavior in a Long-Horizon LLM Agent",
+   "url": "https://arxiv.org/abs/2611.17515v1",
+   "date": "2026-11-13T05:09:43+08:00",
+   "summary": "Can sustained gain-loss (valence) framing sway an LLM agent toward market manipulation? We place Gemma 3 12B into the seat of a defendant in the London silver-fixing litigation, in a market simulation",
+   "source": "arxiv-qfin",
+   "source_name": "arXiv q-fin",
+   "kind": "研究",
+   "family": "arxiv-qfin"
   },
   {
    "title": "lballabio/QuantLib",
@@ -503,15 +543,6 @@ window.SITE_FEED = {
    "url": "https://github.com/hummingbot/hummingbot",
    "date": "2026-11-12T07:40:36+08:00",
    "summary": "Open source software that helps you create and deploy high-frequency crypto trading bots",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源"
-  },
-  {
-   "title": "banbox/banbot",
-   "url": "https://github.com/banbox/banbot",
-   "date": "2026-11-12T06:02:22+08:00",
-   "summary": "a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading bot",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源"
@@ -987,5 +1018,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "f58180b1eec08cc82f0b53593f650b82"
+ "signature": "258882c48d2d2e6c987a89a47bfde623"
 };
