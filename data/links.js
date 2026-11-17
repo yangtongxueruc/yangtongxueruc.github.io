@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-17T15:57:53+08:00",
- "generated_at_human": "2026-11-17 15:57",
+ "generated_at": "2026-11-17T23:08:55+08:00",
+ "generated_at_human": "2026-11-17 23:08",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -18,8 +18,8 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 98,
-  "items_added": 3,
+  "items": 101,
+  "items_added": 2,
   "archive_max": 3000
  },
  "sources": [
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 923,
+   "ms": 748,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 272,
+   "ms": 263,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 596,
+   "ms": 623,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 489,
+   "ms": 610,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 296,
+   "ms": 471,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 729,
+   "ms": 781,
    "http": 200
   }
  ],
@@ -150,7 +150,7 @@ window.SITE_FEED = {
   {
    "title": "man-group/ArcticDB",
    "url": "https://github.com/man-group/ArcticDB",
-   "date": "2026-11-17T15:57:46+08:00",
+   "date": "2026-11-17T22:59:09+08:00",
    "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
@@ -158,10 +158,10 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "JerBouma/FinanceToolkit",
-   "url": "https://github.com/JerBouma/FinanceToolkit",
-   "date": "2026-11-17T15:49:29+08:00",
-   "summary": "Transparent and Efficient Financial Analysis",
+   "title": "questdb/questdb",
+   "url": "https://github.com/questdb/questdb",
+   "date": "2026-11-17T22:58:49+08:00",
+   "summary": "QuestDB is a high performance, open-source, time-series database",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -170,8 +170,79 @@ window.SITE_FEED = {
   {
    "title": "Lumiwealth/lumibot",
    "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-17T15:31:56+08:00",
+   "date": "2026-11-17T22:55:06+08:00",
    "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "lballabio/QuantLib",
+   "url": "https://github.com/lballabio/QuantLib",
+   "date": "2026-11-17T22:44:26+08:00",
+   "summary": "The QuantLib C++ library",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZhuLinsen/daily_stock_analysis",
+   "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
+   "date": "2026-11-17T22:41:08+08:00",
+   "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "TNT-Likely/PanWatch",
+   "url": "https://github.com/TNT-Likely/PanWatch",
+   "date": "2026-11-17T22:18:12+08:00",
+   "summary": "PanWatch — AI stock monitoring for A-shares, HK & US markets, powered by TradingAgents. Portfolio insights, real-time alerts & automated reports.｜盯盘侠：覆盖 A股/港…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Citadel气象专家加盟 HRT，高薪组建天气分析团队",
+   "url": "https://mp.weixin.qq.com/s/njD7spUt_SLCyM2fsKOaig",
+   "date": "2026-11-17T21:55:28+08:00",
+   "summary": "量化交易公司的人才争夺战，正在延伸到一个相对小众的专业领域——气象学。 Hudson River Trading（HRT）近期从 Citadel 引进了一位拥有超过20年经验的气象工程负责人，并开始组建天气数据分析团队。 最新公布的气象专家",
+   "source": "wechat-manual",
+   "source_name": "公众号",
+   "kind": "公众号",
+   "manual": true,
+   "mid": "2247484765"
+  },
+  {
+   "title": "akfamily/akquant",
+   "url": "https://github.com/akfamily/akquant",
+   "date": "2026-11-17T21:30:54+08:00",
+   "summary": "AKQuant is a high-performance quantitative research and trading framework built on Rust and Python! 开源量化回测框架",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "0xethanq/astra-quant-agent",
+   "url": "https://github.com/0xethanq/astra-quant-agent",
+   "date": "2026-11-17T20:58:44+08:00",
+   "summary": "结合多大模型分析与确定性代码风控的自主量化交易系统 ｜ Autonomous crypto trading system with multi-LLM analysis, deterministic Python risk control & OKX execution.",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "JerBouma/FinanceToolkit",
+   "url": "https://github.com/JerBouma/FinanceToolkit",
+   "date": "2026-11-17T15:49:29+08:00",
+   "summary": "Transparent and Efficient Financial Analysis",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -194,16 +265,6 @@ window.SITE_FEED = {
    "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "questdb/questdb",
-   "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-17T10:15:04+08:00",
-   "summary": "QuestDB is a high performance, open-source, time-series database",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
    "kind": "开源",
    "family": "github"
   },
@@ -238,16 +299,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "lballabio/QuantLib",
-   "url": "https://github.com/lballabio/QuantLib",
-   "date": "2026-11-17T05:24:07+08:00",
-   "summary": "The QuantLib C++ library",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "coding-kitties/investing-algorithm-framework",
    "url": "https://github.com/coding-kitties/investing-algorithm-framework",
    "date": "2026-11-17T05:07:04+08:00",
@@ -272,26 +323,6 @@ window.SITE_FEED = {
    "url": "https://github.com/kadoa-org/quant-jobs",
    "date": "2026-11-17T00:55:51+08:00",
    "summary": "The most comprehensive quant job board. Includes data on jobs, firms, technologies, strategies, and much more.",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "akfamily/akquant",
-   "url": "https://github.com/akfamily/akquant",
-   "date": "2026-11-16T23:48:20+08:00",
-   "summary": "AKQuant is a high-performance quantitative research and trading framework built on Rust and Python! 开源量化回测框架",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "ZhuLinsen/daily_stock_analysis",
-   "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
-   "date": "2026-11-16T21:20:41+08:00",
-   "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
    "kind": "开源",
@@ -1069,5 +1100,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "359d9202fbe59da7543af739ff911ae8"
+ "signature": "47d26141cc91275d1eeb3fd850bffaec"
 };
