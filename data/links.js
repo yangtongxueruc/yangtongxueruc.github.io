@@ -18,7 +18,7 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 101,
+  "items": 102,
   "items_added": 2,
   "archive_max": 3000
  },
@@ -196,6 +196,17 @@ window.SITE_FEED = {
    "source_name": "GitHub 量化开源",
    "kind": "开源",
    "family": "github"
+  },
+  {
+   "title": "前Citadel数据骨干加入SIG，出任另类数据负责人",
+   "url": "https://mp.weixin.qq.com/s/fpiAdP4dIoCgoRJ6TXxflQ",
+   "date": "2026-11-17T22:23:25+08:00",
+   "summary": "另类数据（Alternative Data）正在成为全球量化交易机构争夺的关键资源，而具备数据科学、机器学习及金融研究复合背景的专业人才，也越来越受到关注。 2026年11月16日，eFinancialCareers报道，全球量化交易公司S",
+   "source": "wechat-manual",
+   "source_name": "公众号",
+   "kind": "公众号",
+   "manual": true,
+   "mid": "2247484769"
   },
   {
    "title": "TNT-Likely/PanWatch",
@@ -1100,5 +1111,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "47d26141cc91275d1eeb3fd850bffaec"
+ "signature": "37af527e672ab526971731d995bfd1e9"
 };
