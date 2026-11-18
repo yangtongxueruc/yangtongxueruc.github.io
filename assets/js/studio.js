@@ -2228,7 +2228,16 @@
   function openPub() {
     var cur = S.content.version || 1;
     var ver = $("#pub-ver");
-    if (ver) ver.textContent = "v" + cur + " → v" + (cur + 1);
+    if (ver) {
+      var txt = "v" + cur + " → v" + (cur + 1);
+      /* 动效参数也在这次提交里时，把它的版本一起摆出来 ——
+         两个版本号是独立的，只看文案版本会以为"这次没改动效"。 */
+      if (window.TopoStore && window.TopoStore.isDirty()) {
+        var tv = window.TopoStore.published().version;
+        txt += " · 动效 v" + tv + " → v" + (tv + 1);
+      }
+      ver.textContent = txt;
+    }
     var input = $("#pub-token");
     if (input) input.value = savedToken();
     pubErr("");
@@ -2427,6 +2436,7 @@
       var topoDraft = window.TopoStore ? window.TopoStore.draft() : null;
       var topoDirty = !!(window.TopoStore && window.TopoStore.isDirty());
       var topoSnap = null;
+      var topoSkipMsg = "";
       if (topoDirty) {
         var topoRemote = null;
         try {
@@ -2436,27 +2446,29 @@
         } catch (e) { topoRemote = null; }   // 404：仓库里还没有这个文件
         var remoteTopoV = topoRemote && typeof topoRemote.version === "number" ? topoRemote.version : 0;
         /* 乐观锁：草稿是基于哪个已发布版本调的，就必须还在那个版本上。
-           期间别人发布过（版本前进了），这份草稿发出去等于静默盖掉对方的调整。 */
+           期间别人发布过（版本前进了），这份草稿发出去等于静默盖掉对方的调整。
+           这里不拦整次发布 —— 文案该发还是发，只把动效跳过并说清楚，
+           否则"草稿落后"会把与动效无关的发布一起卡死。 */
         if (topoDraft.base !== remoteTopoV) {
-          throw new Error("动效草稿是基于 v" + topoDraft.base + " 调的，仓库已经是 v" + remoteTopoV + "。\n"
-            + "为避免覆盖另一台设备刚发布过的调整，本次发布已停止。\n"
-            + "请先在动效面板点「载入线上值」，看清差异后再重新调整。");
+          topoSkipMsg = "动效草稿是基于 v" + topoDraft.base + " 调的，仓库已经是 v" + remoteTopoV
+            + "，本次没有发布动效。先点「载入线上值」再看差异";
+        } else {
+          var thist = topoRemote && Array.isArray(topoRemote.history) ? topoRemote.history.slice() : [];
+          if (topoRemote) {
+            thist.push({
+              version: remoteTopoV,
+              updatedAt: topoRemote.updatedAt || "",
+              params: topoRemote.params
+            });
+            while (thist.length > 8) thist.shift();
+          }
+          topoSnap = {
+            version: remoteTopoV + 1,
+            updatedAt: new Date().toISOString().slice(0, 10),
+            params: topoDraft.params,
+            history: thist
+          };
         }
-        var thist = topoRemote && Array.isArray(topoRemote.history) ? topoRemote.history.slice() : [];
-        if (topoRemote) {
-          thist.push({
-            version: remoteTopoV,
-            updatedAt: topoRemote.updatedAt || "",
-            params: topoRemote.params
-          });
-          while (thist.length > 8) thist.shift();
-        }
-        topoSnap = {
-          version: remoteTopoV + 1,
-          updatedAt: new Date().toISOString().slice(0, 10),
-          params: topoDraft.params,
-          history: thist
-        };
       }
 
       pubStep("读取仓库状态 …");
@@ -2670,6 +2682,12 @@
             ? "这些数据文件没同步：" + dataSkipped.join("、")
               + "（本地服务可能没在跑）"
             : ""));
+      /* 动效被跳过（草稿落后于仓库）必须显式说出来：
+         「已发布 v131」本身是对的，但用户以为动效也进去了。 */
+      if (topoSkipMsg) {
+        warnTail += " · 动效未发布";
+        warnMsg = (warnMsg ? warnMsg + "；" : "") + topoSkipMsg;
+      }
       setState("已发布 v" + v + warnTail, !!warnTail);
       /* 磁盘侧同步：不论发布走代理还是直连都尝试，失败必须可见 */
         /* 磁盘侧同步：本机模式写回 v2/data/content.js；云端模式没有磁盘，
