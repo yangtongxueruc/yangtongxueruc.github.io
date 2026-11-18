@@ -228,6 +228,9 @@
         frame.removeAttribute("src");
         load();
       }
+    } else if (d.type === "topo:beat") {
+      // 控制台的「脉冲跳切」：一次性的动作，不落 localStorage，直接转给引擎
+      post("topo:beat");
     }
   });
 

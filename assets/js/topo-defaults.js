@@ -33,6 +33,7 @@ window.TOPO_DEFAULTS = {
   frame: true,          // 边界框
   autorotate: true,     // 镜头自动旋转
   postfx: true,         // 全屏光学
-  ripple: true,         // 悬停波纹
-  rippleHz: 3.8         // 波纹频率
+  autoBeatCut: true,    // 自动节拍跳切：每 0.96s 一次相位硬切（原视频 0:21 那下）
+  ripple: true,         // 悬停波纹扰动
+  rippleHz: 3.8         // 波纹频率 Hz（1.0–12.0）
 };

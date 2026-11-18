@@ -30,7 +30,7 @@
     boxW: 520, boxH: 325, dx: 0, dy: 0,
     labels: ["最新动态", "比赛", "练习", "信息库"],
     contours: true, voxels: true, dust: true, frame: true,
-    autorotate: true, postfx: true, ripple: true, rippleHz: 3.8
+    autorotate: true, postfx: true, autoBeatCut: true, ripple: true, rippleHz: 3.8
   };
 
   function read() {
@@ -68,6 +68,17 @@
     }
   }
 
+  /* 手动切一次节拍相位。消息先到 links.html（topo-embed.js），
+     再由它转给内层 topo-scene.html —— 控制台够不到孙级 iframe。 */
+  function beat() {
+    var frame = document.getElementById("preview");
+    if (frame && frame.contentWindow) {
+      try {
+        frame.contentWindow.postMessage({ type: "topo:beat" }, "*");
+      } catch (e) {}
+    }
+  }
+
   /* ---------------- 参数表 ---------------- */
 
   /* 画面区域：这块画布在页头里占多大、摆在哪儿。
@@ -100,7 +111,16 @@
     { k: "frame", label: "边界框" },
     { k: "autorotate", label: "自动旋转" },
     { k: "postfx", label: "全屏光学" },
-    { k: "ripple", label: "波纹扰动" }
+    { k: "autoBeatCut", label: "自动节拍跳切" },
+    { k: "ripple", label: "悬停波纹扰动" }
+  ];
+
+  /* 波纹频段：和引擎面板里那三个 chip 同一组值（1.6 / 3.8 / 8.8 Hz），
+     手感记忆点在于"低频厚重、高频细密"，给快捷键比只给滑杆好调。 */
+  var RIPPLE_PRESETS = [
+    { name: "1.6", hz: 1.6, label: "低频 1.6" },
+    { name: "3.8", hz: 3.8, label: "中频 3.8" },
+    { name: "8.8", hz: 8.8, label: "高频 8.8" }
   ];
 
   var BOX_PRESETS = [
@@ -152,6 +172,13 @@
     ".tp-sw{display:flex;align-items:center;gap:6px;",
     "font-size:var(--text-xs);color:var(--text-2);cursor:pointer;padding:2px 0}",
     ".tp-sw input{width:14px;height:14px;flex:none;accent-color:var(--accent);cursor:pointer;margin:0}",
+    /* 波纹频率那一块：悬停波纹关掉时整块降到 45% 并禁掉交互，
+       免得以为"调了没反应" */
+    ".tp-sec.is-off{opacity:.45}",
+    ".tp-sec.is-off .rng,.tp-sec.is-off .numin,.tp-sec.is-off .tp-chip,.tp-sec.is-off .tbtn{pointer-events:none}",
+    ".tp-hzrow{display:flex;align-items:center;gap:var(--space-8);margin-top:var(--space-8)}",
+    ".tp-hzrow .tbtn{flex:none}",
+    ".tp-hint{font-size:10px;line-height:1.5;color:var(--text-3);min-width:0}",
     ".tp-tagrow{display:flex;gap:6px;margin-bottom:6px}",
     ".tp-tagrow .inp{flex:1;min-width:0}",
     ".tp-del{flex:none;width:26px;border-radius:var(--radius-4);background:transparent;border:1px solid var(--border-strong);",
@@ -183,10 +210,10 @@
   }
 
   var flashTimer = null;
-  function flash() {
+  function flash(text) {
     var dot = refs.state;
     if (!dot) return;
-    dot.textContent = "已保存";
+    dot.textContent = text || "已保存";
     dot.style.color = "var(--accent)";
     clearTimeout(flashTimer);
     flashTimer = setTimeout(function () {
@@ -265,6 +292,7 @@
     box.checked = !!state[spec.k];
     box.addEventListener("change", function () {
       state[spec.k] = box.checked;
+      if (spec.k === "ripple") paintRipple();
       commit();
     });
     // 复选框在前、文字在后：两列并排时"框 → 字"的顺序才好扫读
@@ -362,6 +390,31 @@
     secSw.appendChild(grid);
     card.appendChild(secSw);
 
+    /* 波纹与节拍：频率 + 频段快捷键 + 手动切一次相位。
+       这三样在原 demo 的引擎面板里就有（chk-ripple / slider-ripple-freq /
+       btn-beat-jump），第一版搬进控制台时只带了开关，频率和跳切丢了。 */
+    var secWave = el("div", "tp-sec");
+    refs.waveSec = secWave;
+    secWave.appendChild(el("div", "tp-sec__title", "波纹与节拍"));
+    numberField(secWave, { k: "rippleHz", label: "波纹频率", min: 1, max: 12, step: 0.2, unit: "Hz" });
+    refs.hzChips = chipRow(secWave, RIPPLE_PRESETS, "hz", function (item) {
+      state.rippleHz = item.hz;
+      paintRipple();
+      commit();
+    });
+    var beatRow = el("div", "tp-hzrow");
+    var beatBtn = el("button", "tbtn tbtn--sm", "脉冲跳切 CUT");
+    beatBtn.type = "button";
+    beatBtn.title = "立刻做一次节拍相位硬切（原视频 0:21 那下）";
+    beatBtn.addEventListener("click", function () {
+      beat();
+      flash("切了一下");
+    });
+    beatRow.appendChild(beatBtn);
+    beatRow.appendChild(el("div", "tp-hint", "相位瞬移 + 闪一下；「自动节拍跳切」关掉后仍可手动点"));
+    secWave.appendChild(beatRow);
+    card.appendChild(secWave);
+
     /* 标签 */
     var secTag = el("div", "tp-sec");
     var tagTitle = el("div", "tp-sec__title", "页头标签 · 随机分配给波峰");
@@ -457,6 +510,23 @@
       }
     }
     renderTags();
+    paintRipple();
+  }
+
+  /* 波纹频率的滑杆数值 + 三个频段的选中态 + 悬停波纹关掉时整块降级。
+     一个函数管三件事，是因为它们总是同时变：改频率要刷 chip，
+     开关一拨要连"这块还能不能调"一起变。 */
+  function paintRipple() {
+    var r = refs.rippleHz;
+    if (r) r.paint(state.rippleHz);
+    if (refs.hzChips) {
+      var list = refs.hzChips.querySelectorAll(".tp-chip[data-hz]");
+      for (var i = 0; i < list.length; i++) {
+        var hz = parseFloat(list[i].dataset.hz);
+        list[i].classList.toggle("is-on", Math.abs(hz - state.rippleHz) < 0.05);
+      }
+    }
+    if (refs.waveSec) refs.waveSec.classList.toggle("is-off", !state.ripple);
   }
 
   function syncPresetChips() {

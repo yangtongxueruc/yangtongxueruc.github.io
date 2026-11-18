@@ -3194,6 +3194,9 @@ for (int i = 0; i < 12; i++) {
       get running() { return running; },
       start: startLoop,
       stop: stopLoop,
+      /* 手动触发一次节拍跳切。控制台「脉冲跳切」按钮走 topo:beat 消息调它，
+         和原 demo 的 CUT 按钮同一个函数（只跳相位 + 闪一下，不改 autoBeatCut）。 */
+      beatJump: function () { triggerBeatJump(); },
       openPanel: function (open) { setDrawerOpen(open === undefined ? true : !!open); },
       get panelOpen() { return document.getElementById('control-drawer').classList.contains('is-open'); }
     };
@@ -3251,6 +3254,7 @@ for (int i = 0; i < 12; i++) {
     if (typeof p.frame === 'boolean') st.showFrame = p.frame;
     if (typeof p.autorotate === 'boolean') st.autoRotate = p.autorotate;
     if (typeof p.postfx === 'boolean') st.postFxEnabled = p.postfx;
+    if (typeof p.autoBeatCut === 'boolean') st.autoBeatCut = p.autoBeatCut;
     if (typeof p.ripple === 'boolean') st.mouseRipple = p.ripple;
     if (Array.isArray(p.labels) && p.labels.length) st.peakLabels = p.labels.slice(0, 8);
 
@@ -3283,6 +3287,7 @@ for (int i = 0; i < 12; i++) {
     var d = e.data;
     if (!d || typeof d !== 'object') return;
     if (d.type === 'topo:params') applyParams(d.params);
+    else if (d.type === 'topo:beat' && window.TopoHero) window.TopoHero.beatJump();
     else if (d.type === 'topo:stop' && window.TopoHero) window.TopoHero.stop();
     else if (d.type === 'topo:start' && window.TopoHero) window.TopoHero.start();
   });
