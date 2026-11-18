@@ -159,7 +159,16 @@
     ".tp-del:hover{color:var(--warn);border-color:var(--warn)}",
     ".tp-del:disabled{opacity:.35;cursor:not-allowed}",
     ".tp-foot{display:flex;gap:6px;margin-top:var(--space-12)}",
-    ".tp-foot .tbtn{flex:1}"
+    ".tp-foot .tbtn{flex:1}",
+    /* 不是资源库页时露出的一行入口。控制台顶栏在 <1440px 会把页面 tab 挤掉，
+       鼠标点不到「资源库」，所以入口不能再依赖那个 tab —— 这里用程序化 click。 */
+    ".tp-teaser{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-8);margin:0 0 var(--space-16);",
+    "padding:var(--space-8) var(--space-12);border:1px solid var(--border);border-radius:var(--radius-8);",
+    "background:var(--surface-1);font-size:var(--text-xs);line-height:1.5;color:var(--text-3)}",
+    ".tp-teaser__txt{min-width:0;display:flex;flex-direction:column}",
+    ".tp-teaser b{display:block;color:var(--text-1);font-weight:600;font-size:var(--text-sm)}",
+    ".tp-teaser span{display:block}",
+    ".tp-teaser__go{flex:none;margin-left:auto}"
   ].join("");
 
   var state = read();
@@ -282,16 +291,20 @@
 
   /* ---------------- 面板 ---------------- */
 
+  /* 样式只注入一次。入口条（teaser）也要用到，所以单独拎出来，
+     不能只在 build() 里注入 —— 那样停在别的页时入口条是没有样式的。 */
+  function ensureStyle() {
+    if (document.getElementById("tp-style")) return;
+    var style = document.createElement("style");
+    style.id = "tp-style";
+    style.textContent = CSS;
+    document.head.appendChild(style);
+  }
+
   function build() {
     if (card) return card;
 
-    var style = document.getElementById("tp-style");
-    if (!style) {
-      style = document.createElement("style");
-      style.id = "tp-style";
-      style.textContent = CSS;
-      document.head.appendChild(style);
-    }
+    ensureStyle();
 
     card = el("section", "tp-card");
     card.id = "tp-card";
@@ -494,8 +507,18 @@
   }
 
   /* ---------------- 挂载 ----------------
-     只在预览正显示「资源库」时出现：动效就在那一页的页头里，
-     切到首页 / 影像再摆一块参数面板只会让人误以为改了别处。 */
+     两种情况：
+       · 预览正显示「资源库」→ 把整块参数面板摆到左栏最前面；
+       · 正显示别的页      → 只留一行入口条，说明动效长在哪、一键切过去。
+
+     为什么非要有入口条：控制台一打开，预览默认停在「首页」，那时右边
+     本来就不该有动效。只在资源库页挂面板，用户看到的是「右边没有动效、
+     左边也没有面板」，很容易以为功能没生效。另外顶栏的页面 tab 在窄屏
+     会被右侧操作区挤掉一截（1440 下已经溢出 23px，1280 下「资源库」
+     整个落在可视区外），入口条不能依赖鼠标点到那个 tab，所以走
+     element.click() 程序化切换。 */
+
+  var teaser = null;
 
   function previewIsLinks() {
     var ifr = document.getElementById("preview");
@@ -512,15 +535,36 @@
     refs.note.hidden = !(w && w < 1080);
   }
 
+  function buildTeaser() {
+    if (teaser) return teaser;
+    ensureStyle();
+    teaser = el("div", "tp-teaser");
+    teaser.id = "tp-teaser";
+    var txt = el("div", "tp-teaser__txt");
+    txt.appendChild(el("b", "", "页头地形动效"));
+    txt.appendChild(el("span", "", "在「资源库」页头右侧，桌面预览 ≥1080px 可见"));
+    var go = el("button", "tbtn tbtn--sm tp-teaser__go", "切到资源库");
+    go.type = "button";
+    go.addEventListener("click", function () { jumpToPanel(); });
+    teaser.appendChild(txt);
+    teaser.appendChild(go);
+    return teaser;
+  }
+
   function mount() {
     var pane = document.getElementById("formpane");
     if (!pane) return;
 
     if (!previewIsLinks()) {
       if (card && card.parentNode) card.parentNode.removeChild(card);
+      var t = buildTeaser();
+      if (t.parentNode !== pane || pane.firstChild !== t) {
+        pane.insertBefore(t, pane.firstChild);
+      }
       return;
     }
 
+    if (teaser && teaser.parentNode) teaser.parentNode.removeChild(teaser);
     build();
     if (card.parentNode !== pane || pane.firstChild !== card) {
       pane.insertBefore(card, pane.firstChild);
