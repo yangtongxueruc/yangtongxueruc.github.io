@@ -1,0 +1,3294 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- 这是被 iframe 引用的动效层，不该被单独收录 -->
+  <meta name="robots" content="noindex, nofollow" />
+  <title>TOPO HERO — 可嵌入的 WebGL 等高线地形背景</title>
+  <script src="assets/js/vendor/three.min.js"></script>
+  <script>window.TOPO_TRANSPARENT = true;</script>
+  <!-- 不引外部字体：Google Fonts 在国内会卡住首屏，标签又只是几个短词 -->
+  <style>
+    :root {
+      --bg-matte: #171114;
+      --accent-coral: #ff4233;
+      --accent-gold: #ffd479;
+      --accent-cyan: #00f5d4;
+    }
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    /* 嵌入版：overflow 交给 .topo-stage，body 不再锁死整页滚动 */
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-matte);
+      color: #f5ebe6;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    html, body { height: 100%; }
+
+    /* 舞台：把这块放进你的 hero 区，尺寸完全跟着父容器走 */
+    .topo-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg-matte);
+    }
+    .font-mono-hud {
+      font-family: 'Menlo', 'Consolas', monospace;
+    }
+    .font-pixel-fui {
+      font-family: 'Menlo', 'Consolas', 'SF Mono', 'PingFang SC', 'Microsoft YaHei', monospace;
+      -webkit-font-smoothing: none;
+      font-smooth: never;
+      text-rendering: optimizeSpeed;
+      letter-spacing: 0.08em;
+    }
+    .peak-marker-node {
+      position: absolute;
+      top: 0;
+      left: 0;
+      will-change: transform, opacity;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .peak-label-box {
+      padding: 2px 7px;
+      font-size: 12px;
+      line-height: 1.35;
+      border-width: 1px;
+      border-style: solid;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      white-space: nowrap;
+      box-shadow: 0 0 12px rgba(255, 66, 51, 0.35);
+    }
+    #webgl-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      cursor: grab;
+    }
+    #webgl-container canvas { display: block; }
+
+    /* 峰值标签层：原来靠 Tailwind 的 fixed inset-0，这里自备定位 */
+    #peak-markers-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    /* 演示外壳（HUD / 嵌入弹窗）在嵌入版里全部让位；参数面板保留，改成自带样式 */
+    #fui-reticle-overlay,
+    #top-hud-bar,
+    #btn-exit-pure,
+    #hero-card-overlay,
+    #embed-modal,
+    #website-preview-layer {
+      display: none !important;
+    }
+
+    /* ---------- 站内场景页的覆盖：无底色、无边框 ---------- */
+    html, body, .topo-stage {
+      background: transparent !important;
+      background-color: transparent !important;
+    }
+    #webgl-container canvas { background: transparent; }
+    /* 嵌入场景里不出现站内面板：参数统一由站点控制台下发 */
+    #ui-toggle, #control-drawer { display: none !important; }
+
+    /* ---------- 参数面板（不依赖任何 CSS 框架） ---------- */
+    #ui-toggle {
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      z-index: 30;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(24, 17, 20, 0.82);
+      border: 1px solid rgba(255, 77, 61, 0.34);
+      color: #ffd479;
+      font: 500 12px/1 'Menlo', 'Consolas', monospace;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    #ui-toggle:hover {
+      border-color: rgba(255, 212, 121, 0.7);
+      color: #fff3d0;
+    }
+    #control-drawer {
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      bottom: 14px;
+      width: 308px;
+      max-width: calc(100% - 28px);
+      z-index: 31;
+      padding: 14px;
+      border-radius: 12px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: rgba(24, 17, 20, 0.92);
+      border: 1px solid rgba(255, 77, 61, 0.26);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.62);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      color: #e8ded9;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(calc(100% + 24px));
+      transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.26s ease;
+    }
+    #control-drawer.is-open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+    }
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 9px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 66, 51, 0.2);
+    }
+    .drawer-title {
+      flex: 1;
+      font: 500 12px/1 'Menlo', 'Consolas', monospace;
+      letter-spacing: 0.12em;
+      color: #ffd479;
+    }
+    #save-status-badge {
+      font: 400 10px/1 'Menlo', 'Consolas', monospace;
+      padding: 3px 5px;
+      border-radius: 4px;
+      color: #6ee7b7;
+      background: rgba(16, 185, 129, 0.16);
+      border: 1px solid rgba(16, 185, 129, 0.34);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .ctl { margin-bottom: 9px; }
+    .ctl-sec {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .ctl-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 5px;
+      font: 400 11px/1.4 'Menlo', 'Consolas', monospace;
+    }
+    .ctl-label { color: #b8a9a3; }
+    .ctl-val {
+      color: #ffd479;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .chip-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+    }
+    .chip {
+      padding: 5px 2px;
+      border-radius: 5px;
+      font: 400 11px/1.2 'Menlo', 'Consolas', monospace;
+      color: #a99a95;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .chip:hover { color: #ffe49e; border-color: rgba(255, 212, 121, 0.4); }
+    .chip.is-on {
+      color: #ffe49e;
+      background: rgba(255, 66, 51, 0.22);
+      border-color: rgba(255, 94, 77, 0.6);
+    }
+    .layer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+    }
+    .ui-layer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      border-radius: 5px;
+      font: 400 11px/1 'Menlo', 'Consolas', monospace;
+      color: #8d807b;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .ui-layer.is-on {
+      color: #ffe49e;
+      background: rgba(255, 66, 51, 0.15);
+      border-color: rgba(255, 94, 77, 0.45);
+    }
+    .ui-badge {
+      font-size: 9px;
+      opacity: 0.7;
+      letter-spacing: 0.06em;
+    }
+    .ui-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 0;
+      cursor: pointer;
+    }
+    input.ui-chk {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 30px;
+      height: 17px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.13);
+      position: relative;
+      cursor: pointer;
+      transition: background 0.18s ease;
+      flex: none;
+    }
+    input.ui-chk::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #cfc4bf;
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+    input.ui-chk:checked { background: rgba(255, 66, 51, 0.55); }
+    input.ui-chk:checked::after {
+      transform: translateX(13px);
+      background: #fff3d0;
+    }
+    .tag-row {
+      display: flex;
+      gap: 5px;
+      margin-top: 5px;
+    }
+    .tag-input {
+      flex: 1;
+      min-width: 0;
+      padding: 5px 6px;
+      border-radius: 5px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #ffe49e;
+      font-size: 11px;
+      outline: none;
+    }
+    .tag-input:focus { border-color: rgba(255, 212, 121, 0.6); }
+    .tag-del {
+      flex: none;
+      width: 24px;
+      padding: 0;
+      border-radius: 5px;
+      background: rgba(244, 63, 94, 0.16);
+      border: 1px solid rgba(244, 63, 94, 0.34);
+      color: #fda4af;
+      font-size: 12px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .tag-del:disabled { opacity: 0.32; cursor: not-allowed; }
+    .ui-btn {
+      padding: 6px 10px;
+      border-radius: 5px;
+      font: 400 11px/1 'Menlo', 'Consolas', monospace;
+      color: #cfc4bf;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .ui-btn:hover {
+      color: #ffe49e;
+      background: rgba(255, 255, 255, 0.11);
+    }
+    .ui-mini {
+      padding: 3px 7px;
+      border-radius: 4px;
+      font: 400 10px/1 'Menlo', 'Consolas', monospace;
+      color: #948783;
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      cursor: pointer;
+    }
+    .drawer-foot {
+      display: flex;
+      gap: 6px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    #control-drawer.is-collapsed #controls-content { display: none; }
+    @media (max-width: 560px) {
+      #control-drawer {
+        left: 14px;
+        width: auto;
+      }
+    }
+    #webgl-container:active {
+      cursor: grabbing;
+    }
+    /* HUD Glassmorphism Panels */
+    .hud-panel {
+      background: rgba(24, 17, 20, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 77, 61, 0.24);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 212, 121, 0.09);
+    }
+    .hud-corner {
+      position: relative;
+    }
+    .hud-corner::before,
+    .hud-corner::after {
+      content: '';
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-color: rgba(255, 94, 77, 0.65);
+      pointer-events: none;
+    }
+    .hud-corner::before {
+      top: -1px;
+      left: -1px;
+      border-top: 1.5px solid rgba(255, 94, 77, 0.75);
+      border-left: 1.5px solid rgba(255, 94, 77, 0.75);
+    }
+    .hud-corner::after {
+      bottom: -1px;
+      right: -1px;
+      border-bottom: 1.5px solid rgba(255, 94, 77, 0.75);
+      border-right: 1.5px solid rgba(255, 94, 77, 0.75);
+    }
+    /* Custom Range Sliders */
+    input[type="range"].hud-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      outline: none;
+    }
+    input[type="range"].hud-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #ffd479;
+      border: 2px solid #ff4233;
+      box-shadow: 0 0 8px rgba(255, 66, 51, 0.8);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    input[type="range"].hud-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(20, 14, 17, 0.4);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 77, 61, 0.35);
+      border-radius: 999px;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.9; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.92); }
+    }
+    .status-dot {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="relative w-full h-full overflow-hidden select-none">
+
+  <!-- 3D WebGL Viewport -->
+  <div class="topo-stage" id="topo-stage">
+    <!-- 3D WebGL Viewport -->
+    <div id="webgl-container" aria-label="Interactive 3D Topographic Canvas"></div>
+
+    <!-- Dynamic 3D Terrain Peak Pixel Markers Layer -->
+    <div id="peak-markers-layer"></div>
+
+    <!-- 参数控制面板：自带样式，不依赖任何 CSS 框架 -->
+    <button id="ui-toggle" type="button" title="参数调节">参数</button>
+
+    <aside id="control-drawer" aria-label="参数调节">
+      <div class="drawer-head">
+        <span class="drawer-title">参数调节</span>
+        <span id="save-status-badge">已保存</span>
+        <button id="btn-collapse-controls" type="button" class="ui-mini">折叠</button>
+        <button id="btn-close-drawer" type="button" class="ui-mini" title="收起面板">✕</button>
+      </div>
+
+      <div id="controls-content">
+        <div class="ctl-sec" style="border-top:none;margin-top:0;padding-top:0">
+          <div class="ctl-row"><span class="ctl-label">配色预设</span></div>
+          <div class="chip-row">
+            <button type="button" class="chip preset-btn is-on" data-preset="original">红金</button>
+            <button type="button" class="chip preset-btn" data-preset="quant">青色</button>
+            <button type="button" class="chip preset-btn" data-preset="mono">单色</button>
+          </div>
+        </div>
+
+        <div class="ctl-sec">
+          <div class="ctl-row">
+            <label class="ctl-label" for="slider-levels">等高线层数</label>
+            <span class="ctl-val" id="val-levels">7 层</span>
+          </div>
+          <input id="slider-levels" type="range" min="4" max="14" step="1" value="7" class="hud-slider" />
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-row">
+            <label class="ctl-label" for="slider-amp">地形起伏度</label>
+            <span class="ctl-val" id="val-amp">0.82x</span>
+          </div>
+          <input id="slider-amp" type="range" min="0.3" max="2.4" step="0.02" value="0.82" class="hud-slider" />
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-row">
+            <label class="ctl-label" for="slider-speed">噪声演化速率</label>
+            <span class="ctl-val" id="val-speed">0.34</span>
+          </div>
+          <input id="slider-speed" type="range" min="0.0" max="1.5" step="0.02" value="0.34" class="hud-slider" />
+        </div>
+
+        <div class="ctl-sec">
+          <div class="ctl-row">
+            <label class="ctl-label" for="slider-orbit">镜头环绕速度</label>
+            <span class="ctl-val" id="val-orbit">0.36 rad/s</span>
+          </div>
+          <input id="slider-orbit" type="range" min="0.0" max="1.2" step="0.02" value="0.36" class="hud-slider" />
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-row">
+            <label class="ctl-label" for="slider-pitch">相机俯角</label>
+            <span class="ctl-val" id="val-pitch">26°</span>
+          </div>
+          <input id="slider-pitch" type="range" min="16" max="62" step="1" value="26" class="hud-slider" />
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-row">
+            <label class="ctl-label" for="slider-dist">相机距离</label>
+            <span class="ctl-val" id="val-dist">14.2</span>
+          </div>
+          <input id="slider-dist" type="range" min="7.5" max="20" step="0.1" value="14.2" class="hud-slider" />
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-row">
+            <label class="ctl-label" for="slider-dof">景深散景</label>
+            <span class="ctl-val" id="val-dof">0.90</span>
+          </div>
+          <input id="slider-dof" type="range" min="0.0" max="1.6" step="0.05" value="0.90" class="hud-slider" />
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-row">
+            <label class="ctl-label" for="slider-bloom">辉光强度</label>
+            <span class="ctl-val" id="val-bloom">0.85</span>
+          </div>
+          <input id="slider-bloom" type="range" min="0.0" max="1.6" step="0.05" value="0.85" class="hud-slider" />
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-row">
+            <label class="ctl-label" for="slider-cyan">青色信号点占比</label>
+            <span class="ctl-val" id="val-cyan">5%</span>
+          </div>
+          <input id="slider-cyan" type="range" min="0" max="35" step="1" value="5" class="hud-slider" />
+        </div>
+
+        <div class="ctl-sec">
+          <div class="ctl-row"><span class="ctl-label">图层显隐</span></div>
+          <div class="layer-grid">
+            <button type="button" class="ui-layer is-on" data-layer="contours">等高线<span class="ui-badge">ON</span></button>
+            <button type="button" class="ui-layer is-on" data-layer="voxels">粒子柱<span class="ui-badge">ON</span></button>
+            <button type="button" class="ui-layer is-on" data-layer="dust">浮尘<span class="ui-badge">ON</span></button>
+            <button type="button" class="ui-layer is-on" data-layer="frame">边界框<span class="ui-badge">ON</span></button>
+          </div>
+        </div>
+
+        <div class="ctl-sec">
+          <label class="ui-toggle-row">
+            <span class="ctl-label">波峰标签</span>
+            <input id="chk-peak-tags" type="checkbox" class="ui-chk" checked />
+          </label>
+          <label class="ui-toggle-row">
+            <span class="ctl-label">镜头自动旋转</span>
+            <input id="chk-autorotate" type="checkbox" class="ui-chk" checked />
+          </label>
+          <label class="ui-toggle-row">
+            <span class="ctl-label">全屏光学（景深/色散）</span>
+            <input id="chk-postfx" type="checkbox" class="ui-chk" checked />
+          </label>
+          <label class="ui-toggle-row">
+            <span class="ctl-label">自动节拍跳切</span>
+            <input id="chk-autocut" type="checkbox" class="ui-chk" checked />
+          </label>
+          <label class="ui-toggle-row">
+            <span class="ctl-label">悬停波纹扰动</span>
+            <input id="chk-ripple" type="checkbox" class="ui-chk" checked />
+          </label>
+        </div>
+
+        <div class="ctl-sec" id="ripple-freq-wrap">
+          <div class="ctl-row">
+            <label class="ctl-label" for="slider-ripple-freq">波纹频率</label>
+            <span class="ctl-val" id="val-ripple-freq">3.8 Hz</span>
+          </div>
+          <input id="slider-ripple-freq" type="range" min="1.0" max="12.0" step="0.2" value="3.8" class="hud-slider" />
+          <div class="chip-row" style="margin-top:6px">
+            <button type="button" data-ripple-preset="1.6" class="chip ripple-preset-btn">低频 1.6</button>
+            <button type="button" data-ripple-preset="3.8" class="chip ripple-preset-btn is-on">中频 3.8</button>
+            <button type="button" data-ripple-preset="8.8" class="chip ripple-preset-btn">高频 8.8</button>
+          </div>
+        </div>
+
+        <div class="ctl-sec">
+          <div class="ctl-row">
+            <label class="ctl-label" for="slider-tag-fontsize">标签字号</label>
+            <span class="ctl-val" id="val-tag-fontsize">12 px</span>
+          </div>
+          <input id="slider-tag-fontsize" type="range" min="10" max="24" step="1" value="12" class="hud-slider" />
+          <div class="ctl-row" style="margin-top:8px">
+            <span class="ctl-label">标签内容（随机分配给波峰）</span>
+            <span class="ctl-val" id="tag-count-badge">6 项</span>
+          </div>
+          <div id="peak-tags-list"></div>
+          <div class="tag-row">
+            <input id="input-new-tag" type="text" maxlength="12" placeholder="输入新标签…" class="tag-input font-pixel-fui" />
+            <button id="btn-add-tag" type="button" class="ui-btn" style="padding:4px 10px">新增</button>
+          </div>
+        </div>
+
+        <div class="drawer-foot">
+          <button id="btn-reset-params" type="button" class="ui-btn" style="flex:1">重置默认参数</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Subtle FUI Crosshairs & Grid Overlay -->
+  <div id="fui-reticle-overlay" class="pointer-events-none fixed inset-0 z-10 transition-opacity duration-500">
+    <div class="hidden sm:flex fixed left-6 top-1/2 -translate-y-1/2 flex-col gap-3 opacity-40 font-mono-hud text-[10px] tracking-widest text-rose-400">
+      <span>+ 04.88 // FAR DOF</span>
+      <span class="w-3 h-[1px] bg-rose-500/60"></span>
+      <span>+ 02.41</span>
+      <span class="w-2 h-[1px] bg-rose-500/40"></span>
+      <span class="text-cyan-400">00.00 // FOCAL PLANE</span>
+      <span class="w-2 h-[1px] bg-rose-500/40"></span>
+      <span>- 02.41</span>
+      <span class="w-3 h-[1px] bg-rose-500/60"></span>
+      <span>- 04.88 // NEAR BOKEH</span>
+    </div>
+  </div>
+
+  <!-- Top Navigation & Telemetry Bar -->
+  <header id="top-hud-bar" class="fixed top-0 left-0 right-0 z-20 p-3 sm:p-5 flex flex-wrap items-center justify-between gap-2 pointer-events-none transition-all duration-300">
+    <!-- Left Brand / Identity -->
+    <div class="hud-panel hud-corner px-3.5 py-2 rounded-lg pointer-events-auto flex items-center gap-3">
+      <div class="relative flex items-center justify-center w-2.5 h-2.5">
+        <span class="status-dot absolute inline-flex w-full h-full rounded-full bg-rose-500 opacity-75"></span>
+        <span class="relative inline-flex rounded-full w-2 h-2 bg-amber-300"></span>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-mono-hud text-xs font-semibold tracking-wider text-amber-200">SIGNAL.FUI // TOPO-X</span>
+          <span class="text-[10px] font-mono-hud px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">POST-FX BOKEH</span>
+        </div>
+        <p class="text-[11px] text-stone-400 hidden sm:block">C4D Signal 1.5 + X-Particles 等高线体素引擎高保真复刻</p>
+      </div>
+    </div>
+
+    <!-- Center Live Telemetry Readout -->
+    <div class="hud-panel px-3.5 py-1.5 rounded-lg pointer-events-auto hidden xl:flex items-center gap-5 font-mono-hud text-[11px]">
+      <div>
+        <span class="text-stone-500 block text-[9px]">AZIMUTH / PITCH</span>
+        <span id="telemetry-angles" class="text-amber-200">042.8° / 38.0°</span>
+      </div>
+      <div class="h-5 w-[1px] bg-rose-500/20"></div>
+      <div>
+        <span class="text-stone-500 block text-[9px]">NOISE PHASE (Z)</span>
+        <span id="telemetry-phase" class="text-rose-400">0014.82</span>
+      </div>
+      <div class="h-5 w-[1px] bg-rose-500/20"></div>
+      <div>
+        <span class="text-stone-500 block text-[9px]">CURSOR ELEVATION</span>
+        <span id="telemetry-cursor" class="text-cyan-400">STANDBY</span>
+      </div>
+      <div class="h-5 w-[1px] bg-rose-500/20"></div>
+      <div>
+        <span class="text-stone-500 block text-[9px]">VOXEL / RIBBON</span>
+        <span id="telemetry-verts" class="text-stone-300">42,500 PTS</span>
+      </div>
+    </div>
+
+    <!-- Right Action Controls -->
+    <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 pointer-events-auto">
+      <button id="btn-site-preview" type="button" class="hud-panel hover:bg-cyan-500/20 active:scale-95 transition-all px-3 py-2 rounded-lg font-mono-hud text-xs text-cyan-300 border border-cyan-400/35 flex items-center gap-1.5" title="切换个人网站完整首屏实景预览">
+        <span>个人网站实景: 关</span>
+      </button>
+      <button id="btn-auto-rotate" type="button" class="hud-panel hover:bg-amber-500/20 active:scale-95 transition-all px-3 py-2 rounded-lg font-mono-hud text-xs text-amber-200 border border-amber-400/40 flex items-center gap-1.5" title="启动或关闭镜头 360° 自动环绕旋转">
+        <span id="rotate-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        <span id="rotate-label">自动旋转: 开</span>
+      </button>
+      <button id="btn-beat-jump" type="button" class="hud-panel hover:bg-rose-500/25 active:scale-95 transition-all px-3 py-2 rounded-lg font-mono-hud text-xs text-amber-200 flex items-center gap-1.5 border border-rose-500/40" title="触发原视频 0:21 处的节拍相位硬切效果">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+        <span>脉冲跳切 (CUT)</span>
+      </button>
+      <button id="btn-audio-toggle" type="button" class="hud-panel hover:bg-rose-500/20 active:scale-95 transition-all px-3 py-2 rounded-lg font-mono-hud text-xs text-stone-300 flex items-center gap-1.5" title="开启/关闭 Web Audio 合成器低音节拍驱动">
+        <span id="audio-icon" class="text-rose-400">♪</span>
+        <span id="audio-label">节拍音轨: 关</span>
+      </button>
+      <button id="btn-embed-modal" type="button" class="hud-panel hover:bg-amber-500/20 active:scale-95 transition-all px-3 py-2 rounded-lg font-mono-hud text-xs text-amber-300 border border-amber-400/30 hidden sm:flex items-center gap-1.5">
+        <span>&lt;/&gt; 嵌入个人网站</span>
+      </button>
+      <button id="btn-pure-mode" type="button" class="hud-panel hover:bg-white/10 active:scale-95 transition-all px-3 py-2 rounded-lg font-mono-hud text-xs text-stone-200" title="隐藏 UI 面板，预览纯背景效果">
+        <span>纯享模式</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Floating Exit Pure Mode Button (Hidden by default) -->
+  <button id="btn-exit-pure" type="button" class="hidden fixed top-4 right-4 z-30 hud-panel px-3.5 py-2 rounded-lg font-mono-hud text-xs text-amber-200 hover:bg-rose-500/25 transition-all">
+    显示 HUD 控制台 (ESC)
+  </button>
+
+  <!-- Personal Website Full Hero & Portfolio Simulation Layer (Toggleable via #btn-site-preview) -->
+  <div id="website-preview-layer" class="hidden fixed inset-0 z-15 pointer-events-none flex flex-col justify-between p-6 sm:p-12 pt-20 sm:pt-24 transition-opacity duration-500">
+    <div class="max-w-xl pointer-events-auto">
+      <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 font-mono-hud text-[10px] text-amber-200 mb-3">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+        <span>STOCHASTIC TOPOGRAPHY &amp; QUANTITATIVE VISUALIZATION</span>
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-bold tracking-tight text-white leading-tight mb-3">
+        Exploring Signal Dynamics &amp; Algorithmic Aesthetics.
+      </h2>
+      <p class="text-xs sm:text-sm text-stone-300/90 leading-relaxed mb-5">
+        将三维 Simplex 连续随机过程、移动正方形（Marching Squares）等高线切片与体素点云结合，构建可随市场波动率或音频脉冲实时演化的个人网站交互主视觉。
+      </p>
+      <div class="flex flex-wrap gap-2.5">
+        <button id="btn-site-cta-code" type="button" class="px-4 py-2 rounded-lg bg-gradient-to-r from-rose-600 to-amber-500 text-slate-950 font-mono-hud font-semibold text-xs hover:brightness-110 transition-all shadow-lg shadow-rose-600/20">
+          获取组件嵌入代码 →
+        </button>
+        <button id="btn-site-cta-cut" type="button" class="px-4 py-2 rounded-lg hud-panel text-amber-200 font-mono-hud text-xs hover:bg-white/10 transition-all">
+          触发相位突变 (Phase Jump)
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom Portfolio Feature Cards in Website Preview Mode -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-4xl pointer-events-auto">
+      <div class="hud-panel p-3.5 rounded-xl border border-white/10 hover:border-rose-500/40 transition-all">
+        <div class="font-mono-hud text-[10px] text-cyan-400 mb-1">01 // STOCHASTIC FIELD</div>
+        <div class="text-xs font-semibold text-amber-100 mb-1">多频 Simplex 噪声驱动</div>
+        <p class="text-[11px] text-stone-400">3 层分形布朗运动（fBm）叠加径向暗角衰减，精准复刻 C4D Signal 1.5 的闭合孤岛与山脊演化。</p>
+      </div>
+      <div class="hud-panel p-3.5 rounded-xl border border-white/10 hover:border-rose-500/40 transition-all">
+        <div class="font-mono-hud text-[10px] text-amber-300 mb-1">02 // OPTICAL BOKEH DOF</div>
+        <div class="text-xs font-semibold text-amber-100 mb-1">双通道光学散景与色散</div>
+        <p class="text-[11px] text-stone-400">结合顶点弥散圆与全屏 Post-FX 散景/辉光/红青色散着色器，连同外围红框呈现真实浅景深虚化。</p>
+      </div>
+      <div class="hud-panel p-3.5 rounded-xl border border-white/10 hover:border-rose-500/40 transition-all">
+        <div class="font-mono-hud text-[10px] text-rose-400 mb-1">03 // ZERO-VIDEO FOOTPRINT</div>
+        <div class="text-xs font-semibold text-amber-100 mb-1">纯代码 60fps 轻量集成</div>
+        <p class="text-[11px] text-stone-400">替代数十 MB 的 MP4 背景视频，首屏秒开，支持鼠标悬停引力波交互与响应式降级。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Hero Personal Website Overlay Preview (Default HUD Card) -->
+  <section id="hero-card-overlay" class="fixed left-3 sm:left-6 bottom-4 sm:bottom-6 z-20 max-w-md pointer-events-none transition-all duration-300">
+    <div class="hud-panel hud-corner p-4 sm:p-5 rounded-xl pointer-events-auto">
+      <div class="flex items-center justify-between gap-2 mb-2">
+        <span class="font-mono-hud text-[10px] uppercase tracking-[0.18em] text-cyan-400 flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+          LAYER INSPECTOR &amp; PRESETS // 图层拆解与预设
+        </span>
+        <button id="btn-toggle-hero-text" type="button" class="text-[11px] font-mono-hud text-stone-400 hover:text-amber-200 underline">
+          收起卡片
+        </button>
+      </div>
+      <div id="hero-card-body">
+        <h1 class="text-base sm:text-lg font-semibold tracking-tight text-amber-50 mb-1">
+          Quantitative &amp; Generative Systems
+        </h1>
+        <p class="text-[11px] text-stone-300/90 leading-relaxed mb-3">
+          点击下方图层开关可单独检视原视频的 4 个空间层次；支持拖拽环绕、滚轮变焦与鼠标悬停波峰扰动。
+        </p>
+
+        <!-- 4-Layer Visual Breakdown Toggles -->
+        <div class="grid grid-cols-2 gap-1.5 mb-3">
+          <button id="btn-layer-contours" type="button" class="px-2 py-1.5 rounded text-[11px] font-mono-hud bg-amber-500/20 text-amber-200 border border-amber-400/40 flex items-center justify-between transition-all">
+            <span>L1. 等高线丝带</span>
+            <span class="text-[9px] opacity-80">ON</span>
+          </button>
+          <button id="btn-layer-voxels" type="button" class="px-2 py-1.5 rounded text-[11px] font-mono-hud bg-rose-500/20 text-rose-200 border border-rose-400/40 flex items-center justify-between transition-all">
+            <span>L2. 体素点阵柱</span>
+            <span class="text-[9px] opacity-80">ON</span>
+          </button>
+          <button id="btn-layer-dust" type="button" class="px-2 py-1.5 rounded text-[11px] font-mono-hud bg-cyan-500/20 text-cyan-200 border border-cyan-400/40 flex items-center justify-between transition-all">
+            <span>L3. 悬浮信号尘</span>
+            <span class="text-[9px] opacity-80">ON</span>
+          </button>
+          <button id="btn-layer-frame" type="button" class="px-2 py-1.5 rounded text-[11px] font-mono-hud bg-rose-500/20 text-rose-200 border border-rose-400/40 flex items-center justify-between transition-all">
+            <span>L4. 裁剪边界框</span>
+            <span class="text-[9px] opacity-80">ON</span>
+          </button>
+        </div>
+
+        <!-- Theme Preset Switcher -->
+        <div class="grid grid-cols-3 gap-1.5 pt-2 border-t border-white/10">
+          <button type="button" data-preset="original" class="preset-btn px-2 py-1.5 rounded text-[11px] font-mono-hud bg-rose-500/30 text-amber-200 border border-rose-500/50 transition-all">
+            01. 原片复刻
+          </button>
+          <button type="button" data-preset="quant" class="preset-btn px-2 py-1.5 rounded text-[11px] font-mono-hud bg-white/5 text-stone-300 hover:bg-white/10 border border-transparent transition-all">
+            02. 量化曲面
+          </button>
+          <button type="button" data-preset="mono" class="preset-btn px-2 py-1.5 rounded text-[11px] font-mono-hud bg-white/5 text-stone-300 hover:bg-white/10 border border-transparent transition-all">
+            03. 极简黑白
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Right Parameter Control Panel -->
+
+
+  <!-- Embed & Replication Guide Modal -->
+  <div id="embed-modal" class="hidden fixed inset-0 z-40 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="hud-panel hud-corner w-full max-w-2xl rounded-2xl p-5 sm:p-6 border border-rose-500/40 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-white/10">
+        <div>
+          <span class="font-mono-hud text-[10px] text-cyan-400 uppercase tracking-widest">INTEGRATION &amp; ARCHITECTURE</span>
+          <h2 class="text-base sm:text-lg font-semibold text-amber-100">个人网站高保真嵌入方案与多框架代码导出</h2>
+        </div>
+        <button id="btn-close-modal" type="button" class="px-2.5 py-1 rounded bg-white/10 hover:bg-rose-500/30 text-stone-200 font-mono-hud text-xs">
+          ✕ 关闭
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs text-stone-300 leading-relaxed">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="p-3 rounded-lg bg-black/40 border border-white/5">
+            <div class="font-mono-hud text-amber-300 text-[11px] mb-1">01 // 视觉层次还原度 (98%+)</div>
+            <p class="text-stone-400">采用实时 Marching Squares 3D 丝带网格 + 42,500 颗 GPU 体素柱与悬浮微尘，配合双通道 Post-FX 散景 (Vogel Disk Bokeh)、红青色散与加色辉光，连同红色外框呈现真实镜头边缘虚化。</p>
+          </div>
+          <div class="p-3 rounded-lg bg-black/40 border border-white/5">
+            <div class="font-mono-hud text-cyan-300 text-[11px] mb-1">02 // 响应式与性能优化策略</div>
+            <p class="text-stone-400">自动限制 `devicePixelRatio &lt;= 2`，离屏后处理采用半分辨率辉光采样；页面不可见时自动挂起 `requestAnimationFrame`，兼顾桌面端高画质与移动端续航。</p>
+          </div>
+        </div>
+
+        <!-- Code Format Switcher Tabs -->
+        <div>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <div class="flex gap-1.5">
+              <button type="button" data-codetab="iframe" class="codetab-btn px-2.5 py-1 rounded font-mono-hud text-[11px] bg-rose-500/30 text-amber-200 border border-rose-500/50">
+                1. Iframe 零依赖嵌入
+              </button>
+              <button type="button" data-codetab="react" class="codetab-btn px-2.5 py-1 rounded font-mono-hud text-[11px] bg-white/5 text-stone-300 hover:bg-white/10 border border-transparent">
+                2. React / Next.js 组件封装
+              </button>
+              <button type="button" data-codetab="shader" class="codetab-btn px-2.5 py-1 rounded font-mono-hud text-[11px] bg-white/5 text-stone-300 hover:bg-white/10 border border-transparent">
+                3. GLSL 散景与色散核
+              </button>
+            </div>
+            <button id="btn-copy-code" type="button" class="px-2.5 py-1 rounded bg-rose-500/25 hover:bg-rose-500/40 text-amber-200 border border-rose-500/40 font-mono-hud text-[11px]">
+              复制嵌入代码
+            </button>
+          </div>
+          <pre id="embed-code-block" class="p-3 rounded-lg bg-black/70 border border-white/10 font-mono-hud text-[11px] text-emerald-300 overflow-x-auto select-all">&lt;!-- 个人网站 Hero 全屏交互背景容器 --&gt;
+&lt;div style="position: relative; width: 100%; height: 100vh; overflow: hidden; background: #171114;"&gt;
+  &lt;iframe
+    src="./topo-scene.html?pure=1"
+    style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: auto;"
+    loading="lazy"
+    title="3D Topographic FUI Background"&gt;
+  &lt;/iframe&gt;
+  &lt;!-- 您的个人网站标题与导航内容叠加在上方 (pointer-events: none 让鼠标穿透交互) --&gt;
+&lt;/div&gt;</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. FAST 3D SIMPLEX NOISE IMPLEMENTATION (Self-Contained, Deterministic)
+    // =========================================================================
+    class SimplexNoise3D {
+      constructor(seed = 42) {
+        this.p = new Uint8Array(256);
+        for (let i = 0; i < 256; i++) this.p[i] = i;
+        let n = seed;
+        for (let i = 255; i > 0; i--) {
+          n = (n * 16807) % 2147483647;
+          const j = n % (i + 1);
+          const tmp = this.p[i];
+          this.p[i] = this.p[j];
+          this.p[j] = tmp;
+        }
+        this.perm = new Uint8Array(512);
+        this.permMod12 = new Uint8Array(512);
+        for (let i = 0; i < 512; i++) {
+          this.perm[i] = this.p[i & 255];
+          this.permMod12[i] = this.perm[i] % 12;
+        }
+        this.grad3 = new Float32Array([
+          1,1,0, -1,1,0, 1,-1,0, -1,-1,0,
+          1,0,1, -1,0,1, 1,0,-1, -1,0,-1,
+          0,1,1, 0,-1,1, 0,1,-1, 0,-1,-1
+        ]);
+      }
+
+      noise3D(xin, yin, zin) {
+        const permMod12 = this.permMod12;
+        const perm = this.perm;
+        const grad3 = this.grad3;
+        const F3 = 1.0 / 3.0;
+        const G3 = 1.0 / 6.0;
+        let n0, n1, n2, n3;
+        const s = (xin + yin + zin) * F3;
+        const i = Math.floor(xin + s);
+        const j = Math.floor(yin + s);
+        const k = Math.floor(zin + s);
+        const t = (i + j + k) * G3;
+        const X0 = i - t;
+        const Y0 = j - t;
+        const Z0 = k - t;
+        const x0 = xin - X0;
+        const y0 = yin - Y0;
+        const z0 = zin - Z0;
+        let i1, j1, k1, i2, j2, k2;
+        if (x0 >= y0) {
+          if (y0 >= z0) { i1=1; j1=0; k1=0; i2=1; j2=1; k2=0; }
+          else if (x0 >= z0) { i1=1; j1=0; k1=0; i2=1; j2=0; k2=1; }
+          else { i1=0; j1=0; k1=1; i2=1; j2=0; k2=1; }
+        } else {
+          if (y0 < z0) { i1=0; j1=0; k1=1; i2=0; j2=1; k2=1; }
+          else if (x0 < z0) { i1=0; j1=1; k1=0; i2=0; j2=1; k2=1; }
+          else { i1=0; j1=1; k1=0; i2=1; j2=1; k2=0; }
+        }
+        const x1 = x0 - i1 + G3;
+        const y1 = y0 - j1 + G3;
+        const z1 = z0 - k1 + G3;
+        const x2 = x0 - i2 + 2.0 * G3;
+        const y2 = y0 - j2 + 2.0 * G3;
+        const z2 = z0 - k2 + 2.0 * G3;
+        const x3 = x0 - 1.0 + 3.0 * G3;
+        const y3 = y0 - 1.0 + 3.0 * G3;
+        const z3 = z0 - 1.0 + 3.0 * G3;
+        const ii = i & 255;
+        const jj = j & 255;
+        const kk = k & 255;
+        let t0 = 0.6 - x0*x0 - y0*y0 - z0*z0;
+        if (t0 < 0) n0 = 0.0;
+        else {
+          const gi0 = permMod12[ii + perm[jj + perm[kk]]] * 3;
+          t0 *= t0;
+          n0 = t0 * t0 * (grad3[gi0]*x0 + grad3[gi0+1]*y0 + grad3[gi0+2]*z0);
+        }
+        let t1 = 0.6 - x1*x1 - y1*y1 - z1*z1;
+        if (t1 < 0) n1 = 0.0;
+        else {
+          const gi1 = permMod12[ii+i1 + perm[jj+j1 + perm[kk+k1]]] * 3;
+          t1 *= t1;
+          n1 = t1 * t1 * (grad3[gi1]*x1 + grad3[gi1+1]*y1 + grad3[gi1+2]*z1);
+        }
+        let t2 = 0.6 - x2*x2 - y2*y2 - z2*z2;
+        if (t2 < 0) n2 = 0.0;
+        else {
+          const gi2 = permMod12[ii+i2 + perm[jj+j2 + perm[kk+k2]]] * 3;
+          t2 *= t2;
+          n2 = t2 * t2 * (grad3[gi2]*x2 + grad3[gi2+1]*y2 + grad3[gi2+2]*z2);
+        }
+        let t3 = 0.6 - x3*x3 - y3*y3 - z3*z3;
+        if (t3 < 0) n3 = 0.0;
+        else {
+          const gi3 = permMod12[ii+1 + perm[jj+1 + perm[kk+1]]] * 3;
+          t3 *= t3;
+          n3 = t3 * t3 * (grad3[gi3]*x3 + grad3[gi3+1]*y3 + grad3[gi3+2]*z3);
+        }
+        return 32.0 * (n0 + n1 + n2 + n3);
+      }
+    }
+
+    // =========================================================================
+    // 2. APPLICATION STATE & COLOR PRESETS
+    // =========================================================================
+    const PRESETS = {
+      original: {
+        name: 'original',
+        bgHex: '#171114',
+        bgVec: new THREE.Vector3(0.090, 0.066, 0.078),
+        coreColor: new THREE.Color('#ffe49e'),
+        midColor: new THREE.Color('#ff8833'),
+        haloColor: new THREE.Color('#ff2e24'),
+        voxelPrimary: new THREE.Color('#ff3b2f'),
+        voxelDeep: new THREE.Color('#9e141d'),
+        voxelCyan: new THREE.Color('#00f5d4'),
+        frameColor: new THREE.Color('#ff3d2e')
+      },
+      quant: {
+        name: 'quant',
+        bgHex: '#0b1017',
+        bgVec: new THREE.Vector3(0.043, 0.063, 0.090),
+        coreColor: new THREE.Color('#d8fff8'),
+        midColor: new THREE.Color('#00e5ff'),
+        haloColor: new THREE.Color('#0066ff'),
+        voxelPrimary: new THREE.Color('#00b4d8'),
+        voxelDeep: new THREE.Color('#1d3557'),
+        voxelCyan: new THREE.Color('#ffb703'),
+        frameColor: new THREE.Color('#00e5ff')
+      },
+      mono: {
+        name: 'mono',
+        bgHex: '#0f0f11',
+        bgVec: new THREE.Vector3(0.058, 0.058, 0.066),
+        coreColor: new THREE.Color('#ffffff'),
+        midColor: new THREE.Color('#d4d4d8'),
+        haloColor: new THREE.Color('#52525b'),
+        voxelPrimary: new THREE.Color('#a1a1aa'),
+        voxelDeep: new THREE.Color('#27272a'),
+        voxelCyan: new THREE.Color('#ffffff'),
+        frameColor: new THREE.Color('#e4e4e7')
+      }
+    };
+
+    const CODE_SNIPPETS = {
+      iframe: `<!-- 个人网站 Hero 全屏交互背景容器 -->
+<div style="position: relative; width: 100%; height: 100vh; overflow: hidden; background: #171114;">
+  <iframe
+    src="./topo-scene.html?pure=1"
+    style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: auto;"
+    loading="lazy"
+    title="3D Topographic FUI Background">
+  </iframe>
+  <!-- 您的个人网站标题与导航内容叠加在上方 (pointer-events: none 让鼠标穿透交互) -->
+</div>`,
+      react: `// TopographyHero.tsx — React / Next.js 个人网站背景封装组件
+import React, { useState } from 'react';
+
+export default function TopographyHero() {
+  const [preset, setPreset] = useState<'original' | 'quant' | 'mono'>('original');
+  return (
+    <section className="relative w-full h-screen overflow-hidden bg-[#171114]">
+      <iframe
+        src={\`/topo-scene.html?pure=1&preset=\${preset}\`}
+        className="absolute inset-0 w-full h-full border-0"
+        title="Signal 1.5 + X-Particles WebGL Topography"
+      />
+      <div className="relative z-10 pointer-events-none flex flex-col justify-end h-full p-12">
+        <h1 className="text-4xl font-bold text-amber-50">Quantitative & Generative Portfolio</h1>
+      </div>
+    </section>
+  );
+}`,
+      shader: `// 核心光学散景 (Vogel Disk Bokeh) + 径向红青色散 (Chromatic Aberration) 片元着色器
+float tiltBlur = pow(abs(vUv.y - 0.50) * 1.85, 1.65) * uDofStrength;
+vec2 caOffset = (vUv - 0.5) * 0.0038 * (0.4 + tiltBlur);
+// 12-Tap 黄金角螺旋散景核采样 + 高亮阈值辉光叠加
+for (int i = 0; i < 12; i++) {
+  float ang = float(i) * 2.3999632;
+  float rad = sqrt((float(i) + 0.5) / 12.0) * tiltBlur * 0.014;
+  vec2 sampleUV = vUv + vec2(cos(ang), sin(ang) * uAspect) * rad;
+  accColor += texture2D(tDiffuse, sampleUV).rgb;
+}`
+    };
+
+    // 透明模式：由宿主页在引入本脚本前设置 window.TOPO_TRANSPARENT = true。
+    // 打开后画布不带底色、后处理输出按亮度算 alpha，只留发光的点与线，
+    // 暗部完全透出宿主页背景 —— 这样才能"没有框"地嵌进深色站点。
+    const TRANSPARENT = window.TOPO_TRANSPARENT === true;
+    // 视线落点：矮框（16:10）里地形天然偏下，透明模式下把焦点压低让它居中
+    const LOOK_Y = TRANSPARENT ? -0.36 : -0.08;
+
+    const STORAGE_KEY = 'topography_fui_settings_v1';
+    const DEFAULT_PEAK_LABELS = ['最新动态', '比赛', '练习', '招聘', '信息库', '小玩意'];
+
+    const state = {
+      preset: 'original',
+      contourLevels: 7,
+      elevationAmp: 0.82,
+      noiseSpeed: 0.34,
+      autoRotate: true,
+      orbitSpeed: 0.36,
+      dofStrength: 0.90,
+      bloomStrength: 0.85,
+      cyanRatio: 0.045,
+      postFxEnabled: true,
+      autoBeatCut: true,
+      showFrame: true,
+      showPeakTags: true,
+      showContours: true,
+      showVoxels: true,
+      showDust: true,
+      mouseRipple: true,
+      rippleFreq: 3.8,
+      peakLabels: [...DEFAULT_PEAK_LABELS],
+      peakFontSize: 12,
+      pureMode: false,
+      sitePreviewMode: false,
+      audioEnabled: false,
+      noisePhaseZ: 14.8,
+      phaseJumpOffset: 0.0,
+      beatFlash: 0.0,
+      azimuth: 0.72,
+      pitch: 0.46, // ~26°，原片是接近平视的俯瞰，38° 太陡了
+      distance: 14.2,
+      pointerNDC: new THREE.Vector2(99, 99),
+      hoverWorldPos: new THREE.Vector3(99, 0, 99),
+      isHoveringPlane: false
+    };
+
+    let saveBadgeTimer = null;
+
+    // 嵌入模式默认不落 localStorage：站点自己决定栏目名和参数，
+    // 否则访客上次在别的页面上拖过的视角会盖掉这次的设定。
+    // 想在本地调试里保留记忆时，在引入前写 window.TOPO_HERO_OPTS = { persist: true }。
+    const HERO_OPTS = (typeof window.TOPO_HERO_OPTS === 'object' && window.TOPO_HERO_OPTS) || {};
+    const PERSIST = HERO_OPTS.persist === true;
+
+    function saveSettings() {
+      if (!PERSIST) return;
+      try {
+        const payload = {
+          preset: state.preset,
+          contourLevels: state.contourLevels,
+          elevationAmp: state.elevationAmp,
+          noiseSpeed: state.noiseSpeed,
+          autoRotate: state.autoRotate,
+          orbitSpeed: state.orbitSpeed,
+          dofStrength: state.dofStrength,
+          bloomStrength: state.bloomStrength,
+          cyanRatio: state.cyanRatio,
+          postFxEnabled: state.postFxEnabled,
+          autoBeatCut: state.autoBeatCut,
+          showFrame: state.showFrame,
+          showPeakTags: state.showPeakTags,
+          showContours: state.showContours,
+          showVoxels: state.showVoxels,
+          showDust: state.showDust,
+          mouseRipple: state.mouseRipple,
+          rippleFreq: state.rippleFreq,
+          peakLabels: state.peakLabels,
+          peakFontSize: state.peakFontSize
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        const badge = document.getElementById('save-status-badge');
+        if (badge) {
+          badge.classList.remove('opacity-0');
+          if (saveBadgeTimer) clearTimeout(saveBadgeTimer);
+          saveBadgeTimer = setTimeout(() => {
+            badge.classList.add('opacity-0');
+          }, 1400);
+        }
+      } catch (e) {}
+    }
+
+    function loadSettings() {
+      if (!PERSIST) return;
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        if (!saved || typeof saved !== 'object') return;
+
+        if (saved.preset && PRESETS[saved.preset]) state.preset = saved.preset;
+        if (typeof saved.contourLevels === 'number') state.contourLevels = saved.contourLevels;
+        if (typeof saved.elevationAmp === 'number') state.elevationAmp = saved.elevationAmp;
+        if (typeof saved.noiseSpeed === 'number') state.noiseSpeed = saved.noiseSpeed;
+        if (typeof saved.autoRotate === 'boolean') state.autoRotate = saved.autoRotate;
+        if (typeof saved.orbitSpeed === 'number') state.orbitSpeed = saved.orbitSpeed;
+        if (typeof saved.dofStrength === 'number') state.dofStrength = saved.dofStrength;
+        if (typeof saved.bloomStrength === 'number') state.bloomStrength = saved.bloomStrength;
+        if (typeof saved.cyanRatio === 'number') state.cyanRatio = saved.cyanRatio;
+        if (typeof saved.postFxEnabled === 'boolean') state.postFxEnabled = saved.postFxEnabled;
+        if (typeof saved.autoBeatCut === 'boolean') state.autoBeatCut = saved.autoBeatCut;
+        if (typeof saved.showFrame === 'boolean') state.showFrame = saved.showFrame;
+        if (typeof saved.showPeakTags === 'boolean') state.showPeakTags = saved.showPeakTags;
+        if (typeof saved.showContours === 'boolean') state.showContours = saved.showContours;
+        if (typeof saved.showVoxels === 'boolean') state.showVoxels = saved.showVoxels;
+        if (typeof saved.showDust === 'boolean') state.showDust = saved.showDust;
+        if (typeof saved.mouseRipple === 'boolean') state.mouseRipple = saved.mouseRipple;
+        if (typeof saved.rippleFreq === 'number') state.rippleFreq = saved.rippleFreq;
+        if (typeof saved.peakFontSize === 'number') state.peakFontSize = Math.max(10, Math.min(24, saved.peakFontSize));
+        if (Array.isArray(saved.peakLabels)) {
+          const cleaned = saved.peakLabels.map((t) => String(t).trim()).filter(Boolean);
+          if (cleaned.length > 0) state.peakLabels = cleaned;
+        }
+      } catch (e) {}
+    }
+
+    loadSettings();
+
+    // 宿主页可以直接在 <script> 里声明栏目名 / 预设，不用等 onload 再调 API
+    if (Array.isArray(HERO_OPTS.labels)) {
+      const cleaned = HERO_OPTS.labels.map((t) => String(t).trim()).filter(Boolean);
+      if (cleaned.length) state.peakLabels = cleaned;
+    }
+    if (typeof HERO_OPTS.preset === 'string' && PRESETS[HERO_OPTS.preset]) {
+      state.preset = HERO_OPTS.preset;
+    }
+    if (typeof HERO_OPTS.fontSize === 'number') {
+      state.peakFontSize = Math.max(10, Math.min(24, HERO_OPTS.fontSize));
+    }
+
+    // 用 <iframe> 嵌的时候宿主页碰不到这里的 window，所以配置也走 query：
+    //   topo-hero.html?labels=项目,写作,摄影&preset=quant&fs=14
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('pure') === '1') state.pureMode = true;
+      const urlPreset = params.get('preset');
+      if (urlPreset && PRESETS[urlPreset]) state.preset = urlPreset;
+      const urlLabels = params.get('labels');
+      if (urlLabels) {
+        const cleaned = urlLabels.split(',').map((t) => t.trim()).filter(Boolean);
+        if (cleaned.length) state.peakLabels = cleaned;
+      }
+      const urlFs = parseFloat(params.get('fs'));
+      if (isFinite(urlFs)) state.peakFontSize = Math.max(10, Math.min(24, urlFs));
+    } catch (e) {}
+
+    // =========================================================================
+    // 3. THREE.JS SCENE, CAMERA & CUSTOM SHADERS
+    // =========================================================================
+    const container = document.getElementById('webgl-container');
+    const stageEl = document.getElementById('topo-stage');
+
+    // 一切尺寸都从舞台量，不再读 window.innerWidth —— 嵌进任意容器都能用
+    const VIEW = { w: 1, h: 1 };
+    let fitFactor = 1;   // 竖屏时把相机拉远，保证方片不会只剩中间一块
+    function measureView() {
+      const r = stageEl.getBoundingClientRect();
+      VIEW.w = Math.max(1, Math.round(r.width));
+      VIEW.h = Math.max(1, Math.round(r.height));
+    }
+    measureView();
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      powerPreference: 'high-performance',
+      alpha: TRANSPARENT,
+      premultipliedAlpha: false
+    });
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(VIEW.w, VIEW.h);
+    renderer.setClearColor(new THREE.Color(PRESETS[state.preset].bgHex), TRANSPARENT ? 0.0 : 1.0);
+    container.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      36,
+      VIEW.w / VIEW.h,
+      0.1,
+      100
+    );
+
+    const worldGroup = new THREE.Group();
+    scene.add(worldGroup);
+
+    const simplex = new SimplexNoise3D(1337);
+    const BOARD_SIZE = 7.4;
+    const HALF_SIZE = BOARD_SIZE * 0.5;
+
+    // -------------------------------------------------------------------------
+    // 3A. RED BOUNDING FRAME + VERTICAL PILLAR STREAKS (Matches Video Frame)
+    // -------------------------------------------------------------------------
+    const frameGroup = new THREE.Group();
+    worldGroup.add(frameGroup);
+
+    function createBoundingFrame() {
+      while (frameGroup.children.length > 0) {
+        const child = frameGroup.children[0];
+        if (child.geometry) child.geometry.dispose();
+        frameGroup.remove(child);
+      }
+      const p = PRESETS[state.preset];
+      const hs = HALF_SIZE;
+
+      const frameVerts = new Float32Array([
+        // Upper crisp bounding square at y = 0.08
+        -hs, 0.08, -hs,   hs, 0.08, -hs,
+         hs, 0.08, -hs,   hs, 0.08,  hs,
+         hs, 0.08,  hs,  -hs, 0.08,  hs,
+        -hs, 0.08,  hs,  -hs, 0.08, -hs,
+        // Secondary outer halo rim slightly wider
+        -hs*1.012, 0.08, -hs*1.012,   hs*1.012, 0.08, -hs*1.012,
+         hs*1.012, 0.08, -hs*1.012,   hs*1.012, 0.08,  hs*1.012,
+         hs*1.012, 0.08,  hs*1.012,  -hs*1.012, 0.08,  hs*1.012,
+        -hs*1.012, 0.08,  hs*1.012,  -hs*1.012, 0.08, -hs*1.012,
+        // Lower subtle bounding square at y = -0.34
+        -hs, -0.34, -hs,  hs, -0.34, -hs,
+         hs, -0.34, -hs,  hs, -0.34,  hs,
+         hs, -0.34,  hs, -hs, -0.34,  hs,
+        -hs, -0.34,  hs, -hs, -0.34, -hs,
+        // 4 corner vertical struts
+        -hs, 0.08, -hs,  -hs, -0.34, -hs,
+         hs, 0.08, -hs,   hs, -0.34, -hs,
+         hs, 0.08,  hs,   hs, -0.34,  hs,
+        -hs, 0.08,  hs,  -hs, -0.34,  hs
+      ]);
+      const geom = new THREE.BufferGeometry();
+      geom.setAttribute('position', new THREE.BufferAttribute(frameVerts, 3));
+      const mat = new THREE.LineBasicMaterial({
+        color: p.frameColor,
+        transparent: true,
+        opacity: 0.52,
+        blending: THREE.AdditiveBlending
+      });
+      const lines = new THREE.LineSegments(geom, mat);
+      frameGroup.add(lines);
+    }
+    createBoundingFrame();
+
+    // -------------------------------------------------------------------------
+    // 3B. VOXEL POINT-CLOUD MATRIX (X-Particles Vertical Pillar Grid + Bokeh DoF)
+    // -------------------------------------------------------------------------
+    const GRID_RES_P = 58; // 58 x 58 columns
+    const LAYERS_P = 12;   // 12 vertical dots per column = 40,368 particles
+    const TOTAL_PARTICLES = GRID_RES_P * GRID_RES_P * LAYERS_P;
+
+    const pPositions = new Float32Array(TOTAL_PARTICLES * 3);
+    const pGridUV = new Float32Array(TOTAL_PARTICLES * 3);
+    const pRandom = new Float32Array(TOTAL_PARTICLES * 2);
+
+    let ptr = 0;
+    for (let ix = 0; ix < GRID_RES_P; ix++) {
+      for (let iz = 0; iz < GRID_RES_P; iz++) {
+        const u = ix / (GRID_RES_P - 1);
+        const v = iz / (GRID_RES_P - 1);
+        const wx = (u - 0.5) * BOARD_SIZE * 0.965;
+        const wz = (v - 0.5) * BOARD_SIZE * 0.965;
+        const colSeed = Math.sin(ix * 12.9898 + iz * 78.233) * 43758.5453;
+        const colRand = colSeed - Math.floor(colSeed);
+
+        for (let ly = 0; ly < LAYERS_P; ly++) {
+          const layerFrac = ly / (LAYERS_P - 1);
+          pPositions[ptr * 3 + 0] = wx;
+          pPositions[ptr * 3 + 1] = -layerFrac * 0.95;
+          pPositions[ptr * 3 + 2] = wz;
+
+          pGridUV[ptr * 3 + 0] = u;
+          pGridUV[ptr * 3 + 1] = v;
+          pGridUV[ptr * 3 + 2] = layerFrac;
+
+          const rSeed = Math.sin((ptr + 1) * 91.13 + colRand * 47.2) * 19375.31;
+          const rVal = rSeed - Math.floor(rSeed);
+          pRandom[ptr * 2 + 0] = colRand;
+          pRandom[ptr * 2 + 1] = rVal;
+          ptr++;
+        }
+      }
+    }
+
+    const particleGeom = new THREE.BufferGeometry();
+    particleGeom.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+    particleGeom.setAttribute('aGridUV', new THREE.BufferAttribute(pGridUV, 3));
+    particleGeom.setAttribute('aRandom', new THREE.BufferAttribute(pRandom, 2));
+
+    const particleUniforms = {
+      uTime: { value: 0 },
+      uDofStrength: { value: state.dofStrength },
+      uFocalDist: { value: state.distance },
+      uCyanRatio: { value: state.cyanRatio },
+      uPixelRatio: { value: pixelRatio },
+      uColorPrimary: { value: PRESETS[state.preset].voxelPrimary.clone() },
+      uColorDeep: { value: PRESETS[state.preset].voxelDeep.clone() },
+      uColorCyan: { value: PRESETS[state.preset].voxelCyan.clone() },
+      uBeatFlash: { value: 0.0 }
+    };
+
+    const particleMaterial = new THREE.ShaderMaterial({
+      uniforms: particleUniforms,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      vertexShader: `
+        attribute vec3 aGridUV;
+        attribute vec2 aRandom;
+        uniform float uDofStrength;
+        uniform float uFocalDist;
+        uniform float uCyanRatio;
+        uniform float uPixelRatio;
+        uniform vec3 uColorPrimary;
+        uniform vec3 uColorDeep;
+        uniform vec3 uColorCyan;
+        uniform float uBeatFlash;
+
+        varying vec3 vColor;
+        varying float vAlpha;
+        varying float vCoc;
+
+        void main() {
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_Position = projectionMatrix * mvPosition;
+
+          float viewDist = -mvPosition.z;
+          float coc = abs(viewDist - uFocalDist) * 0.30 * uDofStrength;
+          vCoc = coc;
+
+          float layerFrac = aGridUV.z;
+          float isCyan = step(1.0 - uCyanRatio, aRandom.y);
+
+          float baseSize = mix(4.0, 1.8, layerFrac) + isCyan * 1.6;
+          float bokehSize = baseSize + coc * 9.0;
+          gl_PointSize = bokehSize * uPixelRatio * (12.5 / max(viewDist, 1.0));
+
+          vec3 col = mix(uColorPrimary, uColorDeep, pow(layerFrac, 0.72));
+          col = mix(col, uColorCyan, isCyan);
+          col += vec3(0.28, 0.14, 0.06) * uBeatFlash * (1.0 - layerFrac);
+          vColor = col;
+
+          float energyAtten = 1.0 / (1.0 + coc * coc * 2.6);
+          float verticalFade = mix(0.80, 0.10, layerFrac);
+          float sparseMask = step(0.22, fract(aRandom.x * 7.13 + layerFrac * 3.7));
+          vAlpha = verticalFade * energyAtten * sparseMask * (isCyan > 0.5 ? 1.0 : 0.52);
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vColor;
+        varying float vAlpha;
+        varying float vCoc;
+
+        void main() {
+          vec2 uv = gl_PointCoord * 2.0 - 1.0;
+          float r2 = dot(uv, uv);
+          if (r2 > 1.0) discard;
+          float r = sqrt(r2);
+
+          float sharpProfile = exp(-r2 * 3.8);
+          float bokehDisc = smoothstep(1.0, 0.66, r) * (0.62 + 0.38 * smoothstep(0.28, 0.84, r));
+          float profile = mix(sharpProfile, bokehDisc, clamp(vCoc * 0.85, 0.0, 1.0));
+
+          gl_FragColor = vec4(vColor, vAlpha * profile);
+        }
+      `
+    });
+
+    const particleSystem = new THREE.Points(particleGeom, particleMaterial);
+    worldGroup.add(particleSystem);
+
+    // -------------------------------------------------------------------------
+    // 3C. FLOATING AMBIENT SIGNAL DUST LAYER (Matches Floating Bokeh Dots Around Box)
+    // -------------------------------------------------------------------------
+    const DUST_COUNT = 1400;
+    const dustPos = new Float32Array(DUST_COUNT * 3);
+    const dustSeed = new Float32Array(DUST_COUNT * 3); // (phase, speed, isCyan)
+    for (let i = 0; i < DUST_COUNT; i++) {
+      const s1 = Math.sin(i * 19.31 + 0.7) * 43758.54;
+      const s2 = Math.sin(i * 73.17 + 2.1) * 29183.11;
+      const s3 = Math.sin(i * 41.89 + 5.3) * 17593.79;
+      const r1 = s1 - Math.floor(s1);
+      const r2 = s2 - Math.floor(s2);
+      const r3 = s3 - Math.floor(s3);
+
+      // Spread slightly beyond the bounding box (-4.2 to +4.2) like X-Particles stray emitters
+      dustPos[i * 3 + 0] = (r1 - 0.5) * BOARD_SIZE * 1.12;
+      dustPos[i * 3 + 1] = (r2 - 0.35) * 1.65;
+      dustPos[i * 3 + 2] = (r3 - 0.5) * BOARD_SIZE * 1.12;
+
+      dustSeed[i * 3 + 0] = r1 * 6.283;
+      dustSeed[i * 3 + 1] = 0.4 + r2 * 1.2;
+      dustSeed[i * 3 + 2] = r3;
+    }
+
+    const dustGeom = new THREE.BufferGeometry();
+    dustGeom.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+    dustGeom.setAttribute('aSeed', new THREE.BufferAttribute(dustSeed, 3));
+
+    const dustMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uDofStrength: particleUniforms.uDofStrength,
+        uFocalDist: particleUniforms.uFocalDist,
+        uCyanRatio: particleUniforms.uCyanRatio,
+        uPixelRatio: particleUniforms.uPixelRatio,
+        uColorPrimary: particleUniforms.uColorPrimary,
+        uColorCyan: particleUniforms.uColorCyan
+      },
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      vertexShader: `
+        attribute vec3 aSeed;
+        uniform float uTime;
+        uniform float uDofStrength;
+        uniform float uFocalDist;
+        uniform float uCyanRatio;
+        uniform float uPixelRatio;
+        uniform vec3 uColorPrimary;
+        uniform vec3 uColorCyan;
+
+        varying vec3 vColor;
+        varying float vAlpha;
+        varying float vCoc;
+
+        void main() {
+          vec3 pos = position;
+          pos.y += sin(uTime * aSeed.y + aSeed.x) * 0.14;
+
+          vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+          gl_Position = projectionMatrix * mvPosition;
+
+          float viewDist = -mvPosition.z;
+          float coc = abs(viewDist - uFocalDist) * 0.34 * uDofStrength;
+          vCoc = coc;
+
+          float isCyan = step(1.0 - uCyanRatio * 1.25, aSeed.z);
+          vColor = mix(uColorPrimary, uColorCyan, isCyan);
+
+          float baseSize = 2.6 + isCyan * 1.6;
+          gl_PointSize = (baseSize + coc * 8.0) * uPixelRatio * (12.0 / max(viewDist, 1.0));
+
+          float twinkle = 0.45 + 0.55 * sin(uTime * 2.4 * aSeed.y + aSeed.x * 3.0);
+          float energyAtten = 1.0 / (1.0 + coc * coc * 2.2);
+          vAlpha = 0.42 * twinkle * energyAtten;
+        }
+      `,
+      fragmentShader: particleMaterial.fragmentShader
+    });
+
+    const dustSystem = new THREE.Points(dustGeom, dustMaterial);
+    worldGroup.add(dustSystem);
+
+    // -------------------------------------------------------------------------
+    // 3D. 3D STEPPED CONTOUR RIBBON MESH (Marching Squares -> Glowing Ribbons)
+    // -------------------------------------------------------------------------
+    const MAX_SEGMENTS = 18000;
+    const ribbonPositions = new Float32Array(MAX_SEGMENTS * 6 * 3);
+    const ribbonNextPos = new Float32Array(MAX_SEGMENTS * 6 * 3);
+    const ribbonSideElev = new Float32Array(MAX_SEGMENTS * 6 * 2);
+
+    const ribbonGeom = new THREE.BufferGeometry();
+    ribbonGeom.setAttribute('position', new THREE.BufferAttribute(ribbonPositions, 3).setUsage(THREE.DynamicDrawUsage));
+    ribbonGeom.setAttribute('aOtherPos', new THREE.BufferAttribute(ribbonNextPos, 3).setUsage(THREE.DynamicDrawUsage));
+    ribbonGeom.setAttribute('aSideElev', new THREE.BufferAttribute(ribbonSideElev, 2).setUsage(THREE.DynamicDrawUsage));
+    ribbonGeom.setDrawRange(0, 0);
+
+    const ribbonUniforms = {
+      uAspect: { value: VIEW.w / VIEW.h },
+      uDofStrength: { value: state.dofStrength },
+      uFocalDist: { value: state.distance },
+      uCoreColor: { value: PRESETS[state.preset].coreColor.clone() },
+      uMidColor: { value: PRESETS[state.preset].midColor.clone() },
+      uHaloColor: { value: PRESETS[state.preset].haloColor.clone() },
+      uBeatFlash: { value: 0.0 }
+    };
+
+    const ribbonMaterial = new THREE.ShaderMaterial({
+      uniforms: ribbonUniforms,
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending,
+      vertexShader: `
+        attribute vec3 aOtherPos;
+        attribute vec2 aSideElev;
+        uniform float uAspect;
+        uniform float uDofStrength;
+        uniform float uFocalDist;
+
+        varying float vSide;
+        varying float vElev;
+        varying float vCoc;
+
+        void main() {
+          vSide = aSideElev.x;
+          vElev = aSideElev.y;
+
+          vec4 mvA = modelViewMatrix * vec4(position, 1.0);
+          vec4 mvB = modelViewMatrix * vec4(aOtherPos, 1.0);
+
+          vec4 clipA = projectionMatrix * mvA;
+          vec4 clipB = projectionMatrix * mvB;
+
+          vec2 ndcA = clipA.xy / max(clipA.w, 0.0001);
+          vec2 ndcB = clipB.xy / max(clipB.w, 0.0001);
+
+          vec2 dir = ndcB - ndcA;
+          dir.x *= uAspect;
+          float len = length(dir);
+          vec2 normal = (len > 0.00001) ? vec2(-dir.y, dir.x) / len : vec2(0.0, 1.0);
+          normal.x /= uAspect;
+
+          float viewDist = -mvA.z;
+          float coc = abs(viewDist - uFocalDist) * 0.28 * uDofStrength;
+          vCoc = coc;
+
+          float baseWidth = 0.0060 * (13.0 / max(viewDist, 1.0));
+          float dofSpread = baseWidth * (1.0 + coc * 0.9);
+
+          clipA.xy += normal * vSide * dofSpread * clipA.w;
+          gl_Position = clipA;
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 uCoreColor;
+        uniform vec3 uMidColor;
+        uniform vec3 uHaloColor;
+        uniform float uBeatFlash;
+
+        varying float vSide;
+        varying float vElev;
+        varying float vCoc;
+
+        void main() {
+          float d = abs(vSide);
+
+          float blurFactor = clamp(vCoc * 0.75, 0.0, 1.0);
+          float coreWidth = mix(0.20, 0.44, blurFactor);
+
+          float coreMask = smoothstep(coreWidth, 0.0, d);
+          float midMask = exp(-d * d * mix(6.4, 2.8, blurFactor));
+          float haloMask = exp(-d * d * 2.10) * (1.0 - d * 0.72);
+
+          // 三项直接相加，中心值会飙到 3~4，clamp 之后整片糊成纯白。
+          // 先把权重压到中心 ≈ 2.6，再用软膝把它折回来 —— 这样中心是暖白，
+          // 外圈还能留住橙红的层次。
+          vec3 coreCol = mix(uCoreColor, vec3(1.0), 0.30);
+          vec3 col = uHaloColor * haloMask * 0.85
+                   + uMidColor  * midMask  * (0.40 + 0.22 * vElev)
+                   + coreCol    * coreMask * (0.95 + 0.35 * vElev + uBeatFlash * 0.42);
+
+          col = col / (1.0 + col * 0.55);
+
+          float energyAtten = 1.0 / (1.0 + vCoc * vCoc * 1.15);
+          float alpha = clamp((coreMask + midMask * 0.62 + haloMask * 0.42) * energyAtten, 0.0, 1.0);
+
+          gl_FragColor = vec4(col, alpha);
+        }
+      `
+    });
+
+    const contourMesh = new THREE.Mesh(ribbonGeom, ribbonMaterial);
+    worldGroup.add(contourMesh);
+
+    // -------------------------------------------------------------------------
+    // 3E. FULLSCREEN OPTICAL POST-PROCESSING PASS (Bokeh Blur + Bloom + Chroma)
+    // -------------------------------------------------------------------------
+    let renderTarget = new THREE.WebGLRenderTarget(
+      VIEW.w * pixelRatio,
+      VIEW.h * pixelRatio,
+      {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBAFormat
+      }
+    );
+
+    const postScene = new THREE.Scene();
+    const postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const postUniforms = {
+      tDiffuse: { value: renderTarget.texture },
+      uAspect: { value: VIEW.w / VIEW.h },
+      uDofStrength: { value: state.dofStrength },
+      uBloomStrength: { value: state.bloomStrength },
+      uBgColor: { value: PRESETS[state.preset].bgVec.clone() },
+      uTransparent: { value: TRANSPARENT ? 1.0 : 0.0 },
+      uTime: { value: 0 }
+    };
+
+    const postMaterial = new THREE.ShaderMaterial({
+      uniforms: postUniforms,
+      depthWrite: false,
+      depthTest: false,
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = vec4(position.xy, 0.0, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D tDiffuse;
+        uniform float uAspect;
+        uniform float uDofStrength;
+        uniform float uBloomStrength;
+        uniform vec3 uBgColor;
+        uniform float uTime;
+        uniform float uTransparent;
+        varying vec2 vUv;
+
+        void main() {
+          // Optical Tilt-Shift Depth of Field (blurs near foreground bottom & far background top of the plate)
+          float distFromCenterY = abs(vUv.y - 0.50);
+          float radialEdge = length((vUv - 0.5) * vec2(1.0, 1.15));
+          float tiltBlur = clamp(pow(distFromCenterY * 1.82, 1.65) + pow(max(0.0, radialEdge - 0.38), 1.5) * 0.45, 0.0, 1.2) * uDofStrength;
+
+          // Subtle Radial Chromatic Aberration (matches C4D lens dispersion at frame edges)
+          vec2 caOffset = (vUv - 0.5) * 0.0032 * (0.35 + tiltBlur);
+          vec3 centerCol;
+          centerCol.r = texture2D(tDiffuse, vUv + caOffset).r;
+          centerCol.g = texture2D(tDiffuse, vUv).g;
+          centerCol.b = texture2D(tDiffuse, vUv - caOffset).b;
+
+          // 12-Tap Vogel Golden-Angle Disk Bokeh + Multi-Radius Bloom
+          vec3 bokehAcc = centerCol * 1.4;
+          float totalW = 1.4;
+          vec3 bloomAcc = vec3(0.0);
+
+          for (int i = 0; i < 12; i++) {
+            float fi = float(i);
+            float ang = fi * 2.39996323;
+            float rNorm = sqrt((fi + 0.5) / 12.0);
+            vec2 dir = vec2(cos(ang), sin(ang) * uAspect);
+
+            // Bokeh sample
+            vec2 bokehUV = clamp(vUv + dir * rNorm * tiltBlur * 0.011, 0.001, 0.999);
+            vec3 sCol = texture2D(tDiffuse, bokehUV).rgb;
+            // Highlight bokeh boost (bright points bloom into richer bokeh discs)
+            float luma = dot(sCol, vec3(0.299, 0.587, 0.114));
+            float w = 1.0 + max(0.0, luma - 0.38) * 1.5;
+            bokehAcc += sCol * w;
+            totalW += w;
+
+            // Wide Bloom halo sample
+            vec2 bloomUV = clamp(vUv + dir * (0.006 + rNorm * 0.022), 0.001, 0.999);
+            vec3 bCol = texture2D(tDiffuse, bloomUV).rgb;
+            vec3 brightPass = max(vec3(0.0), bCol - uBgColor - vec3(0.06));
+            bloomAcc += brightPass;
+          }
+
+          vec3 col = bokehAcc / totalW;
+          col += (bloomAcc / 12.0) * uBloomStrength * 0.62;
+
+          // Filmic Matte Vignette & Subtle Analog Sensor Grain (matching video's #171114 darks)
+          float vig = smoothstep(1.18, 0.32, radialEdge);
+
+          float grain = (fract(sin(dot(vUv * 512.0 + uTime, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * 0.012;
+
+          if (uTransparent > 0.5) {
+            // 透明模式：不加底色、不加颗粒（颗粒在半透明区会变成一层脏噪点）。
+            // 只按"到中心的权重"压暗，alpha 取亮度 —— 亮的点/线留下，暗部透出去。
+            col *= 0.80 + 0.20 * vig;
+            // alpha 用 smoothstep 而不是线性放大：暗部直接归零。
+            // 线性版在浅色主题下会留一层灰粉色薄纱，边缘还看得出矩形。
+            float lum = max(max(col.r, col.g), col.b);
+            float a = smoothstep(0.07, 0.58, lum);
+            // 画布四边各留一条窄淡出带：地形被容器裁到时不出现直线切口
+            float edgeFade =
+              smoothstep(0.0, 0.10, vUv.x) * smoothstep(1.0, 0.90, vUv.x) *
+              smoothstep(0.0, 0.10, vUv.y) * smoothstep(1.0, 0.90, vUv.y);
+            a *= edgeFade;
+            gl_FragColor = vec4(col, a);
+          } else {
+            col = mix(uBgColor * 0.72, col, 0.78 + 0.22 * vig);
+            col += grain;
+            gl_FragColor = vec4(col, 1.0);
+          }
+        }
+      `
+    });
+
+    const postQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), postMaterial);
+    postScene.add(postQuad);
+
+    // =========================================================================
+    // 4. HEIGHTFIELD EVALUATION & MARCHING SQUARES CONTOUR EXTRACTION
+    // =========================================================================
+    const MS_RES = 62;
+    const heightGrid = new Float32Array(MS_RES * MS_RES);
+
+    function sampleTerrainHeight(normX, normZ, phaseZ) {
+      const sx = normX * 1.02;
+      const sz = normZ * 1.02;
+
+      let n = simplex.noise3D(sx, sz, phaseZ) * 0.74;
+      n += simplex.noise3D(sx * 1.85 + 4.2, sz * 1.85 - 3.1, phaseZ * 1.35) * 0.20;
+      n += simplex.noise3D(sx * 3.4 - 9.7, sz * 3.4 + 6.4, phaseZ * 1.7) * 0.06;
+
+      const edgeDist = Math.max(Math.abs(normX), Math.abs(normZ));
+      const vignette = 1.0 - Math.pow(Math.max(0.0, (edgeDist - 0.72) / 0.28), 2.0) * 0.45;
+      n = (n + 0.12) * vignette;
+
+      if (state.mouseRipple && state.isHoveringPlane) {
+        const wx = normX * HALF_SIZE;
+        const wz = normZ * HALF_SIZE;
+        const dx = wx - state.hoverWorldPos.x;
+        const dz = wz - state.hoverWorldPos.z;
+        const distSq = dx * dx + dz * dz;
+        if (distSq < 3.2) {
+          const dist = Math.sqrt(distSq);
+          const freq = state.rippleFreq;
+          const wave = Math.cos(dist * freq - performance.now() * (0.0021 * freq)) * Math.exp(-distSq * 0.85);
+          n += wave * 0.36;
+        }
+      }
+
+      return n;
+    }
+
+    function updateHeightfieldAndVoxels(phaseZ) {
+      for (let iz = 0; iz < MS_RES; iz++) {
+        const normZ = (iz / (MS_RES - 1)) * 2.0 - 1.0;
+        for (let ix = 0; ix < MS_RES; ix++) {
+          const normX = (ix / (MS_RES - 1)) * 2.0 - 1.0;
+          heightGrid[iz * MS_RES + ix] = sampleTerrainHeight(normX, normZ, phaseZ);
+        }
+      }
+
+      const posAttr = particleGeom.attributes.position;
+      const posArr = posAttr.array;
+      const amp = state.elevationAmp;
+      let idx = 0;
+
+      for (let ix = 0; ix < GRID_RES_P; ix++) {
+        const normX = (ix / (GRID_RES_P - 1)) * 2.0 - 1.0;
+        const gx = Math.min(MS_RES - 1, Math.floor(((normX + 1.0) * 0.5) * (MS_RES - 1)));
+        for (let iz = 0; iz < GRID_RES_P; iz++) {
+          const normZ = (iz / (GRID_RES_P - 1)) * 2.0 - 1.0;
+          const gz = Math.min(MS_RES - 1, Math.floor(((normZ + 1.0) * 0.5) * (MS_RES - 1)));
+          const rawH = heightGrid[gz * MS_RES + gx];
+          const surfaceY = Math.max(-0.18, rawH * amp * 0.85);
+          const columnDepth = 0.34 + Math.max(0.0, surfaceY) * 0.30;
+
+          for (let ly = 0; ly < LAYERS_P; ly++) {
+            const layerFrac = ly / (LAYERS_P - 1);
+            posArr[idx * 3 + 1] = surfaceY - layerFrac * columnDepth;
+            idx++;
+          }
+        }
+      }
+      posAttr.needsUpdate = true;
+    }
+
+    function extractMarchingSquaresRibbons() {
+      const levels = state.contourLevels;
+      const amp = state.elevationAmp;
+      const minThreshold = 0.05;
+      const maxThreshold = 0.66;
+
+      let segCount = 0;
+      const posArr = ribbonGeom.attributes.position.array;
+      const otherArr = ribbonGeom.attributes.aOtherPos.array;
+      const sideElevArr = ribbonGeom.attributes.aSideElev.array;
+
+      const scaleXY = (BOARD_SIZE * 0.95) / (MS_RES - 1);
+      const offsetXY = -(BOARD_SIZE * 0.95) * 0.5;
+
+      function pushSegment(x1, z1, x2, z2, yWorld, elevNorm) {
+        if (segCount >= MAX_SEGMENTS) return;
+        const baseV = segCount * 6;
+
+        const ptsX = [x1, x1, x2, x1, x2, x2];
+        const ptsZ = [z1, z1, z2, z1, z2, z2];
+        const othX = [x2, x2, x1, x2, x1, x1];
+        const othZ = [z2, z2, z1, z2, z1, z1];
+        const sides = [-1, 1, 1, -1, 1, -1];
+
+        for (let k = 0; k < 6; k++) {
+          const vi = (baseV + k) * 3;
+          const si = (baseV + k) * 2;
+          posArr[vi + 0] = ptsX[k];
+          posArr[vi + 1] = yWorld;
+          posArr[vi + 2] = ptsZ[k];
+
+          otherArr[vi + 0] = othX[k];
+          otherArr[vi + 1] = yWorld;
+          otherArr[vi + 2] = othZ[k];
+
+          sideElevArr[si + 0] = sides[k];
+          sideElevArr[si + 1] = elevNorm;
+        }
+        segCount++;
+      }
+
+      for (let lv = 0; lv < levels; lv++) {
+        const elevNorm = levels > 1 ? lv / (levels - 1) : 0.5;
+        const iso = minThreshold + elevNorm * (maxThreshold - minThreshold);
+        const yWorld = 0.03 + elevNorm * 0.92 * amp;
+
+        for (let iz = 0; iz < MS_RES - 1; iz++) {
+          const z0 = offsetXY + iz * scaleXY;
+          const z1 = z0 + scaleXY;
+          const row0 = iz * MS_RES;
+          const row1 = (iz + 1) * MS_RES;
+
+          for (let ix = 0; ix < MS_RES - 1; ix++) {
+            const v0 = heightGrid[row0 + ix];
+            const v1 = heightGrid[row0 + ix + 1];
+            const v2 = heightGrid[row1 + ix + 1];
+            const v3 = heightGrid[row1 + ix];
+
+            let mask = 0;
+            if (v0 >= iso) mask |= 8;
+            if (v1 >= iso) mask |= 4;
+            if (v2 >= iso) mask |= 2;
+            if (v3 >= iso) mask |= 1;
+            if (mask === 0 || mask === 15) continue;
+
+            const x0 = offsetXY + ix * scaleXY;
+            const x1 = x0 + scaleXY;
+
+            const tTop = (iso - v0) / ((v1 - v0) || 1e-6);
+            const eTopX = x0 + tTop * scaleXY;
+            const eTopZ = z0;
+
+            const tRight = (iso - v1) / ((v2 - v1) || 1e-6);
+            const eRightX = x1;
+            const eRightZ = z0 + tRight * scaleXY;
+
+            const tBot = (iso - v3) / ((v2 - v3) || 1e-6);
+            const eBotX = x0 + tBot * scaleXY;
+            const eBotZ = z1;
+
+            const tLeft = (iso - v0) / ((v3 - v0) || 1e-6);
+            const eLeftX = x0;
+            const eLeftZ = z0 + tLeft * scaleXY;
+
+            switch (mask) {
+              case 1:
+              case 14:
+                pushSegment(eLeftX, eLeftZ, eBotX, eBotZ, yWorld, elevNorm);
+                break;
+              case 2:
+              case 13:
+                pushSegment(eBotX, eBotZ, eRightX, eRightZ, yWorld, elevNorm);
+                break;
+              case 3:
+              case 12:
+                pushSegment(eLeftX, eLeftZ, eRightX, eRightZ, yWorld, elevNorm);
+                break;
+              case 4:
+              case 11:
+                pushSegment(eTopX, eTopZ, eRightX, eRightZ, yWorld, elevNorm);
+                break;
+              case 5:
+                pushSegment(eLeftX, eLeftZ, eTopX, eTopZ, yWorld, elevNorm);
+                pushSegment(eBotX, eBotZ, eRightX, eRightZ, yWorld, elevNorm);
+                break;
+              case 6:
+              case 9:
+                pushSegment(eTopX, eTopZ, eBotX, eBotZ, yWorld, elevNorm);
+                break;
+              case 7:
+              case 8:
+                pushSegment(eLeftX, eLeftZ, eTopX, eTopZ, yWorld, elevNorm);
+                break;
+              case 10:
+                pushSegment(eLeftX, eLeftZ, eBotX, eBotZ, yWorld, elevNorm);
+                pushSegment(eTopX, eTopZ, eRightX, eRightZ, yWorld, elevNorm);
+                break;
+            }
+          }
+        }
+      }
+
+      ribbonGeom.setDrawRange(0, segCount * 6);
+      ribbonGeom.attributes.position.needsUpdate = true;
+      ribbonGeom.attributes.aOtherPos.needsUpdate = true;
+      ribbonGeom.attributes.aSideElev.needsUpdate = true;
+      return segCount;
+    }
+
+    // =========================================================================
+    // 5. WEB AUDIO SYNTHESIZER PULSE ENGINE
+    // =========================================================================
+    let audioCtx = null;
+    let nextNoteTime = 0;
+    let beatStep = 0;
+
+    function triggerBeatJump() {
+      state.phaseJumpOffset += 2.35 + Math.random() * 1.8;
+      state.beatFlash = 1.0;
+    }
+
+    function playSynthPulse(time, stepIndex) {
+      if (!audioCtx || !state.audioEnabled) return;
+      const osc = audioCtx.createOscillator();
+      const sub = audioCtx.createOscillator();
+      const filter = audioCtx.createBiquadFilter();
+      const gain = audioCtx.createGain();
+
+      const bassNotes = [55.0, 55.0, 65.41, 55.0, 73.42, 65.41, 49.0, 55.0];
+      const freq = bassNotes[stepIndex % bassNotes.length];
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(freq, time);
+
+      sub.type = 'sine';
+      sub.frequency.setValueAtTime(freq * 0.5, time);
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(160, time);
+      filter.frequency.exponentialRampToValueAtTime(920, time + 0.04);
+      filter.frequency.exponentialRampToValueAtTime(140, time + 0.36);
+
+      gain.gain.setValueAtTime(0.001, time);
+      gain.gain.linearRampToValueAtTime(0.16, time + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + 0.42);
+
+      osc.connect(filter);
+      sub.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(time);
+      sub.start(time);
+      osc.stop(time + 0.44);
+      sub.stop(time + 0.44);
+    }
+
+    // =========================================================================
+    // 6. INTERACTION HANDLERS (Orbit Drag, Raycast Ripple, UI Controls)
+    // =========================================================================
+    let isDragging = false;
+    let prevPointer = { x: 0, y: 0 };
+    const raycaster = new THREE.Raycaster();
+    const groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+
+    container.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      prevPointer.x = e.clientX;
+      prevPointer.y = e.clientY;
+    });
+
+    window.addEventListener('pointerup', () => {
+      isDragging = false;
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      const rect = renderer.domElement.getBoundingClientRect();
+      state.pointerNDC.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      state.pointerNDC.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      if (isDragging) {
+        const dx = e.clientX - prevPointer.x;
+        const dy = e.clientY - prevPointer.y;
+        state.azimuth -= dx * 0.0065;
+        state.pitch = Math.max(0.28, Math.min(1.25, state.pitch + dy * 0.005));
+        prevPointer.x = e.clientX;
+        prevPointer.y = e.clientY;
+      }
+
+      raycaster.setFromCamera(state.pointerNDC, camera);
+      const intersectPt = new THREE.Vector3();
+      const hit = raycaster.ray.intersectPlane(groundPlane, intersectPt);
+      if (hit) {
+        const invMat = new THREE.Matrix4().copy(worldGroup.matrixWorld).invert();
+        intersectPt.applyMatrix4(invMat);
+        if (Math.abs(intersectPt.x) <= HALF_SIZE && Math.abs(intersectPt.z) <= HALF_SIZE) {
+          state.hoverWorldPos.copy(intersectPt);
+          state.isHoveringPlane = true;
+          const elTel = document.getElementById('telemetry-cursor');
+          if (elTel) {
+            elTel.textContent = `X:${intersectPt.x.toFixed(1)} Z:${intersectPt.z.toFixed(1)}`;
+          }
+        } else {
+          state.isHoveringPlane = false;
+          const elTel = document.getElementById('telemetry-cursor');
+          if (elTel) elTel.textContent = 'STANDBY';
+        }
+      }
+    });
+
+    container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      state.distance = Math.max(7.5, Math.min(20.0, state.distance + e.deltaY * 0.006));
+      particleUniforms.uFocalDist.value = state.distance;
+      ribbonUniforms.uFocalDist.value = state.distance;
+    }, { passive: false });
+
+    function bindSlider(id, valId, key, formatter, onUpdate) {
+      const el = document.getElementById(id);
+      const valEl = document.getElementById(valId);
+      if (!el || !valEl) return;
+      el.addEventListener('input', () => {
+        const num = parseFloat(el.value);
+        state[key] = num;
+        valEl.textContent = formatter(num);
+        if (onUpdate) onUpdate(num);
+        saveSettings();
+      });
+    }
+
+    bindSlider('slider-levels', 'val-levels', 'contourLevels', (v) => `${Math.round(v)} 层`);
+    bindSlider('slider-amp', 'val-amp', 'elevationAmp', (v) => `${v.toFixed(2)}x`);
+    bindSlider('slider-speed', 'val-speed', 'noiseSpeed', (v) => v.toFixed(2));
+    bindSlider('slider-orbit', 'val-orbit', 'orbitSpeed', (v) => `${v.toFixed(2)} rad/s`);
+    bindSlider('slider-dof', 'val-dof', 'dofStrength', (v) => v.toFixed(2), (v) => {
+      particleUniforms.uDofStrength.value = v;
+      ribbonUniforms.uDofStrength.value = v;
+      postUniforms.uDofStrength.value = v;
+    });
+    bindSlider('slider-bloom', 'val-bloom', 'bloomStrength', (v) => v.toFixed(2), (v) => {
+      postUniforms.uBloomStrength.value = v;
+    });
+    bindSlider('slider-cyan', 'val-cyan', 'cyanRatio', (v) => `${Math.round(v)}%`, (v) => {
+      state.cyanRatio = v / 100;
+      particleUniforms.uCyanRatio.value = state.cyanRatio;
+    });
+    bindSlider('slider-ripple-freq', 'val-ripple-freq', 'rippleFreq', (v) => `${v.toFixed(1)} Hz`, (v) => setRippleFreq(v));
+
+    function setAutoRotate(enabled) {
+      state.autoRotate = enabled;
+      const chk = document.getElementById('chk-autorotate');
+      const lbl = document.getElementById('rotate-label');
+      const dot = document.getElementById('rotate-dot');
+      const btn = document.getElementById('btn-auto-rotate');
+      if (chk) chk.checked = enabled;
+      if (lbl) lbl.textContent = enabled ? '自动旋转: 开' : '自动旋转: 关';
+      if (dot) {
+        dot.className = enabled
+          ? 'w-1.5 h-1.5 rounded-full bg-emerald-400'
+          : 'w-1.5 h-1.5 rounded-full bg-stone-500';
+      }
+      if (btn) {
+        btn.className = enabled
+          ? 'hud-panel hover:bg-amber-500/20 active:scale-95 transition-all px-3 py-2 rounded-lg font-mono-hud text-xs text-amber-200 border border-amber-400/40 flex items-center gap-1.5'
+          : 'hud-panel hover:bg-white/10 active:scale-95 transition-all px-3 py-2 rounded-lg font-mono-hud text-xs text-stone-400 border border-white/10 flex items-center gap-1.5';
+      }
+    }
+
+    document.getElementById('btn-auto-rotate').addEventListener('click', () => {
+      setAutoRotate(!state.autoRotate);
+      saveSettings();
+    });
+    document.getElementById('chk-autorotate').addEventListener('change', (e) => {
+      setAutoRotate(e.target.checked);
+      saveSettings();
+    });
+
+    document.getElementById('chk-postfx').addEventListener('change', (e) => {
+      state.postFxEnabled = e.target.checked;
+      saveSettings();
+    });
+    document.getElementById('chk-autocut').addEventListener('change', (e) => {
+      state.autoBeatCut = e.target.checked;
+      saveSettings();
+    });
+    const chkFrameEl = document.getElementById('chk-frame');
+    if (chkFrameEl) {
+      chkFrameEl.addEventListener('change', (e) => {
+        state.showFrame = e.target.checked;
+        frameGroup.visible = state.showFrame;
+        syncLayerButton('btn-layer-frame', state.showFrame);
+        syncUiLayers();
+        saveSettings();
+      });
+    }
+
+    function setRippleFreq(val) {
+      state.rippleFreq = val;
+      const sl = document.getElementById('slider-ripple-freq');
+      const lb = document.getElementById('val-ripple-freq');
+      if (sl) sl.value = val;
+      if (lb) lb.textContent = `${val.toFixed(1)} Hz`;
+      document.querySelectorAll('.ripple-preset-btn').forEach((btn) => {
+        const pv = parseFloat(btn.getAttribute('data-ripple-preset'));
+        btn.classList.toggle('is-on', Math.abs(pv - val) < 0.15);
+      });
+    }
+
+    document.querySelectorAll('.ripple-preset-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        setRippleFreq(parseFloat(btn.getAttribute('data-ripple-preset')));
+        saveSettings();
+      });
+    });
+
+    document.getElementById('chk-ripple').addEventListener('change', (e) => {
+      state.mouseRipple = e.target.checked;
+      const wrap = document.getElementById('ripple-freq-wrap');
+      if (wrap) {
+        wrap.style.opacity = state.mouseRipple ? '1' : '0.4';
+        wrap.classList.toggle('pointer-events-none', !state.mouseRipple);
+      }
+      saveSettings();
+    });
+
+    // 4-Layer Visual Breakdown Inspector Buttons
+    function syncLayerButton(btnId, isActive) {
+      const btn = document.getElementById(btnId);
+      if (!btn) return;
+      const badge = btn.querySelector('span:last-child');
+      if (badge) badge.textContent = isActive ? 'ON' : 'OFF';
+      btn.style.opacity = isActive ? '1' : '0.42';
+    }
+
+    document.getElementById('btn-layer-contours').addEventListener('click', () => {
+      state.showContours = !state.showContours;
+      contourMesh.visible = state.showContours;
+      syncLayerButton('btn-layer-contours', state.showContours);
+      saveSettings();
+    });
+    document.getElementById('btn-layer-voxels').addEventListener('click', () => {
+      state.showVoxels = !state.showVoxels;
+      particleSystem.visible = state.showVoxels;
+      syncLayerButton('btn-layer-voxels', state.showVoxels);
+      saveSettings();
+    });
+    document.getElementById('btn-layer-dust').addEventListener('click', () => {
+      state.showDust = !state.showDust;
+      dustSystem.visible = state.showDust;
+      syncLayerButton('btn-layer-dust', state.showDust);
+      saveSettings();
+    });
+    document.getElementById('btn-layer-frame').addEventListener('click', () => {
+      state.showFrame = !state.showFrame;
+      frameGroup.visible = state.showFrame;
+      if (chkFrameEl) chkFrameEl.checked = state.showFrame;
+      syncLayerButton('btn-layer-frame', state.showFrame);
+      saveSettings();
+    });
+
+    // Preset Switcher Buttons
+    function applyPreset(presetKey) {
+      const p = PRESETS[presetKey] || PRESETS.original;
+      state.preset = presetKey;
+      // 只改舞台底色，不碰 body —— 内联进站点时不能把人家整页刷成深色
+      if (stageEl && !TRANSPARENT) stageEl.style.backgroundColor = p.bgHex;
+      renderer.setClearColor(new THREE.Color(p.bgHex), TRANSPARENT ? 0.0 : 1.0);
+      postUniforms.uBgColor.value.copy(p.bgVec);
+
+      ribbonUniforms.uCoreColor.value.copy(p.coreColor);
+      ribbonUniforms.uMidColor.value.copy(p.midColor);
+      ribbonUniforms.uHaloColor.value.copy(p.haloColor);
+
+      particleUniforms.uColorPrimary.value.copy(p.voxelPrimary);
+      particleUniforms.uColorDeep.value.copy(p.voxelDeep);
+      particleUniforms.uColorCyan.value.copy(p.voxelCyan);
+
+      createBoundingFrame();
+      refreshPeakMarkerStyles();
+
+      document.querySelectorAll('.preset-btn').forEach((btn) => {
+        btn.classList.toggle('is-on', btn.getAttribute('data-preset') === presetKey);
+      });
+    }
+
+    document.querySelectorAll('.preset-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        applyPreset(btn.getAttribute('data-preset'));
+        saveSettings();
+      });
+    });
+
+    // Personal Website Hero Preview Mode Toggle
+    function setSitePreviewMode(enabled) {
+      state.sitePreviewMode = enabled;
+      const siteLayer = document.getElementById('website-preview-layer');
+      const heroCard = document.getElementById('hero-card-overlay');
+      const drawer = document.getElementById('control-drawer');
+      const btnSite = document.getElementById('btn-site-preview');
+
+      if (enabled) {
+        siteLayer.classList.remove('hidden');
+        heroCard.classList.add('hidden');
+        drawer.classList.add('hidden');
+        btnSite.innerHTML = '<span>个人网站实景: 开</span>';
+        btnSite.classList.add('bg-cyan-500/25', 'text-white');
+      } else {
+        siteLayer.classList.add('hidden');
+        heroCard.classList.remove('hidden');
+        drawer.classList.remove('hidden');
+        btnSite.innerHTML = '<span>个人网站实景: 关</span>';
+        btnSite.classList.remove('bg-cyan-500/25', 'text-white');
+      }
+    }
+
+    document.getElementById('btn-site-preview').addEventListener('click', () => {
+      setSitePreviewMode(!state.sitePreviewMode);
+    });
+    document.getElementById('btn-site-cta-code').addEventListener('click', () => {
+      document.getElementById('embed-modal').classList.remove('hidden');
+    });
+    document.getElementById('btn-site-cta-cut').addEventListener('click', () => {
+      triggerBeatJump();
+    });
+
+    // Beat Jump Button
+    document.getElementById('btn-beat-jump').addEventListener('click', () => {
+      triggerBeatJump();
+    });
+
+    // Audio Toggle Button
+    document.getElementById('btn-audio-toggle').addEventListener('click', () => {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+          nextNoteTime = audioCtx.currentTime + 0.05;
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      state.audioEnabled = !state.audioEnabled;
+      const lbl = document.getElementById('audio-label');
+      const btn = document.getElementById('btn-audio-toggle');
+      if (state.audioEnabled) {
+        lbl.textContent = '节拍音轨: 开';
+        btn.classList.add('border', 'border-cyan-400/50', 'text-cyan-200');
+      } else {
+        lbl.textContent = '节拍音轨: 关';
+        btn.classList.remove('border', 'border-cyan-400/50', 'text-cyan-200');
+      }
+    });
+
+    // Pure Mode Toggle
+    function setPureMode(enabled) {
+      state.pureMode = enabled;
+      const topBar = document.getElementById('top-hud-bar');
+      const heroCard = document.getElementById('hero-card-overlay');
+      const drawer = document.getElementById('control-drawer');
+      const siteLayer = document.getElementById('website-preview-layer');
+      const exitBtn = document.getElementById('btn-exit-pure');
+
+      if (enabled) {
+        topBar.classList.add('opacity-0', 'pointer-events-none');
+        heroCard.classList.add('opacity-0', 'pointer-events-none');
+        drawer.classList.add('opacity-0', 'pointer-events-none');
+        siteLayer.classList.add('opacity-0', 'pointer-events-none');
+        exitBtn.classList.remove('hidden');
+      } else {
+        topBar.classList.remove('opacity-0', 'pointer-events-none');
+        heroCard.classList.remove('opacity-0', 'pointer-events-none');
+        drawer.classList.remove('opacity-0', 'pointer-events-none');
+        siteLayer.classList.remove('opacity-0', 'pointer-events-none');
+        exitBtn.classList.add('hidden');
+      }
+    }
+
+    document.getElementById('btn-pure-mode').addEventListener('click', () => setPureMode(true));
+    document.getElementById('btn-exit-pure').addEventListener('click', () => setPureMode(false));
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && state.pureMode) setPureMode(false);
+    });
+    if (state.pureMode) setPureMode(true);
+
+    // Collapse Controls Drawer & Hero Card
+    let controlsCollapsed = false;
+    document.getElementById('btn-collapse-controls').addEventListener('click', (e) => {
+      controlsCollapsed = !controlsCollapsed;
+      document.getElementById('control-drawer').classList.toggle('is-collapsed', controlsCollapsed);
+      e.target.textContent = controlsCollapsed ? '展开' : '折叠';
+    });
+
+    let heroCollapsed = false;
+    document.getElementById('btn-toggle-hero-text').addEventListener('click', (e) => {
+      heroCollapsed = !heroCollapsed;
+      const body = document.getElementById('hero-card-body');
+      body.classList.toggle('hidden', heroCollapsed);
+      e.target.textContent = heroCollapsed ? '展开卡片' : '收起卡片';
+    });
+
+    // Reset Default Parameters
+    document.getElementById('btn-reset-params').addEventListener('click', () => {
+      // 重置回本文件调好的那套参数，而不是原 demo 的初始值，
+      // 否则一点重置画面就跳到过曝的那一版
+      state.contourLevels = 7;
+      state.elevationAmp = 0.82;
+      state.noiseSpeed = 0.34;
+      setAutoRotate(true);
+      state.orbitSpeed = 0.36;
+      state.dofStrength = 0.90;
+      state.bloomStrength = 0.85;
+      state.cyanRatio = 0.045;
+      state.rippleFreq = 3.8;
+      state.pitch = 0.46;
+      state.distance = 14.2;
+      state.postFxEnabled = true;
+      state.showContours = true;
+      state.showVoxels = true;
+      state.showDust = true;
+      state.showFrame = true;
+
+      contourMesh.visible = true;
+      particleSystem.visible = true;
+      dustSystem.visible = true;
+      frameGroup.visible = true;
+      syncLayerButton('btn-layer-contours', true);
+      syncLayerButton('btn-layer-voxels', true);
+      syncLayerButton('btn-layer-dust', true);
+      syncLayerButton('btn-layer-frame', true);
+
+      state.showPeakTags = true;
+      state.autoBeatCut = true;
+      state.mouseRipple = true;
+      state.peakLabels = [...DEFAULT_PEAK_LABELS];
+      state.peakFontSize = 12;
+      state.preset = 'original';
+      particleUniforms.uFocalDist.value = 14.2;
+      ribbonUniforms.uFocalDist.value = 14.2;
+      particleUniforms.uDofStrength.value = 0.90;
+      ribbonUniforms.uDofStrength.value = 0.90;
+      postUniforms.uDofStrength.value = 0.90;
+      postUniforms.uBloomStrength.value = 0.85;
+      particleUniforms.uCyanRatio.value = 0.045;
+      applyPreset('original');
+      reconcileActiveMarkersWithLabels();
+      renderPeakTagsList();
+      syncAllControlsFromState();
+      saveSettings();
+    });
+
+    // Embed Modal, Code Tabs & Copy Handler
+    const embedModal = document.getElementById('embed-modal');
+    document.getElementById('btn-embed-modal').addEventListener('click', () => {
+      embedModal.classList.remove('hidden');
+    });
+    document.getElementById('btn-close-modal').addEventListener('click', () => {
+      embedModal.classList.add('hidden');
+    });
+    embedModal.addEventListener('click', (e) => {
+      if (e.target === embedModal) embedModal.classList.add('hidden');
+    });
+
+    document.querySelectorAll('.codetab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-codetab');
+        const block = document.getElementById('embed-code-block');
+        if (block && CODE_SNIPPETS[key]) {
+          block.textContent = CODE_SNIPPETS[key];
+        }
+        document.querySelectorAll('.codetab-btn').forEach((b) => {
+          const active = b.getAttribute('data-codetab') === key;
+          b.className = active
+            ? 'codetab-btn px-2.5 py-1 rounded font-mono-hud text-[11px] bg-rose-500/30 text-amber-200 border border-rose-500/50'
+            : 'codetab-btn px-2.5 py-1 rounded font-mono-hud text-[11px] bg-white/5 text-stone-300 hover:bg-white/10 border border-transparent';
+        });
+      });
+    });
+
+    document.getElementById('btn-copy-code').addEventListener('click', (e) => {
+      const codeText = document.getElementById('embed-code-block').textContent;
+      const btn = e.currentTarget;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(codeText);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = codeText;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        btn.textContent = '✓ 已复制代码';
+        setTimeout(() => { btn.textContent = '复制嵌入代码'; }, 1800);
+      } catch (err) {
+        btn.textContent = '请手动全选复制';
+      }
+    });
+
+    // Responsive Resize —— 用 ResizeObserver，容器被 CSS 改变尺寸时也能跟上
+    let resizeRaf = 0;
+    function applySize() {
+      resizeRaf = 0;
+      measureView();
+      const pr = Math.min(window.devicePixelRatio || 1, 2);
+      camera.aspect = VIEW.w / VIEW.h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(VIEW.w, VIEW.h);
+      renderTarget.setSize(VIEW.w * pr, VIEW.h * pr);
+      ribbonUniforms.uAspect.value = VIEW.w / VIEW.h;
+      postUniforms.uAspect.value = VIEW.w / VIEW.h;
+      particleUniforms.uPixelRatio.value = pr;
+
+      // 垂直 FOV 固定 36°，容器一窄，水平视野就跟着塌。
+      // 方片在 X 方向占 ±3.7，留 8% 余量就是要看得见半宽 4.0；
+      // 由 tan(半水平角) = tan18° × aspect 反推相机距离，
+      // 竖屏才会整体退后而不是把方片两侧裁掉。
+      const aspect = VIEW.w / VIEW.h;
+      const tanHalfV = Math.tan(18 * Math.PI / 180);
+      const neededDist = 4.0 / Math.max(0.02, tanHalfV * aspect);
+      fitFactor = Math.min(2.2, Math.max(1, neededDist / Math.max(6, state.distance)));
+    }
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(() => {
+        if (!resizeRaf) resizeRaf = requestAnimationFrame(applySize);
+      }).observe(stageEl);
+    } else {
+      window.addEventListener('resize', applySize);
+    }
+
+    // =========================================================================
+    // 6B. DYNAMIC TERRAIN PEAK MARKERS (Triangular Reticle + Pixel Chinese Tags)
+    // =========================================================================
+    const peakLayerEl = document.getElementById('peak-markers-layer');
+    // 标签池：节点复用，但"哪个标签落到哪个峰"仍然是随机的。
+    // 原版是每帧销毁重建 DOM，地形一动同名标签被反复开除又重招，透明度被拽成锯齿
+    // （表现为 6 个标签只看得见 2 个）。这里只把节点池化，抽取规则保持原样：
+    // 每次有新峰上台时，从未被占用的标签里随机挑一个，同一时间绝不重复。
+    const peakPool = [];
+    const projVec = new THREE.Vector3();
+
+    function ensurePeakPool() {
+      const want = state.peakLabels;
+      // 池子大小 = 同时最多能显示几个 = 标签总数
+      while (peakPool.length > want.length) {
+        const m = peakPool.pop();
+        if (m.dom.el.parentNode) m.dom.el.parentNode.removeChild(m.dom.el);
+      }
+      while (peakPool.length < want.length) {
+        peakPool.push({
+          label: null,
+          dom: createPeakMarkerDOM(''),
+          wx: 0, wz: 0, rawH: 0,
+            opacity: 0,
+            targetOpacity: 0,
+            lostT: 1.0,
+            hideFade: 0,
+            locked: false,
+            phase: Math.random() * Math.PI * 2
+          });
+      }
+      // 标签列表被改动后，池子里正在用的名字可能已经不存在了，先收回重抽
+      const valid = new Set(want);
+      for (const m of peakPool) {
+        if (m.label !== null && !valid.has(m.label)) {
+          m.label = null;
+          m.dom.box.textContent = '';
+          m.opacity = 0;
+          m.targetOpacity = 0;
+          m.lostT = 1.0;
+          m.locked = false;
+        }
+      }
+    }
+
+    // 从"当前没被占用"的标签里随机抽一个
+    function pickFreeLabel() {
+      const used = new Set();
+      for (const m of peakPool) {
+        // 只看"名字有没有被占"，不看透明度：刚抽到名字的节点这一帧 opacity 还是 0，
+        // 用透明度筛会让同一个名字在同一帧被抽两次
+        if (m.label !== null) used.add(m.label);
+      }
+      const free = state.peakLabels.filter((lbl) => !used.has(lbl));
+      if (free.length === 0) return null;
+      return free[Math.floor(Math.random() * free.length)];
+    }
+
+    function getPeakPalette() {
+      if (state.preset === 'quant') {
+        return {
+          text: '#d8fff8',
+          border: 'rgba(0, 229, 255, 0.78)',
+          bg: 'rgba(11, 16, 23, 0.82)',
+          tri: '#00e5ff',
+          dot: '#ffb703',
+          shadow: '0 0 12px rgba(0, 229, 255, 0.45)'
+        };
+      }
+      if (state.preset === 'mono') {
+        return {
+          text: '#ffffff',
+          border: 'rgba(228, 228, 231, 0.78)',
+          bg: 'rgba(15, 15, 17, 0.84)',
+          tri: '#ffffff',
+          dot: '#a1a1aa',
+          shadow: '0 0 10px rgba(255, 255, 255, 0.35)'
+        };
+      }
+      return {
+        text: '#ffe49e',
+        border: 'rgba(255, 66, 51, 0.80)',
+        bg: 'rgba(23, 17, 20, 0.82)',
+        tri: '#ff4233',
+        dot: '#00f5d4',
+        shadow: '0 0 12px rgba(255, 66, 51, 0.48)'
+      };
+    }
+
+    function createPeakMarkerDOM(label) {
+      const pal = getPeakPalette();
+      const el = document.createElement('div');
+      el.className = 'peak-marker-node';
+      el.style.opacity = '0';
+
+      const box = document.createElement('div');
+      box.className = 'peak-label-box font-pixel-fui';
+      box.style.color = pal.text;
+      box.style.borderColor = pal.border;
+      box.style.backgroundColor = pal.bg;
+      box.style.boxShadow = pal.shadow;
+      box.style.fontSize = `${state.peakFontSize}px`;
+      box.style.padding = `${Math.max(2, Math.round(state.peakFontSize * 0.18))}px ${Math.max(6, Math.round(state.peakFontSize * 0.55))}px`;
+      box.textContent = label;
+
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '16');
+      svg.setAttribute('height', '20');
+      svg.setAttribute('viewBox', '0 0 16 20');
+      svg.style.marginTop = '3px';
+      svg.style.overflow = 'visible';
+
+      const tri = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+      tri.setAttribute('points', '2,1 14,1 8,11');
+      tri.setAttribute('fill', pal.tri);
+      tri.setAttribute('stroke', pal.text);
+      tri.setAttribute('stroke-width', '1');
+
+      const stem = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      stem.setAttribute('x1', '8');
+      stem.setAttribute('y1', '12');
+      stem.setAttribute('x2', '8');
+      stem.setAttribute('y2', '18');
+      stem.setAttribute('stroke', pal.border);
+      stem.setAttribute('stroke-width', '1');
+      stem.setAttribute('stroke-dasharray', '2 2');
+
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      dot.setAttribute('x', '7');
+      dot.setAttribute('y', '18');
+      dot.setAttribute('width', '2');
+      dot.setAttribute('height', '2');
+      dot.setAttribute('fill', pal.dot);
+
+      svg.appendChild(tri);
+      svg.appendChild(stem);
+      svg.appendChild(dot);
+      el.appendChild(box);
+      el.appendChild(svg);
+      if (peakLayerEl) peakLayerEl.appendChild(el);
+      return { el, box, tri, stem, dot };
+    }
+
+    function refreshPeakMarkerStyles() {
+      const pal = getPeakPalette();
+      for (const m of peakPool) {
+        m.dom.box.style.color = pal.text;
+        m.dom.box.style.borderColor = pal.border;
+        m.dom.box.style.backgroundColor = pal.bg;
+        m.dom.box.style.boxShadow = pal.shadow;
+        m.dom.box.style.fontSize = `${state.peakFontSize}px`;
+        m.dom.box.style.padding = `${Math.max(2, Math.round(state.peakFontSize * 0.18))}px ${Math.max(6, Math.round(state.peakFontSize * 0.55))}px`;
+        m.dom.tri.setAttribute('fill', pal.tri);
+        m.dom.tri.setAttribute('stroke', pal.text);
+        m.dom.stem.setAttribute('stroke', pal.border);
+        m.dom.dot.setAttribute('fill', pal.dot);
+      }
+    }
+
+    function updatePeakMarkers(dt, elapsedSec) {
+      if (!peakLayerEl) return;
+      if (!state.showPeakTags) {
+        peakLayerEl.style.display = 'none';
+        return;
+      }
+      peakLayerEl.style.display = 'block';
+      ensurePeakPool();
+
+      const scaleXY = (BOARD_SIZE * 0.95) / (MS_RES - 1);
+      const offsetXY = -(BOARD_SIZE * 0.95) * 0.5;
+      const amp = state.elevationAmp;
+
+      // 1. Detect local maxima across heightGrid (ignoring outer border)
+      const rawMaxima = [];
+      const ENTER_H = 0.39;
+      const EXIT_H = 0.31;
+      for (let iz = 4; iz < MS_RES - 4; iz++) {
+        const row = iz * MS_RES;
+        for (let ix = 4; ix < MS_RES - 4; ix++) {
+          const h = heightGrid[row + ix];
+          if (h < EXIT_H) continue;
+          if (
+            h >= heightGrid[row + ix - 1] &&
+            h >= heightGrid[row + ix + 1] &&
+            h >= heightGrid[row - MS_RES + ix] &&
+            h >= heightGrid[row + MS_RES + ix] &&
+            h >= heightGrid[row - MS_RES + ix - 1] &&
+            h >= heightGrid[row - MS_RES + ix + 1] &&
+            h >= heightGrid[row + MS_RES + ix - 1] &&
+            h >= heightGrid[row + MS_RES + ix + 1]
+          ) {
+            rawMaxima.push({
+              wx: offsetXY + ix * scaleXY,
+              wz: offsetXY + iz * scaleXY,
+              rawH: h
+            });
+          }
+        }
+      }
+
+      // 2. Non-Maximum Suppression & cap at state.peakLabels.length
+      rawMaxima.sort((a, b) => b.rawH - a.rawH);
+      const peaks = [];
+      for (const cand of rawMaxima) {
+        let tooClose = false;
+        for (const p of peaks) {
+          const dx = cand.wx - p.wx;
+          const dz = cand.wz - p.wz;
+          if (dx * dx + dz * dz < 1.55 * 1.55) {
+            tooClose = true;
+            break;
+          }
+        }
+        if (!tooClose) {
+          peaks.push(cand);
+          if (peaks.length >= state.peakLabels.length) break;
+        }
+      }
+
+      // 3. 峰位 → 标签的"粘性"分配。
+      //    已经在台上的标签优先续约（locked 先于新兵、高峰先于矮峰），
+      //    半径给到 3.2 世界单位；真找不到才进入 1.8 秒宽限期。
+      //    已经完全淡出的标签允许全盘重新落位（那次跳变在 opacity 0 时发生，看不见）。
+      const claimed = new Array(peaks.length).fill(false);
+      const order = peakPool.slice().sort((a, b) => {
+        if (a.locked !== b.locked) return a.locked ? -1 : 1;
+        return b.rawH - a.rawH;
+      });
+
+      // 把 m 绑到最近的未占用峰上：pass 1 只认半径内（守坑），
+      // pass 2 不限距离兜底（峰还够用时不允许有标签空着——否则 6 个标签
+      // 会因为互相抢坑轮流饿死，表现为随机闪烁）。
+      function claimPeak(m, radius, needH) {
+        let bestIdx = -1;
+        let bestD2 = radius === Infinity ? Infinity : radius * radius;
+        for (let i = 0; i < peaks.length; i++) {
+          if (claimed[i]) continue;
+          const dx = peaks[i].wx - m.wx;
+          const dz = peaks[i].wz - m.wz;
+          const d2 = dx * dx + dz * dz;
+          if (d2 < bestD2) {
+            bestD2 = d2;
+            bestIdx = i;
+          }
+        }
+        if (bestIdx === -1 || peaks[bestIdx].rawH < needH) return false;
+
+        claimed[bestIdx] = true;
+        const pk = peaks[bestIdx];
+        if (m.locked) {
+          const k = Math.min(1, dt * 8);
+          m.wx += (pk.wx - m.wx) * k;
+          m.wz += (pk.wz - m.wz) * k;
+          m.rawH += (pk.rawH - m.rawH) * k;
+        } else {
+          // 首次上台 / 从全透明处复活：直接落位，不从旧坐标滑过来
+          m.wx = pk.wx;
+          m.wz = pk.wz;
+          m.rawH = pk.rawH;
+        }
+        m.locked = true;
+        m.lostT = 0;
+        m.targetOpacity = 1.0;
+        return true;
+      }
+
+      // pass 1：守在原来的坑里
+      for (const m of order) {
+        const wasLocked = m.locked;
+        const isBlank = m.opacity < 0.05;
+        const R = wasLocked ? 3.2 : (isBlank ? 99 : 1.9);
+        // 已经淡到看不见的标签不设门槛，否则会永远回不来
+        const needH = (wasLocked || isBlank) ? EXIT_H : ENTER_H;
+        if (!claimPeak(m, R, needH)) {
+          m.locked = false;
+          m.lostT += dt;
+          // 1.8s 宽限：噪声把峰短暂吃掉时先按住不熄，避免闪烁
+          m.targetOpacity = m.lostT > 1.8 ? 0.0 : 1.0;
+        }
+      }
+
+      // pass 2：峰还够用时，空着的标签就近兜底，不许空转
+      let freePeaks = 0;
+      for (let i = 0; i < claimed.length; i++) if (!claimed[i]) freePeaks++;
+      for (const m of order) {
+        if (m.locked || freePeaks === 0) continue;
+        if (claimPeak(m, Infinity, EXIT_H)) freePeaks--;
+      }
+
+      // 4. 透明度平滑 —— 只改数值，DOM 节点一个都不删
+      for (const m of peakPool) {
+        const fadeSpeed = m.targetOpacity > m.opacity ? 4.5 : 1.5;
+        m.opacity += (m.targetOpacity - m.opacity) * Math.min(1, dt * fadeSpeed);
+        if (m.opacity < 0.004) m.opacity = 0;
+      }
+
+      // 5. 退场即交还标签名，让别的峰有机会抽到它
+      for (const m of peakPool) {
+        if (m.label !== null && m.targetOpacity === 0 && m.opacity < 0.03) {
+          m.label = null;
+          m.dom.box.textContent = '';
+          m.hideFade = 0;
+        }
+      }
+
+      // 5b. 新上台的峰从剩余标签里随机抽一个，保证同时出现的名字不重复
+      for (const m of peakPool) {
+        if (m.label !== null || m.targetOpacity !== 1.0) continue;
+        const lbl = pickFreeLabel();
+        if (lbl === null) continue;
+        m.label = lbl;
+        m.dom.box.textContent = lbl;
+        m.opacity = 0;
+        m.phase = Math.random() * Math.PI * 2;
+      }
+
+      // 6. Project 3D peak positions to 2D screen coordinates
+      worldGroup.updateMatrixWorld();
+      const w = VIEW.w;
+      const h = VIEW.h;
+
+      // 屏幕空间避让：容器一窄，3D 里离得很远的峰在屏幕上会挤到一起，
+      // 标签就叠成一坨。按峰高优先，矮峰给高峰让位。
+      // 注意避让也走 hideFade 平滑 —— 硬切 opacity 会在阈值上来回跳。
+      const placed = [];
+      const ordered = peakPool.slice().sort((a, b) => b.rawH - a.rawH);
+
+      for (const m of ordered) {
+        if (m.label === null || m.opacity <= 0.002) {
+          m.dom.el.style.opacity = '0';
+          m.hideFade += (0 - m.hideFade) * Math.min(1, dt * 8);
+          continue;
+        }
+
+        const elevNorm = Math.min(1.0, Math.max(0.0, (m.rawH - 0.02) / 0.72));
+        const peakY = 0.04 + Math.pow(elevNorm, 1.08) * 1.05 * amp;
+
+        projVec.set(m.wx, peakY + 0.14, m.wz);
+        projVec.applyMatrix4(worldGroup.matrixWorld);
+        projVec.project(camera);
+
+        let outOfDepth = projVec.z > 1.0 || projVec.z < -1.0;
+        let sx = 0;
+        let sy = 0;
+        let hide = outOfDepth;
+        if (!outOfDepth) {
+          sx = (projVec.x * 0.5 + 0.5) * w;
+          sy = (-projVec.y * 0.5 + 0.5) * h;
+          // 贴边的不显示，否则会露出半截标签
+          if (sx < 44 || sx > w - 44 || sy < 32 || sy > h - 22) {
+            hide = true;
+          } else {
+            for (let i = 0; i < placed.length; i++) {
+              // 纵向阈值要够放下"标签盒 + 三角 + 引线"这一摞（约 46px），
+              // 之前写 26 会让上下错开一点点的两个标签直接叠在一起
+              if (Math.abs(placed[i][0] - sx) < 64 && Math.abs(placed[i][1] - sy) < 46) {
+                hide = true;
+                break;
+              }
+            }
+          }
+          if (!hide) placed.push([sx, sy]);
+        }
+
+        m.hideFade += ((hide ? 0 : 1) - m.hideFade) * Math.min(1, dt * 9);
+        if (hide && m.hideFade < 0.02) {
+          m.dom.el.style.opacity = '0';
+          continue;
+        }
+
+        const bob = Math.sin(elapsedSec * 3.2 + m.phase) * 2.5;
+        const disp = m.opacity * m.hideFade;
+        const popScale = 0.86 + 0.14 * disp;
+
+        m.dom.el.style.transform = `translate3d(${sx.toFixed(1)}px, ${(sy + bob).toFixed(1)}px, 0) translate(-50%, -100%) scale(${popScale.toFixed(3)})`;
+        m.dom.el.style.opacity = disp.toFixed(3);
+      }
+    }
+
+    document.getElementById('chk-peak-tags').addEventListener('change', (e) => {
+      state.showPeakTags = e.target.checked;
+      saveSettings();
+    });
+
+    bindSlider('slider-tag-fontsize', 'val-tag-fontsize', 'peakFontSize', (v) => `${Math.round(v)} px`, () => {
+      refreshPeakMarkerStyles();
+    });
+
+    function reconcileActiveMarkersWithLabels() {
+      // 池子按栏目名逐位对齐，改名就原地换字，多余的从尾部裁掉
+      ensurePeakPool();
+    }
+
+    function renderPeakTagsList() {
+      const listEl = document.getElementById('peak-tags-list');
+      const countBadge = document.getElementById('tag-count-badge');
+      if (!listEl) return;
+      listEl.innerHTML = '';
+      if (countBadge) countBadge.textContent = `${state.peakLabels.length} 项`;
+
+      state.peakLabels.forEach((lbl, idx) => {
+        const row = document.createElement('div');
+        row.className = 'tag-row';
+
+        const inp = document.createElement('input');
+        inp.type = 'text';
+        inp.maxLength = 12;
+        inp.value = lbl;
+        inp.className = 'tag-input font-pixel-fui';
+        inp.addEventListener('change', () => {
+          const oldVal = state.peakLabels[idx];
+          const newVal = inp.value.trim();
+          if (!newVal) {
+            inp.value = oldVal;
+            return;
+          }
+          state.peakLabels[idx] = newVal;
+          // 正在显示这个名字的峰直接换字，不用退场重抽
+          for (const m of peakPool) {
+            if (m.label === oldVal) {
+              m.label = newVal;
+              m.dom.box.textContent = newVal;
+            }
+          }
+          ensurePeakPool();
+          saveSettings();
+        });
+
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.textContent = '×';
+        delBtn.title = '删除该标签';
+        delBtn.className = 'tag-del';
+        delBtn.disabled = state.peakLabels.length <= 1;
+        delBtn.addEventListener('click', () => {
+          if (state.peakLabels.length <= 1) return;
+          state.peakLabels.splice(idx, 1);
+          reconcileActiveMarkersWithLabels();
+          renderPeakTagsList();
+          saveSettings();
+        });
+
+        row.appendChild(inp);
+        row.appendChild(delBtn);
+        listEl.appendChild(row);
+      });
+    }
+
+    function addNewPeakTag() {
+      const inp = document.getElementById('input-new-tag');
+      if (!inp) return;
+      const val = inp.value.trim();
+      if (!val) return;
+      if (!state.peakLabels.includes(val)) {
+        state.peakLabels.push(val);
+        renderPeakTagsList();
+        saveSettings();
+      }
+      inp.value = '';
+    }
+
+    document.getElementById('btn-add-tag').addEventListener('click', addNewPeakTag);
+    document.getElementById('input-new-tag').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addNewPeakTag();
+      }
+    });
+
+    // =========================================================================
+    // 参数面板：开合 + 新增控件绑定
+    // =========================================================================
+    const drawerEl = document.getElementById('control-drawer');
+
+    function setDrawerOpen(open) {
+      drawerEl.classList.toggle('is-open', !!open);
+      const btn = document.getElementById('ui-toggle');
+      // 面板展开时会盖住右下角的入口按钮，直接藏起来，关掉再露出来
+      if (btn) btn.style.display = open ? 'none' : '';
+    }
+
+    document.getElementById('ui-toggle').addEventListener('click', () => {
+      setDrawerOpen(!drawerEl.classList.contains('is-open'));
+    });
+    document.getElementById('btn-close-drawer').addEventListener('click', () => setDrawerOpen(false));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setDrawerOpen(false);
+    });
+
+    // 独立打开这个文件时默认展开面板，被 iframe 嵌进站点时默认收起（不挡画面）。
+    // 想强制指定就 ?ui=1 / ?ui=0，或在内联嵌入前设 TOPO_HERO_OPTS.ui
+    (function initDrawerState() {
+      let open = false;
+      try {
+        const q = new URLSearchParams(window.location.search).get('ui');
+        if (q === '1') open = true;
+        else if (q === '0') open = false;
+        else open = (window.self === window.top) && window.innerWidth >= 900;
+      } catch (e) {}
+      if (HERO_OPTS.ui === true) open = true;
+      else if (HERO_OPTS.ui === false) open = false;
+      setDrawerOpen(open);
+    })();
+
+    // 相机俯角（滑杆给角度，state 存弧度）
+    const pitchSlider = document.getElementById('slider-pitch');
+    const pitchValEl = document.getElementById('val-pitch');
+    pitchSlider.addEventListener('input', () => {
+      const deg = parseFloat(pitchSlider.value);
+      state.pitch = deg * Math.PI / 180;
+      pitchValEl.textContent = `${Math.round(deg)}°`;
+      saveSettings();
+    });
+
+    // 相机距离：真正的机位在每帧按 fitFactor 重算，这里只改基准值
+    const distSlider = document.getElementById('slider-dist');
+    const distValEl = document.getElementById('val-dist');
+    distSlider.addEventListener('input', () => {
+      state.distance = parseFloat(distSlider.value);
+      distValEl.textContent = state.distance.toFixed(1);
+      saveSettings();
+    });
+
+    // 图层开关：面板里的按钮代理给原来那四个（它们藏在 hero 卡片里，逻辑是现成的）
+    function syncUiLayers() {
+      document.querySelectorAll('.ui-layer').forEach((btn) => {
+        const k = btn.dataset.layer;
+        const on = k === 'contours' ? state.showContours
+          : k === 'voxels' ? state.showVoxels
+          : k === 'dust' ? state.showDust
+          : state.showFrame;
+        btn.classList.toggle('is-on', on);
+        const badge = btn.querySelector('.ui-badge');
+        if (badge) badge.textContent = on ? 'ON' : 'OFF';
+      });
+    }
+    document.querySelectorAll('.ui-layer').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const canon = document.getElementById('btn-layer-' + btn.dataset.layer);
+        if (canon) canon.click();
+        syncUiLayers();
+      });
+    });
+
+    function syncAllControlsFromState() {
+      document.getElementById('slider-levels').value = state.contourLevels;
+      document.getElementById('val-levels').textContent = `${Math.round(state.contourLevels)} 层`;
+      document.getElementById('slider-amp').value = state.elevationAmp;
+      document.getElementById('val-amp').textContent = `${state.elevationAmp.toFixed(2)}x`;
+      document.getElementById('slider-speed').value = state.noiseSpeed;
+      document.getElementById('val-speed').textContent = state.noiseSpeed.toFixed(2);
+      document.getElementById('slider-orbit').value = state.orbitSpeed;
+      document.getElementById('val-orbit').textContent = `${state.orbitSpeed.toFixed(2)} rad/s`;
+      document.getElementById('slider-dof').value = state.dofStrength;
+      document.getElementById('val-dof').textContent = state.dofStrength.toFixed(2);
+      document.getElementById('slider-bloom').value = state.bloomStrength;
+      document.getElementById('val-bloom').textContent = state.bloomStrength.toFixed(2);
+      const cyanPct = Math.round(state.cyanRatio * 100);
+      document.getElementById('slider-cyan').value = cyanPct;
+      document.getElementById('val-cyan').textContent = `${cyanPct}%`;
+      setRippleFreq(state.rippleFreq);
+
+      document.getElementById('slider-tag-fontsize').value = state.peakFontSize;
+      document.getElementById('val-tag-fontsize').textContent = `${Math.round(state.peakFontSize)} px`;
+
+      setAutoRotate(state.autoRotate);
+      document.getElementById('chk-postfx').checked = state.postFxEnabled;
+      document.getElementById('chk-autocut').checked = state.autoBeatCut;
+      if (chkFrameEl) chkFrameEl.checked = state.showFrame;
+      document.getElementById('chk-peak-tags').checked = state.showPeakTags;
+      document.getElementById('chk-ripple').checked = state.mouseRipple;
+
+      const wrap = document.getElementById('ripple-freq-wrap');
+      if (wrap) {
+        wrap.style.opacity = state.mouseRipple ? '1' : '0.4';
+        wrap.classList.toggle('pointer-events-none', !state.mouseRipple);
+      }
+
+      contourMesh.visible = state.showContours;
+      particleSystem.visible = state.showVoxels;
+      dustSystem.visible = state.showDust;
+      frameGroup.visible = state.showFrame;
+      syncLayerButton('btn-layer-contours', state.showContours);
+      syncLayerButton('btn-layer-voxels', state.showVoxels);
+      syncLayerButton('btn-layer-dust', state.showDust);
+      syncLayerButton('btn-layer-frame', state.showFrame);
+
+      particleUniforms.uDofStrength.value = state.dofStrength;
+      ribbonUniforms.uDofStrength.value = state.dofStrength;
+      postUniforms.uDofStrength.value = state.dofStrength;
+      postUniforms.uBloomStrength.value = state.bloomStrength;
+      particleUniforms.uCyanRatio.value = state.cyanRatio;
+
+      const pitchDeg = Math.round(state.pitch * 180 / Math.PI);
+      document.getElementById('slider-pitch').value = pitchDeg;
+      document.getElementById('val-pitch').textContent = `${pitchDeg}°`;
+      document.getElementById('slider-dist').value = state.distance;
+      document.getElementById('val-dist').textContent = state.distance.toFixed(1);
+
+      applyPreset(state.preset);
+      renderPeakTagsList();
+      refreshPeakMarkerStyles();
+      syncUiLayers();
+    }
+
+    // Sync all controls, presets, and peak tag editor after all variables are initialized
+    syncAllControlsFromState();
+
+    // =========================================================================
+    // 7. MAIN ANIMATION LOOP (60FPS Turntable + Beat-Cut + Post-FX Render)
+    // =========================================================================
+    let beatTimer = 0;
+    const BEAT_INTERVAL = 0.96;
+
+    let running = false;
+    let lastRafTime = 0;
+
+    function animate(now) {
+      if (!running) return;
+      requestAnimationFrame(animate);
+
+      // 从后台切回来时 now 会跳一大截，夹一下避免地形瞬移
+      const dt = lastRafTime ? Math.min(0.05, (now - lastRafTime) * 0.001) : 0.016;
+      lastRafTime = now;
+      lastTime = now;
+      const elapsedSec = now * 0.001;
+
+      if (!isDragging && state.autoRotate) {
+        state.azimuth += state.orbitSpeed * dt;
+      }
+      worldGroup.rotation.y = state.azimuth;
+
+      const camDist = state.distance * fitFactor;
+      const camY = Math.sin(state.pitch) * camDist;
+      const camZ = Math.cos(state.pitch) * camDist;
+      camera.position.set(0, camY, camZ);
+      camera.lookAt(0, LOOK_Y, 0);
+
+      // 景深焦点必须跟相机同距，不然整幅画面都会糊
+      particleUniforms.uFocalDist.value = camDist;
+      ribbonUniforms.uFocalDist.value = camDist;
+
+      state.noisePhaseZ += state.noiseSpeed * dt;
+      beatTimer += dt;
+      if (state.autoBeatCut && beatTimer >= BEAT_INTERVAL) {
+        beatTimer -= BEAT_INTERVAL;
+        if (beatStep % 2 === 0) {
+          state.phaseJumpOffset += 1.65;
+          state.beatFlash = 0.85;
+        }
+        beatStep++;
+      }
+
+      if (state.audioEnabled && audioCtx) {
+        while (nextNoteTime < audioCtx.currentTime + 0.12) {
+          playSynthPulse(nextNoteTime, beatStep);
+          if (state.autoBeatCut && beatStep % 2 === 0) {
+            triggerBeatJump();
+          }
+          nextNoteTime += 0.48;
+          beatStep++;
+        }
+      }
+
+      state.beatFlash = Math.max(0.0, state.beatFlash - dt * 3.2);
+      particleUniforms.uBeatFlash.value = state.beatFlash;
+      ribbonUniforms.uBeatFlash.value = state.beatFlash;
+      dustMaterial.uniforms.uTime.value = elapsedSec;
+      postUniforms.uTime.value = elapsedSec;
+
+      const activePhase = state.noisePhaseZ + state.phaseJumpOffset;
+      updateHeightfieldAndVoxels(activePhase);
+      const segCount = extractMarchingSquaresRibbons();
+      updatePeakMarkers(dt, elapsedSec);
+
+      const degAz = (((state.azimuth * 180) / Math.PI) % 360 + 360) % 360;
+      const degPitch = (state.pitch * 180) / Math.PI;
+      const elAngles = document.getElementById('telemetry-angles');
+      const elPhase = document.getElementById('telemetry-phase');
+      const elVerts = document.getElementById('telemetry-verts');
+      if (elAngles) elAngles.textContent = `${degAz.toFixed(1).padStart(5, '0')}° / ${degPitch.toFixed(1)}°`;
+      if (elPhase) elPhase.textContent = activePhase.toFixed(2).padStart(7, '0');
+      if (elVerts) elVerts.textContent = `${(TOTAL_PARTICLES + DUST_COUNT).toLocaleString()} PTS / ${segCount} SEG`;
+
+      // Render through Fullscreen Optical Bokeh & Bloom Post-Processing or Direct
+      if (state.postFxEnabled) {
+        renderer.setRenderTarget(renderTarget);
+        renderer.clear();
+        renderer.render(scene, camera);
+        renderer.setRenderTarget(null);
+        renderer.render(postScene, postCamera);
+      } else {
+        renderer.setRenderTarget(null);
+        renderer.render(scene, camera);
+      }
+    }
+
+    // ---- 生命周期：三重暂停 ----
+    const reduceMotion = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      // 尊重系统设置：不转、不演化，只渲一帧静态地形
+      state.autoRotate = false;
+      state.autoBeatCut = false;
+      state.noiseSpeed = 0;
+      state.mouseRipple = false;
+    }
+
+    function startLoop() {
+      if (running) return;
+      running = true;
+      lastRafTime = 0;
+      requestAnimationFrame(animate);
+    }
+    function stopLoop() {
+      running = false;
+    }
+
+    let onScreen = true;
+    if (typeof IntersectionObserver !== 'undefined') {
+      new IntersectionObserver(function (entries) {
+        onScreen = entries[0].isIntersecting;
+        if (onScreen && !document.hidden) startLoop(); else stopLoop();
+      }, { threshold: 0.01 }).observe(stageEl);
+    }
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stopLoop();
+      else if (onScreen) startLoop();
+    });
+
+    // 3) 对外接口：嵌进站点后可以直接改栏目名 / 换配色 / 调参
+    window.TopoHero = {
+      state: state,
+      presets: Object.keys(PRESETS),
+      setPreset: function (name) {
+        if (PRESETS[name]) { state.preset = name; applyPreset(name); }
+      },
+      setLabels: function (arr) {
+        const cleaned = (arr || []).map(function (t) { return String(t).trim(); }).filter(Boolean);
+        if (cleaned.length) {
+          state.peakLabels = cleaned;
+          // 池子逐位换名，多余的节点从尾部裁掉，正在显示的标签继续显示
+          ensurePeakPool();
+        }
+      },
+      get running() { return running; },
+      start: startLoop,
+      stop: stopLoop,
+      openPanel: function (open) { setDrawerOpen(open === undefined ? true : !!open); },
+      get panelOpen() { return document.getElementById('control-drawer').classList.contains('is-open'); }
+    };
+
+    function boot() {
+      applySize();
+      if (reduceMotion) {
+        // 静态帧也走同一条渲染路径，只是不进入循环
+        running = true;
+        animate(performance.now());
+        running = false;
+        lastRafTime = 0;
+      }
+      if (onScreen && !document.hidden) startLoop();
+    }
+
+    if (document.readyState === 'complete') boot();
+    else window.addEventListener('load', boot, { once: true });
+  </script>
+<script>
+/* ------------------------------------------------------------------
+   嵌入桥：把站点控制台存下来的参数灌进引擎。
+   - 首次加载读 localStorage['v2:topo']
+   - 控制台在别的文档里写 localStorage 时，本文档会收到 storage 事件
+   - 父页面也可以直接 postMessage({type:'topo:params', params:{...}})
+   ------------------------------------------------------------------ */
+(function () {
+  var KEY = 'v2:topo';
+
+  function ready(fn) {
+    if (window.TopoHero && typeof syncAllControlsFromState === 'function') fn();
+    else setTimeout(function () { ready(fn); }, 60);
+  }
+
+  function applyParams(p) {
+    if (!p || typeof p !== 'object') return;
+    var st = window.TopoHero.state;
+
+    if (typeof p.preset === 'string') st.preset = p.preset;
+    if (typeof p.levels === 'number') st.contourLevels = p.levels;
+    if (typeof p.amp === 'number') st.elevationAmp = p.amp;
+    if (typeof p.speed === 'number') st.noiseSpeed = p.speed;
+    if (typeof p.orbit === 'number') st.orbitSpeed = p.orbit;
+    if (typeof p.pitchDeg === 'number') st.pitch = p.pitchDeg * Math.PI / 180;
+    if (typeof p.dist === 'number') st.distance = p.dist;
+    if (typeof p.dof === 'number') st.dofStrength = p.dof;
+    if (typeof p.bloom === 'number') st.bloomStrength = p.bloom;
+    if (typeof p.cyanPct === 'number') st.cyanRatio = p.cyanPct / 100;
+    if (typeof p.fontSize === 'number') st.peakFontSize = p.fontSize;
+    if (typeof p.rippleHz === 'number') st.rippleFreq = p.rippleHz;
+
+    if (typeof p.contours === 'boolean') st.showContours = p.contours;
+    if (typeof p.voxels === 'boolean') st.showVoxels = p.voxels;
+    if (typeof p.dust === 'boolean') st.showDust = p.dust;
+    if (typeof p.frame === 'boolean') st.showFrame = p.frame;
+    if (typeof p.autorotate === 'boolean') st.autoRotate = p.autorotate;
+    if (typeof p.postfx === 'boolean') st.postFxEnabled = p.postfx;
+    if (typeof p.ripple === 'boolean') st.mouseRipple = p.ripple;
+    if (Array.isArray(p.labels) && p.labels.length) st.peakLabels = p.labels.slice(0, 8);
+
+    // 面板虽然隐藏着，控件还在 DOM 里：走原有那条同步链，
+    // 一次性把 state 推到 uniform / 几何体 / 标签上，不用重写一套。
+    syncAllControlsFromState();
+  }
+
+  function readStore() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+
+  ready(function () {
+    var stored = readStore();
+    if (stored) applyParams(stored);
+    try { parent.postMessage({ type: 'topo:ready' }, '*'); } catch (e) {}
+  });
+
+  try {
+    window.addEventListener('storage', function (e) {
+      if (e.key !== KEY) return;
+      try { applyParams(e.newValue ? JSON.parse(e.newValue) : null); } catch (err) {}
+    });
+  } catch (e) {}
+
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (!d || typeof d !== 'object') return;
+    if (d.type === 'topo:params') applyParams(d.params);
+    else if (d.type === 'topo:stop' && window.TopoHero) window.TopoHero.stop();
+    else if (d.type === 'topo:start' && window.TopoHero) window.TopoHero.start();
+  });
+
+  window.TopoField = { apply: applyParams };
+})();
+</script>
+</body>
+</html>

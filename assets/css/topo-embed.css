@@ -1,0 +1,77 @@
+/* ============================================================
+   TOPO-EMBED.CSS — 量化信息库页头右侧的地形动效
+
+   两种模式，靠 <html data-topo-frame="box"> 切换：
+     默认 —— 无框：画布透明，只留发光的点与线，直接长在页头背景上
+     box  —— 有框：带边框 / 圆角 / 阴影的一张卡片
+
+   另外：只在桌面端（≥1080px）出现。手机端这一整块不参与布局，
+   页头保持原样 —— 所有规则都写在媒体查询里，唯一的全局规则是
+   .pagehead__aside{display:none}。
+   ============================================================ */
+
+.pagehead__aside { display: none; }
+
+/* 区域几何由 topo-embed.js 写成这五个变量（挂在 <html> 上）：
+     --topo-w   区域宽度      --topo-h   区域高度
+     --topo-dx  水平偏移（正=右）  --topo-dy 垂直偏移（正=下）
+     --topo-pad 文字区右侧让出的宽度
+   变量缺失时下面每一处都留着原来的字面值，所以「没存过参数」和
+   「脚本没跑」这两种情况下的排版跟改造之前逐像素一致。 */
+
+@media (min-width: 1080px) {
+  body[data-page="links"] .pagehead__aside {
+    display: block;
+    position: absolute;
+    /* 贴容器右沿而不是视口右沿：宽屏时容器有居中留白 */
+    right: calc(max(24px, (100% - 1200px) / 2) - var(--topo-dx, 0px));
+    top: calc(50% + var(--topo-dy, 0px));
+    transform: translateY(-50%);
+    width: var(--topo-w, min(43%, 520px));
+    /* 显式高度一旦写下来，下面的 aspect-ratio 就自动失效 —— 想自由改比例
+       只要动高度滑杆，不用改两个地方 */
+    height: var(--topo-h, auto);
+    aspect-ratio: 16 / 10;
+    max-height: calc(100% - 16px);
+    z-index: 1;
+    overflow: hidden;
+    isolation: isolate;
+    /* 无框：容器只负责定位与裁切，自己不画任何东西 */
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  body[data-page="links"] .pagehead__aside iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    /* 透明画布：iframe 也不能铺底色，否则又成一块黑板 */
+    background: transparent;
+    color-scheme: normal;
+  }
+
+  /* 文字区右侧让出画布宽度 + 一点呼吸，标题不会被压到地形上。
+     默认（没有变量时）就是改造前那条 min(46%, 556px)，逐像素一致；
+     区域调宽后跟着变宽，但最多到 66% —— 再宽标题就没地方站了。 */
+  body[data-page="links"] .pagehead .wrap {
+    padding-right: min(max(var(--topo-pad, 552px), min(46%, 556px)), 66%);
+  }
+  body[data-page="links"] .pagehead h1,
+  body[data-page="links"] .pagehead .lead {
+    max-width: 100%;
+  }
+
+  /* 想回到卡片感：给 <html> 加 data-topo-frame="box" 即可，不用改别的 */
+  html[data-topo-frame="box"] body[data-page="links"] .pagehead__aside {
+    border-radius: var(--radius-16);
+    border: 1px solid var(--border);
+    background: #0b0809;
+    box-shadow: 0 28px 64px -28px rgba(0, 0, 0, 0.75);
+  }
+  html[data-topo-frame="box"] body[data-page="links"] .pagehead__aside iframe {
+    background: #0b0809;
+  }
+}
