@@ -15,8 +15,11 @@
   var PAGE = "links";
   var MQ = "(min-width: 1080px)";
   var SRC = "topo-scene.html";
-  var KEY = "v2:topo";
-
+  /* 参数存哪儿、该拿哪一份，统一交给 topo-store.js：
+     顶层页面 = 已发布值；控制台预览里 = 草稿。这里只负责"要参数"和"传给引擎"。 */
+  var STORE = window.TopoStore || null;
+  var KEY_DRAFT = STORE ? STORE.KEY_DRAFT : "v2:topo:draft";
+  var KEY_LEGACY = "v2:topo";
   if (!document.body || document.body.getAttribute("data-page") !== PAGE) return;
 
   var aside = null;
@@ -42,14 +45,23 @@
   }
 
   function currentParams() {
+    if (STORE) return STORE.resolve();
+    /* 兜底：topo-store.js 没加载到（老缓存、或单独调试这个文件）时，
+       退回"只读本机旧键"，行为与接 store 之前一致。 */
     var params = null;
     try {
-      var raw = localStorage.getItem(KEY);
+      var raw = localStorage.getItem(KEY_LEGACY);
       if (raw) params = JSON.parse(raw);
     } catch (e) {}
-    // 本机还没存过参数时用共享默认值，避免引擎吃它自己那套「大画布」取景
     if (!params) params = window.TOPO_DEFAULTS || null;
     return params;
+  }
+
+  /* 场景页也挂同一个版本戳：否则改了引擎、访客手里还是旧 topo-scene.html，
+     新参数发给旧引擎会被静默忽略（比如 autoBeatCut 这类后加的字段）。 */
+  function sceneSrc() {
+    var v = STORE ? STORE.published().version : 0;
+    return SRC + (v ? "?v=" + v : "");
   }
 
   function pushParams() {
@@ -168,7 +180,7 @@
 
   function load() {
     if (!frame || frame.getAttribute("src")) return;
-    frame.setAttribute("src", SRC);
+    frame.setAttribute("src", sceneSrc());
   }
 
   function watch() {
@@ -208,9 +220,10 @@
 
   // 控制台在别的标签页 / 站点预览里改了参数，这里立刻转给引擎
   window.addEventListener("storage", function (e) {
-    if (e.key !== KEY || !frame) return;
+    if (!frame) return;
+    if (e.key !== KEY_DRAFT && e.key !== KEY_LEGACY) return;
     try {
-      var p = e.newValue ? JSON.parse(e.newValue) : {};
+      var p = currentParams() || {};
       applyBox(p);
       post("topo:params", { params: p });
     } catch (err) {}

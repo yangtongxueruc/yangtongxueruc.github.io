@@ -21,6 +21,10 @@
   "use strict";
 
   var KEY = "v2:topo";
+  /* 草稿 / 已发布两份参数的读写全交给 topo-store.js。
+     这个面板只做一件事：把用户拖出来的值写进草稿，再推给预览。
+     发布是把草稿变成「已发布值」，那一步在 studio.js 的 publish() 里。 */
+  var STORE = window.TopoStore || null;
 
   /* 默认值统一放在 topo-defaults.js：页面、引擎、控制台三边共用一份。
      万一那个文件没加载到，这里给一份最小兜底，保证面板不会崩。 */
@@ -33,7 +37,14 @@
     autorotate: true, postfx: true, autoBeatCut: true, ripple: true, rippleHz: 3.8
   };
 
+  /* 打开面板时该显示哪一版：有草稿显示草稿（哪怕它落后），
+     没草稿就显示线上已发布值 —— 不做"静默丢掉草稿"这种事。 */
   function read() {
+    if (STORE) {
+      var d = STORE.draft();
+      if (d) return d.params;
+      return STORE.published().params;
+    }
     var out = {};
     var k;
     for (k in DEFAULTS) {
@@ -54,9 +65,14 @@
   }
 
   function write(p) {
+    if (STORE) { STORE.saveDraft(p); return; }
     try {
       localStorage.setItem(KEY, JSON.stringify(p));
     } catch (e) {}
+  }
+
+  function publishedVersion() {
+    return STORE ? STORE.published().version : 0;
   }
 
   function broadcast(p) {
@@ -179,6 +195,11 @@
     ".tp-hzrow{display:flex;align-items:center;gap:var(--space-8);margin-top:var(--space-8)}",
     ".tp-hzrow .tbtn{flex:none}",
     ".tp-hint{font-size:10px;line-height:1.5;color:var(--text-3);min-width:0}",
+    ".tp-hist{display:flex;align-items:center;gap:var(--space-8);padding:3px 0;",
+    "font-size:var(--text-xs);color:var(--text-3)}",
+    ".tp-hist b{color:var(--text-1);font-weight:600;font-family:var(--font-mono);flex:none}",
+    ".tp-hist__meta{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}",
+    ".tp-hist .tbtn{margin-left:auto;flex:none}",
     ".tp-tagrow{display:flex;gap:6px;margin-bottom:6px}",
     ".tp-tagrow .inp{flex:1;min-width:0}",
     ".tp-del{flex:none;width:26px;border-radius:var(--radius-4);background:transparent;border:1px solid var(--border-strong);",
@@ -213,14 +234,10 @@
   function flash(text) {
     var dot = refs.state;
     if (!dot) return;
-    dot.textContent = text || "已保存";
+    dot.textContent = text || "草稿已存";
     dot.style.color = "var(--accent)";
     clearTimeout(flashTimer);
-    flashTimer = setTimeout(function () {
-      if (!refs.state) return;
-      refs.state.textContent = "本机参数";
-      refs.state.style.color = "";
-    }, 1200);
+    flashTimer = setTimeout(syncStateLabel, 1200);
   }
 
   /* ---------------- 控件 ---------------- */
@@ -342,13 +359,19 @@
     var head = el("div", "tp-card__head");
     head.appendChild(el("span", "tp-card__title", "页头地形动效"));
     head.appendChild(el("span", "tp-card__badge", "桌面端 ≥1080"));
-    refs.state = el("span", "tp-card__state", "本机参数");
+    refs.state = el("span", "tp-card__state", "已同步");
     head.appendChild(refs.state);
     card.appendChild(head);
-    card.appendChild(el("p", "tp-card__desc", "改这里，右边预览实时跟着变。参数只存在本机浏览器，不进 content.js。"));
+    card.appendChild(el("p", "tp-card__desc",
+      "改这里只改「草稿」，右边预览实时跟着变，线上访客不受影响；点「发布改动」才对所有人生效。"));
     refs.note = el("p", "tp-note", "预览当前是手机 / 平板尺寸，动效只在 ≥1080px 出现 —— 切回「桌面」才看得到。");
     refs.note.hidden = true;
     card.appendChild(refs.note);
+    /* 草稿落后于线上时（另一台设备/另一个标签页发布过），要明确说出来：
+       否则面板里显示的是旧草稿，会被误当成"线上就长这样"。 */
+    refs.stale = el("p", "tp-note", "草稿是基于旧版本调的，期间线上已发布过新版本 —— 发布前先「载入线上值」看一眼差异。");
+    refs.stale.hidden = true;
+    card.appendChild(refs.stale);
 
     /* 画面区域 */
     var secBox = el("div", "tp-sec");
@@ -442,7 +465,32 @@
     secTag.appendChild(addRow);
     card.appendChild(secTag);
 
-    /* 底 */
+    /* 版本历史：参数级回滚。只列 topo.js 里带过来的快照（最多 8 条），
+       点「用这版」是把它回填成草稿 —— 仍然要点发布才上线，
+       不做"悄悄覆盖线上"这种事。 */
+    refs.histFold = document.createElement("details");
+    refs.histFold.className = "tp-fold";
+    var histSum = document.createElement("summary");
+    histSum.textContent = "历史版本 · 回滚到已发布过的某一版";
+    refs.histFold.appendChild(histSum);
+    refs.histList = el("div");
+    refs.histFold.appendChild(refs.histList);
+    card.appendChild(refs.histFold);
+
+    /* 底：发布是唯一"对所有人生效"的动作，所以单独占一行、用主按钮。
+       下面一行是三个本地操作（恢复默认 / 载入线上值 / 新窗口）。 */
+    var pubRow = el("div", "tp-foot");
+    refs.pubBtn = el("button", "tbtn tbtn--sm tbtn--primary", "发布改动");
+    refs.pubBtn.type = "button";
+    refs.pubBtn.title = "把草稿写成新的已发布版本（会打开发布面板，需要 Token）";
+    refs.pubBtn.addEventListener("click", function () {
+      var b = document.getElementById("publish");
+      if (b) { b.click(); return; }
+      flash("找不到发布入口");
+    });
+    pubRow.appendChild(refs.pubBtn);
+    card.appendChild(pubRow);
+
     var foot = el("div", "tp-foot");
     var reset = el("button", "tbtn tbtn--sm", "恢复默认");
     reset.type = "button";
@@ -451,12 +499,23 @@
       applyToUI();
       commit();
     });
+    refs.loadPub = el("button", "tbtn tbtn--sm", "载入线上值");
+    refs.loadPub.type = "button";
+    refs.loadPub.title = "丢掉本机草稿，回到线上正在生效的那一版";
+    refs.loadPub.addEventListener("click", function () {
+      if (STORE) STORE.discardDraft();
+      state = STORE ? STORE.published().params : readDefaults();
+      applyToUI();
+      commit();
+      flash("已回到线上值");
+    });
     var view = el("button", "tbtn tbtn--sm", "新窗口看整页");
     view.type = "button";
     view.addEventListener("click", function () {
       window.open("links.html", "_blank");
     });
     foot.appendChild(reset);
+    foot.appendChild(refs.loadPub);
     foot.appendChild(view);
     card.appendChild(foot);
 
@@ -511,6 +570,62 @@
     }
     renderTags();
     paintRipple();
+    renderHistory();
+    syncStateLabel();
+  }
+
+  /* 面板右上角那行小字 + 草稿相关的按钮状态。
+     四种状态：已同步 / 有草稿 / 草稿落后 / 无 store（降级）。 */
+  function syncStateLabel() {
+    var v = publishedVersion();
+    var d = STORE ? STORE.draft() : null;
+    var dirty = STORE ? STORE.isDirty() : false;
+    var txt;
+    var color = "";
+    if (d && d.stale) {
+      txt = "草稿基于 v" + d.base + " · 线上 v" + v;
+      color = "var(--warn)";
+    } else if (dirty) {
+      txt = "草稿 · 线上 v" + v;
+      color = "var(--warn)";
+    } else {
+      txt = "已同步 · v" + v;
+    }
+    if (refs.state) {
+      refs.state.textContent = txt;
+      refs.state.style.color = color;
+    }
+    if (refs.stale) refs.stale.hidden = !(d && d.stale);
+    if (refs.pubBtn) {
+      refs.pubBtn.disabled = !dirty;
+      refs.pubBtn.title = dirty
+        ? "把草稿写成新的已发布版本（会打开发布面板，需要 Token）"
+        : "草稿与线上一致，没有要发布的改动";
+    }
+    if (refs.loadPub) refs.loadPub.hidden = !d;
+  }
+
+  function renderHistory() {
+    var box = refs.histList;
+    if (!box) return;
+    var list = STORE ? STORE.history() : [];
+    if (refs.histFold) refs.histFold.hidden = !list.length;
+    box.innerHTML = "";
+    list.forEach(function (h) {
+      var row = el("div", "tp-hist");
+      row.appendChild(el("b", "", "v" + h.version));
+      row.appendChild(el("span", "tp-hist__meta", h.updatedAt || ""));
+      var b = el("button", "tbtn tbtn--sm", "用这版");
+      b.type = "button";
+      b.addEventListener("click", function () {
+        state = STORE ? STORE.normalize(h.params, STORE.published().params) : h.params;
+        applyToUI();
+        commit();
+        flash("已回填 v" + h.version);
+      });
+      row.appendChild(b);
+      box.appendChild(row);
+    });
   }
 
   /* 波纹频率的滑杆数值 + 三个频段的选中态 + 悬停波纹关掉时整块降级。
@@ -698,10 +813,20 @@
     observe();
     schedule();
 
-    // 别的标签页改了同一份参数，这里跟着刷新
+    // 别的标签页改了同一份草稿（或发布了新版本），这里跟着刷新
     window.addEventListener("storage", function (e) {
-      if (e.key !== KEY) return;
+      if (e.key !== (STORE ? STORE.KEY_DRAFT : "v2:topo:draft") && e.key !== KEY) return;
       state = read();
+      if (card) applyToUI();
+    });
+
+    /* studio.js 发布成功后派发这个事件：把页面里那份 V2_TOPO 换成刚发布的快照，
+       面板上的「草稿 / 已同步」立刻回到一致态，不用刷新页面。 */
+    window.addEventListener("topo:published", function (e) {
+      var snap = e && e.detail;
+      if (STORE && snap) STORE.setPublished(snap);
+      if (STORE) STORE.discardDraft();
+      state = STORE ? STORE.published().params : state;
       if (card) applyToUI();
     });
 

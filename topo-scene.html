@@ -8,6 +8,12 @@
   <title>TOPO HERO — 可嵌入的 WebGL 等高线地形背景</title>
   <script src="assets/js/vendor/three.min.js"></script>
   <script>window.TOPO_TRANSPARENT = true;</script>
+  <!-- 参数来源：已发布值 data/topo.js + 内置兜底 topo-defaults.js，
+       两者统一由 topo-store.js 解析（预览里还会叠控制台草稿）。
+       单独打开这个页面调试时也走同一套，行为跟嵌进页头时一致。 -->
+  <script src="data/topo.js?v=1"></script>
+  <script src="assets/js/topo-defaults.js?v=130"></script>
+  <script src="assets/js/topo-store.js?v=130"></script>
   <!-- 不引外部字体：Google Fonts 在国内会卡住首屏，标签又只是几个短词 -->
   <style>
     :root {
@@ -3264,6 +3270,9 @@ for (int i = 0; i < 12; i++) {
   }
 
   function readStore() {
+    /* 有 topo-store.js 就让它决定"该用哪一份"：公开页面拿已发布值，
+       控制台预览里拿草稿。没加载到就退回旧键，保证单独调试也能跑。 */
+    if (window.TopoStore) return window.TopoStore.resolve();
     try {
       var raw = localStorage.getItem(KEY);
       return raw ? JSON.parse(raw) : null;
@@ -3278,8 +3287,9 @@ for (int i = 0; i < 12; i++) {
 
   try {
     window.addEventListener('storage', function (e) {
-      if (e.key !== KEY) return;
-      try { applyParams(e.newValue ? JSON.parse(e.newValue) : null); } catch (err) {}
+      // 草稿键（控制台预览用）与旧键都接住
+      if (e.key !== 'v2:topo:draft' && e.key !== KEY) return;
+      try { applyParams(readStore()); } catch (err) {}
     });
   } catch (e) {}
 

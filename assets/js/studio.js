@@ -1688,9 +1688,34 @@
       "window.V2_CONTENT = " + JSON.stringify(content, null, 2) + ";\n";
   }
 
+  /* ---------- 地形动效参数（data/topo.js）----------
+     和 content.js 走同一个提交，但版本号独立：只改文案时这个文件一行不动，
+     只改动效时也只推它一个。回滚粒度、diff 噪音都比合进 content.js 好。 */
+  function topoFileText(t) {
+    return "/* ============================================================\n" +
+      "   TOPO.JS —「页头地形动效」的已发布参数（由控制台发布生成，勿手改）\n" +
+      "   导出时间：" + new Date().toLocaleString("zh-CN") + "\n" +
+      "   version 决定 data/topo.js?v= 与 topo-scene.html?v= 两处缓存戳\n" +
+      "   ============================================================ */\n" +
+      "window.V2_TOPO = " + JSON.stringify(t, null, 2) + ";\n";
+  }
+
+  /* 仓库里那份可能是任意历史形态：解析失败就当作没有，让发布照常进行
+     （第一次发布时文件还不存在，不能因此把整次发布拦下来）。 */
+  function parseTopoFile(text) {
+    if (!text) return null;
+    var at = text.indexOf("window.V2_TOPO");
+    if (at < 0) return null;
+    var brace = text.indexOf("{", at);
+    var last = text.lastIndexOf("}");
+    if (brace < 0 || last <= brace) return null;
+    try {
+      return JSON.parse(text.slice(brace, last + 1));
+    } catch (e) { return null; }
+  }
+
   function download(name, text) {
-    var blob = new Blob([text], { type: "text/javascript;charset=utf-8" });
-    var url = URL.createObjectURL(blob);
+    var blob = new Blob([text], { type: "text/javascript;charset=utf-8" });    var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
     a.href = url;
     a.download = name;
@@ -2397,6 +2422,43 @@
           + "为避免覆盖另一台设备发布的内容，本次发布已停止。\n"
           + "请先点顶栏「本机同步」或执行 git pull，确认内容后再发布。");
       }
+      /* ---- 动效参数：只有草稿确实改了才参与这次提交 ---- */
+      pubStep("检查动效参数 …");
+      var topoDraft = window.TopoStore ? window.TopoStore.draft() : null;
+      var topoDirty = !!(window.TopoStore && window.TopoStore.isDirty());
+      var topoSnap = null;
+      if (topoDirty) {
+        var topoRemote = null;
+        try {
+          var tf = await gh(token, "GET",
+            "/repos/" + GH.repo + "/contents/v2/data/topo.js?ref=" + GH.branch);
+          topoRemote = parseTopoFile(b64decode(tf.content));
+        } catch (e) { topoRemote = null; }   // 404：仓库里还没有这个文件
+        var remoteTopoV = topoRemote && typeof topoRemote.version === "number" ? topoRemote.version : 0;
+        /* 乐观锁：草稿是基于哪个已发布版本调的，就必须还在那个版本上。
+           期间别人发布过（版本前进了），这份草稿发出去等于静默盖掉对方的调整。 */
+        if (topoDraft.base !== remoteTopoV) {
+          throw new Error("动效草稿是基于 v" + topoDraft.base + " 调的，仓库已经是 v" + remoteTopoV + "。\n"
+            + "为避免覆盖另一台设备刚发布过的调整，本次发布已停止。\n"
+            + "请先在动效面板点「载入线上值」，看清差异后再重新调整。");
+        }
+        var thist = topoRemote && Array.isArray(topoRemote.history) ? topoRemote.history.slice() : [];
+        if (topoRemote) {
+          thist.push({
+            version: remoteTopoV,
+            updatedAt: topoRemote.updatedAt || "",
+            params: topoRemote.params
+          });
+          while (thist.length > 8) thist.shift();
+        }
+        topoSnap = {
+          version: remoteTopoV + 1,
+          updatedAt: new Date().toISOString().slice(0, 10),
+          params: topoDraft.params,
+          history: thist
+        };
+      }
+
       pubStep("读取仓库状态 …");
       var ref = await gh(token, "GET", "/repos/" + GH.repo + "/git/ref/heads/" + GH.branch);
       var head = ref.object.sha;
@@ -2405,6 +2467,7 @@
 
       pubStep("同步页面版本号与标签页标题 …");
       var changes = [{ path: "v2/data/content.js", text: fileText(next) }];
+      if (topoSnap) changes.push({ path: "v2/data/topo.js", text: topoFileText(topoSnap) });
       var tabTitle = tabTitleOf(next.meta);
       for (var i = 0; i < GH.pages.length; i++) {
         var page = GH.pages[i];
@@ -2419,6 +2482,13 @@
         patched = patched.replace(
           /(<(?:script|link)\b[^>]*\b(?:src|href)=["']assets\/(?:js|css)\/[^"'?]+)(\?v=\d+)?(["'])/g,
           "$1?v=" + v + "$3");
+        /* 动效参数走自己的版本号：否则"只动了动效"时 HTML 里的戳不变，
+           浏览器和 CDN 会继续吃旧缓存，看起来就是"发布了没生效"。 */
+        if (topoSnap) {
+          patched = patched.replace(
+            /(<script[^>]*\bsrc=["']data\/topo\.js)(\?v=\d+)?(["'])/g,
+            "$1?v=" + topoSnap.version + "$3");
+        }
         /* 标题必须写进 HTML 本身，不能只靠脚本运行时去改 —— 浏览器解析到
            <title> 就先显示，render.js 要等下载执行完才跑，中间那一下闪的
            就是 HTML 里的旧标题（强制刷新也一样）。*/
@@ -2547,6 +2617,7 @@
       });
       var commit = await gh(token, "POST", "/repos/" + GH.repo + "/git/commits", {
         message: "content: 发布 v" + v
+          + (topoSnap ? " · 动效 v" + topoSnap.version : "")
           + (images.length ? "（含 " + images.length + " 张图片）" : "")
           + "\n\n由 v2/studio.html 发布",
         tree: newTree.sha,
@@ -2562,6 +2633,15 @@
          中途失败时清单还在，下次发布会自动重试 */
       if (images.length) {
         clearUploads(images.map(function (x) { return x.path; }));
+      }
+      /* 动效参数已经进了这次提交：把面板里"已发布"这一层换成新快照、
+         丢掉草稿，右上角状态立刻回到"已同步"，不刷新页面也不会误报。 */
+      if (topoSnap && window.TopoStore) {
+        try {
+          window.TopoStore.setPublished(topoSnap);
+          window.TopoStore.discardDraft();
+          window.dispatchEvent(new CustomEvent("topo:published", { detail: topoSnap }));
+        } catch (e) {}
       }
 
       /* 浏览器侧状态 */
@@ -2606,6 +2686,7 @@
       var dep = await deploySite();
       closePub();
       var tail = " · " + commit.sha.slice(0, 7)
+        + (topoSnap ? " · 动效 v" + topoSnap.version : "")
         + (pruned ? " · 清掉 " + pruned + " 条失效样式" : "");
         if (dep.ok) {
           setState("已发布 v" + v + (dep.auto ? " · 自动上线中" : " · 已上线") + warnTail, !!warnTail);
