@@ -32,20 +32,24 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/base.css?v=134">
-<link rel="stylesheet" href="assets/css/pages.css?v=134">
-<link rel="stylesheet" href="assets/css/home.css?v=134">
+<link rel="stylesheet" href="assets/css/base.css?v=135">
+<link rel="stylesheet" href="assets/css/pages.css?v=135">
+<link rel="stylesheet" href="assets/css/home.css?v=135">
 <!-- 首屏可选项（由内容控制台字段驱动） -->
-<link rel="stylesheet" href="assets/css/options.css?v=134">
+<link rel="stylesheet" href="assets/css/options.css?v=135">
 <!-- 全页排版精修（含手机端修正，必须压在最后） -->
-<link rel="stylesheet" href="assets/css/refine.css?v=134">
+<link rel="stylesheet" href="assets/css/refine.css?v=135">
 <!-- 首屏流动点阵背景（canvas 由 hero-dots.js 插入） -->
-<link rel="stylesheet" href="assets/css/hero-dots.css?v=134">
-<link rel="stylesheet" href="assets/css/hero-motes.css?v=134">
-<link rel="stylesheet" href="assets/css/mobile.css?v=134">
-<!-- 窄屏标题用的衬线子集：只在窄屏预热，桌面不下载也不加载 -->
-<link rel="preload" as="font" type="font/woff2" crossorigin media="(max-width: 720px)"
-      href="assets/fonts/serif-sc-600.woff2">
+<link rel="stylesheet" href="assets/css/hero-dots.css?v=135">
+<link rel="stylesheet" href="assets/css/hero-motes.css?v=135">
+<link rel="stylesheet" href="assets/css/mobile.css?v=135">
+<!-- 窄屏标题曾经用过自托管宋体子集，后来改成跟站点同一套黑体（见 mobile.css
+     第 24 行的说明），字体文件就再没有任何 @font-face 引用了。这里原先留着的
+     `<link rel="preload" as="font">` 是唯一还指着它的地方 —— 它会在 ≤720px 的
+     手机端强制下载 129KB，而 document.fonts 里没有任何 face 会用到它，Chrome
+     还会在控制台报 "preloaded but not used"。删掉这一行，手机端首屏少一次
+     高优先级下载；字体文件仍留在产物里，要恢复自托管宋体只需把 --m-display
+     指回去并还原这一行。 -->
 <!-- 首屏人像：乱线团替代层（仅桌面宽屏）。手机 / 平板不注入脚本，
      下面这些规则也全都匹配不上，等于不存在。
      data-pfx 由 portrait-fx.js 画出首帧后才置位；脚本没跑起来就一直是空的，
@@ -126,7 +130,7 @@
         if (html.getAttribute("data-pfx")) return;
         html.setAttribute("data-pfx", "boot");
         var s = document.createElement("script");
-        s.src = "assets/js/portrait-fx.js?v=134";
+        s.src = "assets/js/portrait-fx.js?v=135";
         s.async = true;
         s.onerror = function () { html.removeAttribute("data-pfx"); };
         document.head.appendChild(s);
@@ -171,9 +175,9 @@
 <footer class="footer" id="footer-root"></footer>
 <nav class="tabbar" id="tab-root" aria-label="页面导航"></nav>
 
-<script src="data/content.js?v=134"></script>
-<script src="assets/js/render.js?v=134"></script>
-<script src="assets/js/hero-dots.js?v=134"></script>
-<script src="assets/js/hero-fx.js?v=134"></script>
+<script src="data/content.js?v=135" defer></script>
+<script src="assets/js/render.js?v=135" defer></script>
+<script src="assets/js/hero-dots.js?v=135" defer></script>
+<script src="assets/js/hero-fx.js?v=135" defer></script>
 </body>
 </html>

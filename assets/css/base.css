@@ -343,6 +343,28 @@ ul, ol { padding: 0; list-style: none; }
   .theme-select { display: none; }
 }
 
+/* ---------- 空壳容器先不占盒子（CLS） ----------
+   #nav-root / #main / #footer-root / #tab-root 在 HTML 里都是空元素，内容全部
+   由 render.js 注入。空着的时候它们仍按各自的 padding / border 占了一点高度：
+   底部标签栏空着是 8px（只剩内边距），填满链接后变成 52px，于是它在首屏那一下
+   「向上长高 48px」——实测这一下就是 0.18 的 CLS，在手机上占整页 CLS 的一半。
+   空态直接不给盒子：等 render.js 填完，它第一次出现在屏幕上就是最终尺寸，
+   没有「从 8px 撑到 52px」这一步，也就不产生位移。 */
+.tabbar:empty,
+.footer:empty {
+  display: none;
+}
+
+/* 动态列表是异步来的：先取 data/links.json，拿到才逐条插入。
+   数据没到之前那个容器高度是 0，等 21 行一起落地，它一口气长到三千多像素，
+   把下面的板块整体顶下去 —— 实测这一下是 links 页 0.19 的 CLS。
+   做法是在「还没有 .feed」的阶段先把容器撑满一屏：此时下方的板块本来就在
+   视口外，等行到齐、容器长高，它们仍在视口外，不算位移。
+   :has(.feed) 一旦成立规则自动失效，不需要 JS 配合，也不会残留空白。 */
+body[data-page="links"] .block > .wrap > .status + div:not(:has(.feed)) {
+  min-height: 100vh;
+}
+
 /* 移动端底部导航 */
 .tabbar {
   display: none;

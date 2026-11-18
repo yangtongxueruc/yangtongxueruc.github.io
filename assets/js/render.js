@@ -13,6 +13,13 @@
   var IS_ARCHIVE = /\/feed\.html$/.test(location.pathname);
   var state = { content: null, draft: false };
 
+  /* 首屏大图的窄屏变体表：原图路径 → 500w 变体路径。
+     只收录「确认已在产物里」的变体（构建期生成）。查不到就用原图一条路，
+     不做任何存在性探测 —— 那会白白多发一个 404。 */
+  var PORTRAIT_ALTS = {
+    "assets/img/portrait-scratch.jpg": "assets/img/portrait-scratch-500.jpg"
+  };
+
   /* 联系邮箱只有一个真源：content.js 的 meta.email。
      以前 CTA 写一份、页脚链接写一份，控制台里的「联系邮箱」改了谁都不跟着变。
      这里统一取值；旧数据里没有 meta.email 时退回各分节自己带的值，不至于空白。*/
@@ -216,7 +223,16 @@
       mono.textContent = d.portrait.mark || "";
       box.appendChild(mono);
       if (d.portrait.src) {
-        var img = el("img", null, { src: d.portrait.src, alt: "肖像照", fetchpriority: "high" });
+        /* 首屏人像的响应式取图。窄屏是 clamp(180px,64vw,264px)、桌面最大 340px，
+           DPR2 手机只需要 500 物理像素 —— 拿 750 的原图等于多下 68KB。
+           这里用显式映射表而不是按文件名猜：表里没有的图一律只给 src，
+           绝不为了「可能存在的变体」多发一个 404 请求。 */
+        var portraitAttrs = { src: d.portrait.src, alt: "肖像照", fetchpriority: "high" };
+        if (PORTRAIT_ALTS[d.portrait.src]) {
+          portraitAttrs.srcset = PORTRAIT_ALTS[d.portrait.src] + " 500w, " + d.portrait.src + " 750w";
+          portraitAttrs.sizes = "(max-width: 720px) 64vw, 340px";
+        }
+        var img = el("img", null, portraitAttrs);
         img.addEventListener("error", function () {
           img.remove();
           box.classList.add("is-empty");
