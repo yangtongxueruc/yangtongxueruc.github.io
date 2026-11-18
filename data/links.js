@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-18T04:58:45+08:00",
- "generated_at_human": "2026-11-18 04:58",
+ "generated_at": "2026-11-18T15:33:09+08:00",
+ "generated_at_human": "2026-11-18 15:33",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -18,8 +18,8 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 105,
-  "items_added": 3,
+  "items": 107,
+  "items_added": 2,
   "archive_max": 3000
  },
  "sources": [
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1007,
+   "ms": 877,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 520,
+   "ms": 2484,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 663,
+   "ms": 468,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 631,
+   "ms": 503,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 393,
+   "ms": 313,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 912,
+   "ms": 990,
    "http": 200
   }
  ],
@@ -148,6 +148,86 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
+   "title": "jundizhou/easy-stock",
+   "url": "https://github.com/jundizhou/easy-stock",
+   "date": "2026-11-18T15:32:28+08:00",
+   "summary": "A股 AI 投研",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "HKUDS/Vibe-Trading",
+   "url": "https://github.com/HKUDS/Vibe-Trading",
+   "date": "2026-11-18T15:25:01+08:00",
+   "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "shy3130/tick-stock-panel",
+   "url": "https://github.com/shy3130/tick-stock-panel",
+   "date": "2026-11-18T15:18:29+08:00",
+   "summary": "TSP自托管、零运维的 A 股「自建策略 + 监控 + 回测」量化工作台  | LLM能力驱使策略定制+个股分析+复盘 | 自由接入第三方数据源与个性化扩展数据 | 个人开源",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "akfamily/akhub",
+   "url": "https://github.com/akfamily/akhub",
+   "date": "2026-11-18T15:01:32+08:00",
+   "summary": "AKHub：金融与经济数据工具、数据源、量化投研框架和学习资源合集 | A curated hub of financial data tools, data sources, quant research frameworks and learning resources",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Lumiwealth/lumibot",
+   "url": "https://github.com/Lumiwealth/lumibot",
+   "date": "2026-11-18T14:50:42+08:00",
+   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Fincept-Corporation/FinceptTerminal",
+   "url": "https://github.com/Fincept-Corporation/FinceptTerminal",
+   "date": "2026-11-18T14:50:23+08:00",
+   "summary": "FinceptTerminal is a modern finance application offering advanced market analytics, investment research, and economic data tools, designed for interactive ex…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "qusong0627/QuantMind",
+   "url": "https://github.com/qusong0627/QuantMind",
+   "date": "2026-11-18T14:27:39+08:00",
+   "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "pseudo-longinus/quant-buddy-skills",
+   "url": "https://github.com/pseudo-longinus/quant-buddy-skills",
+   "date": "2026-11-18T14:06:14+08:00",
+   "summary": "宽宝 QuantBuddy： 一整套面向Agent Invesment投资研究与决策的底层设施与能力的调用skill， 覆盖A股/港股/美股/期货/宏观/ETF的量化分析与计算。支持行情、估值、财务查询、选股筛选、因子计算、策略回测。A complete infrastructure for Agent base…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
    "title": "questdb/questdb",
    "url": "https://github.com/questdb/questdb",
    "date": "2026-11-18T04:52:34+08:00",
@@ -162,26 +242,6 @@ window.SITE_FEED = {
    "url": "https://github.com/skfolio/skfolio",
    "date": "2026-11-18T04:47:25+08:00",
    "summary": "Python library for portfolio optimization, factor model construction, and risk management built on scikit-learn",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "Lumiwealth/lumibot",
-   "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-18T04:33:37+08:00",
-   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "Fincept-Corporation/FinceptTerminal",
-   "url": "https://github.com/Fincept-Corporation/FinceptTerminal",
-   "date": "2026-11-18T04:04:52+08:00",
-   "summary": "FinceptTerminal is a modern finance application offering advanced market analytics, investment research, and economic data tools, designed for interactive ex…",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -310,16 +370,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "qusong0627/QuantMind",
-   "url": "https://github.com/qusong0627/QuantMind",
-   "date": "2026-11-17T13:18:29+08:00",
-   "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "Blave-TW/blave-agent",
    "url": "https://github.com/Blave-TW/blave-agent",
    "date": "2026-11-17T10:10:59+08:00",
@@ -380,16 +430,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "pseudo-longinus/quant-buddy-skills",
-   "url": "https://github.com/pseudo-longinus/quant-buddy-skills",
-   "date": "2026-11-16T10:32:50+08:00",
-   "summary": "宽宝 QuantBuddy： 一整套面向Agent Invesment投资研究与决策的底层设施与能力的调用skill， 覆盖A股/港股/美股/期货/宏观/ETF的量化分析与计算。支持行情、估值、财务查询、选股筛选、因子计算、策略回测。A complete infrastructure for Agent base…",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "wilsonfreitas/awesome-quant",
    "url": "https://github.com/wilsonfreitas/awesome-quant",
    "date": "2026-11-16T09:04:25+08:00",
@@ -410,16 +450,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "jundizhou/easy-stock",
-   "url": "https://github.com/jundizhou/easy-stock",
-   "date": "2026-11-15T22:36:07+08:00",
-   "summary": "A股 AI 投研",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "Codeforces Round 1135 (Div. 2)",
    "url": "https://codeforces.com/contest/2285",
    "date": "2026-11-15T22:35:00+08:00",
@@ -436,16 +466,6 @@ window.SITE_FEED = {
    "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "HKUDS/Vibe-Trading",
-   "url": "https://github.com/HKUDS/Vibe-Trading",
-   "date": "2026-11-15T20:31:41+08:00",
-   "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
    "kind": "开源",
    "family": "github"
   },
@@ -1141,5 +1161,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "f9ad546a07bc87a8f735021c69aed6a5"
+ "signature": "91e6a4fb223d71c84d05f6caa449f87f"
 };
