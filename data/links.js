@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-19T10:51:24+08:00",
- "generated_at_human": "2026-11-19 10:51",
+ "generated_at": "2026-11-19T15:29:27+08:00",
+ "generated_at_human": "2026-11-19 15:29",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -18,8 +18,8 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 112,
-  "items_added": 0,
+  "items": 116,
+  "items_added": 4,
   "archive_max": 3000
  },
  "sources": [
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 770,
+   "ms": 960,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 366,
+   "ms": 192,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 658,
+   "ms": 665,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 592,
+   "ms": 567,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 357,
+   "ms": 260,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 854,
+   "ms": 743,
    "http": 200
   }
  ],
@@ -148,19 +148,29 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
-   "title": "Lumiwealth/lumibot",
-   "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-19T10:47:46+08:00",
-   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "title": "questdb/questdb",
+   "url": "https://github.com/questdb/questdb",
+   "date": "2026-11-19T15:29:12+08:00",
+   "summary": "QuestDB is a high performance, open-source, time-series database",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
    "family": "github"
   },
   {
+   "title": "Blave-TW/blave-agent",
+   "url": "https://github.com/Blave-TW/blave-agent",
+   "date": "2026-11-19T15:28:17+08:00",
+   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
    "title": "JerBouma/FinanceToolkit",
    "url": "https://github.com/JerBouma/FinanceToolkit",
-   "date": "2026-11-19T10:42:46+08:00",
+   "date": "2026-11-19T15:27:42+08:00",
    "summary": "Transparent and Efficient Financial Analysis",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
@@ -168,10 +178,40 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "questdb/questdb",
-   "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-19T10:40:37+08:00",
-   "summary": "QuestDB is a high performance, open-source, time-series database",
+   "title": "Fincept-Corporation/FinceptTerminal",
+   "url": "https://github.com/Fincept-Corporation/FinceptTerminal",
+   "date": "2026-11-19T14:37:53+08:00",
+   "summary": "FinceptTerminal is a modern finance application offering advanced market analytics, investment research, and economic data tools, designed for interactive ex…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "G-OTW/OpenTraderWorld",
+   "url": "https://github.com/G-OTW/OpenTraderWorld",
+   "date": "2026-11-19T13:55:44+08:00",
+   "summary": "Free and source-available, self-hostable trading workspace: data, backtest, trading journal, news aggregator, rich-doc editor, portfolio, 20+ modules with a …",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "HKUDS/Vibe-Trading",
+   "url": "https://github.com/HKUDS/Vibe-Trading",
+   "date": "2026-11-19T12:43:49+08:00",
+   "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Lumiwealth/lumibot",
+   "url": "https://github.com/Lumiwealth/lumibot",
+   "date": "2026-11-19T12:18:49+08:00",
+   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -182,16 +222,6 @@ window.SITE_FEED = {
    "url": "https://github.com/ZeekCursos/metaid-file-system",
    "date": "2026-11-19T09:50:19+08:00",
    "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "Blave-TW/blave-agent",
-   "url": "https://github.com/Blave-TW/blave-agent",
-   "date": "2026-11-19T09:02:16+08:00",
-   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
    "kind": "开源",
@@ -279,6 +309,26 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
+   "title": "Stock bubbles in limited participation models with power utilities",
+   "url": "https://arxiv.org/abs/2611.24912v1",
+   "date": "2026-11-19T02:47:16+08:00",
+   "summary": "We prove that the equilibrium state-price deflated cum-dividend stock-price process in Guasoni, Larsen, and Leoni (2025) is a strict local martingale. Our result is based on proving that the unrestric",
+   "source": "arxiv-qfin",
+   "source_name": "arXiv q-fin",
+   "kind": "研究",
+   "family": "arxiv-qfin"
+  },
+  {
+   "title": "Vibe-Trading: Towards Agent-Native Trading",
+   "url": "https://arxiv.org/abs/2611.24845v1",
+   "date": "2026-11-19T02:07:57+08:00",
+   "summary": "Existing AI agents can retrieve information, call tools, run experiments, and produce multi-step outputs. Yet most are built around relatively static workflows and struggle to preserve reliable state ",
+   "source": "arxiv-qfin",
+   "source_name": "arXiv q-fin",
+   "kind": "研究",
+   "family": "arxiv-qfin"
+  },
+  {
    "title": "lballabio/QuantLib",
    "url": "https://github.com/lballabio/QuantLib",
    "date": "2026-11-19T01:43:01+08:00",
@@ -332,20 +382,20 @@ window.SITE_FEED = {
    "mid": "2247484943"
   },
   {
+   "title": "Algorithmic Market Making Can Lead to Rough Volatility Through the Order Book",
+   "url": "https://arxiv.org/abs/2611.24028v1",
+   "date": "2026-11-18T16:16:22+08:00",
+   "summary": "Existing work suggests that markets can show volatility with paths rougher than those of Brownian motion. In theory this can happen when the order flow is close to instability with memory that decays ",
+   "source": "arxiv-qfin",
+   "source_name": "arXiv q-fin",
+   "kind": "研究",
+   "family": "arxiv-qfin"
+  },
+  {
    "title": "jundizhou/easy-stock",
    "url": "https://github.com/jundizhou/easy-stock",
    "date": "2026-11-18T15:32:28+08:00",
    "summary": "A股 AI 投研",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "HKUDS/Vibe-Trading",
-   "url": "https://github.com/HKUDS/Vibe-Trading",
-   "date": "2026-11-18T15:25:01+08:00",
-   "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -366,16 +416,6 @@ window.SITE_FEED = {
    "url": "https://github.com/akfamily/akhub",
    "date": "2026-11-18T15:01:32+08:00",
    "summary": "AKHub：金融与经济数据工具、数据源、量化投研框架和学习资源合集 | A curated hub of financial data tools, data sources, quant research frameworks and learning resources",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "Fincept-Corporation/FinceptTerminal",
-   "url": "https://github.com/Fincept-Corporation/FinceptTerminal",
-   "date": "2026-11-18T14:50:23+08:00",
-   "summary": "FinceptTerminal is a modern finance application offering advanced market analytics, investment research, and economic data tools, designed for interactive ex…",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -1215,5 +1255,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "4e8e630e85b7224e21066c6ec2bbe133"
+ "signature": "918c70a83f96fe93c8d1c8f8e34ce964"
 };
