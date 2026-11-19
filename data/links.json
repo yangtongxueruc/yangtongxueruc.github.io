@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-19T15:29:27+08:00",
-  "generated_at_human": "2026-11-19 15:29",
+  "generated_at": "2026-11-20T04:40:40+08:00",
+  "generated_at_human": "2026-11-20 04:40",
   "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
   "families": {
     "wechat-llmquant": "wechat-llmquant",
@@ -17,8 +17,8 @@
     "sources_ok": 6,
     "sources_failed": 0,
     "failed_sources": [],
-    "items": 116,
-    "items_added": 4,
+    "items": 119,
+    "items_added": 3,
     "archive_max": 3000
   },
   "sources": [
@@ -31,7 +31,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 960,
+      "ms": 813,
       "http": 200
     },
     {
@@ -43,7 +43,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 192,
+      "ms": 271,
       "http": 200
     },
     {
@@ -51,11 +51,11 @@
       "name": "GitHub 量化开源",
       "type": "json",
       "kind": "开源",
-      "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-20&sort=updated&order=desc&per_page=10",
+      "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-21&sort=updated&order=desc&per_page=10",
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 665,
+      "ms": 814,
       "http": 200
     },
     {
@@ -63,11 +63,11 @@
       "name": "GitHub 新项目",
       "type": "json",
       "kind": "开源",
-      "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-19+stars%3A%3E50&sort=updated&order=desc&per_page=10",
+      "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-20+stars%3A%3E50&sort=updated&order=desc&per_page=10",
       "ok": true,
       "count": 4,
       "error": null,
-      "ms": 567,
+      "ms": 766,
       "http": 200
     },
     {
@@ -79,7 +79,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 260,
+      "ms": 458,
       "http": 200
     },
     {
@@ -91,7 +91,7 @@
       "ok": true,
       "count": 20,
       "error": null,
-      "ms": 743,
+      "ms": 820,
       "http": 200
     }
   ],
@@ -149,10 +149,80 @@
     {
       "title": "questdb/questdb",
       "url": "https://github.com/questdb/questdb",
-      "date": "2026-11-19T15:29:12+08:00",
+      "date": "2026-11-20T04:26:04+08:00",
       "summary": "QuestDB is a high performance, open-source, time-series database",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "OpenByteInc/QuantDinger",
+      "url": "https://github.com/OpenByteInc/QuantDinger",
+      "date": "2026-11-20T04:24:16+08:00",
+      "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ZeekCursos/metaid-file-system",
+      "url": "https://github.com/ZeekCursos/metaid-file-system",
+      "date": "2026-11-20T02:52:34+08:00",
+      "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "lballabio/QuantLib",
+      "url": "https://github.com/lballabio/QuantLib",
+      "date": "2026-11-20T02:12:09+08:00",
+      "summary": "The QuantLib C++ library",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "skfolio/skfolio",
+      "url": "https://github.com/skfolio/skfolio",
+      "date": "2026-11-20T01:54:39+08:00",
+      "summary": "Python library for portfolio optimization, factor model construction, and risk management built on scikit-learn",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "StockSharp/StockSharp",
+      "url": "https://github.com/StockSharp/StockSharp",
+      "date": "2026-11-20T01:10:26+08:00",
+      "summary": "Algorithmic trading and quantitative trading open source platform to develop trading robots (stock markets, forex, crypto, bitcoins, and options).",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "londonstrategicedge/lse-terminal",
+      "url": "https://github.com/londonstrategicedge/lse-terminal",
+      "date": "2026-11-20T00:59:23+08:00",
+      "summary": "Free, open source trading terminal. Agentic IDE for Python strategies and backtests. LSE market data integrated; connects to other data providers and brokers.",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "0xArchiveIO/0xarchive-quant",
+      "url": "https://github.com/0xArchiveIO/0xarchive-quant",
+      "date": "2026-11-20T00:26:54+08:00",
+      "summary": "Hyperliquid and Lighter backtesting for coding agents. Reverse engineer any trader, test any idea: a deterministic Rust backtester, a trial ledger, a sealed …",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
       "kind": "开源",
       "family": "github"
     },
@@ -213,16 +283,6 @@
       "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "ZeekCursos/metaid-file-system",
-      "url": "https://github.com/ZeekCursos/metaid-file-system",
-      "date": "2026-11-19T09:50:19+08:00",
-      "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
       "kind": "开源",
       "family": "github"
     },
@@ -328,16 +388,6 @@
       "family": "arxiv-qfin"
     },
     {
-      "title": "lballabio/QuantLib",
-      "url": "https://github.com/lballabio/QuantLib",
-      "date": "2026-11-19T01:43:01+08:00",
-      "summary": "The QuantLib C++ library",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "ZhuLinsen/daily_stock_analysis",
       "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
       "date": "2026-11-18T23:38:50+08:00",
@@ -427,16 +477,6 @@
       "summary": "宽宝 QuantBuddy： 一整套面向Agent Invesment投资研究与决策的底层设施与能力的调用skill， 覆盖A股/港股/美股/期货/宏观/ETF的量化分析与计算。支持行情、估值、财务查询、选股筛选、因子计算、策略回测。A complete infrastructure for Agent base…",
       "source": "github-quant-new",
       "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "skfolio/skfolio",
-      "url": "https://github.com/skfolio/skfolio",
-      "date": "2026-11-18T04:47:25+08:00",
-      "summary": "Python library for portfolio optimization, factor model construction, and risk management built on scikit-learn",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
       "kind": "开源",
       "family": "github"
     },
@@ -571,16 +611,6 @@
       "source_name": "Codeforces",
       "kind": "算法竞赛",
       "family": "codeforces"
-    },
-    {
-      "title": "OpenByteInc/QuantDinger",
-      "url": "https://github.com/OpenByteInc/QuantDinger",
-      "date": "2026-11-15T22:33:42+08:00",
-      "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
     },
     {
       "title": "gammagrid/gammagrid",
@@ -1254,5 +1284,5 @@
       "kind": "公众号"
     }
   ],
-  "signature": "918c70a83f96fe93c8d1c8f8e34ce964"
+  "signature": "a4e1d4231bd91ed149d2d8e12518c6b7"
 }
