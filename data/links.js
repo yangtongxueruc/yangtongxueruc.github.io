@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-19T09:33:11+08:00",
- "generated_at_human": "2026-11-19 09:33",
+ "generated_at": "2026-11-19T10:51:24+08:00",
+ "generated_at_human": "2026-11-19 10:51",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 821,
+   "ms": 770,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 528,
+   "ms": 366,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 533,
+   "ms": 658,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 493,
+   "ms": 592,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 255,
+   "ms": 357,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 964,
+   "ms": 854,
    "http": 200
   }
  ],
@@ -148,6 +148,46 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
+   "title": "Lumiwealth/lumibot",
+   "url": "https://github.com/Lumiwealth/lumibot",
+   "date": "2026-11-19T10:47:46+08:00",
+   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "JerBouma/FinanceToolkit",
+   "url": "https://github.com/JerBouma/FinanceToolkit",
+   "date": "2026-11-19T10:42:46+08:00",
+   "summary": "Transparent and Efficient Financial Analysis",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "questdb/questdb",
+   "url": "https://github.com/questdb/questdb",
+   "date": "2026-11-19T10:40:37+08:00",
+   "summary": "QuestDB is a high performance, open-source, time-series database",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZeekCursos/metaid-file-system",
+   "url": "https://github.com/ZeekCursos/metaid-file-system",
+   "date": "2026-11-19T09:50:19+08:00",
+   "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
    "title": "Blave-TW/blave-agent",
    "url": "https://github.com/Blave-TW/blave-agent",
    "date": "2026-11-19T09:02:16+08:00",
@@ -158,10 +198,10 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "JerBouma/FinanceToolkit",
-   "url": "https://github.com/JerBouma/FinanceToolkit",
-   "date": "2026-11-19T08:49:42+08:00",
-   "summary": "Transparent and Efficient Financial Analysis",
+   "title": "rolling-panda-san/notebooks",
+   "url": "https://github.com/rolling-panda-san/notebooks",
+   "date": "2026-11-19T08:53:06+08:00",
+   "summary": "Analysis on systematic trading strategies (e.g., trend-following, carry and mean-reversion). The result is regularly updated.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -178,16 +218,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "questdb/questdb",
-   "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-19T08:12:29+08:00",
-   "summary": "QuestDB is a high performance, open-source, time-series database",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "Jane Street：LLM 如何改变机构交易询价",
    "url": "https://mp.weixin.qq.com/s/uPcYLWaYQPyolru9qO7C3A",
    "date": "2026-11-19T08:00:00+08:00",
@@ -197,16 +227,6 @@ window.SITE_FEED = {
    "kind": "公众号",
    "manual": true,
    "mid": "2247484938"
-  },
-  {
-   "title": "Lumiwealth/lumibot",
-   "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-19T07:56:53+08:00",
-   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
   },
   {
    "title": "man-group/ArcticDB",
@@ -233,16 +253,6 @@ window.SITE_FEED = {
    "url": "https://github.com/ZhuLinsen/alphasift",
    "date": "2026-11-19T06:35:41+08:00",
    "summary": "Full-market stock discovery for AI agents: A-shares plus US/HK/JP/KR/TW/IN, auditable YAML strategies, optional LLM ranking, sector-diversified picks, and tr…",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "ZeekCursos/metaid-file-system",
-   "url": "https://github.com/ZeekCursos/metaid-file-system",
-   "date": "2026-11-19T03:59:30+08:00",
-   "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
    "kind": "开源",
@@ -292,11 +302,13 @@ window.SITE_FEED = {
    "title": "Druckenmiller罕见发出谨慎信号：股票净敞口接近零，AI投资下一站看向哪里？",
    "url": "https://mp.weixin.qq.com/s?__biz=MzkzOTcwNDA3MQ==&mid=2247494091&idx=1&sn=76c72bb68bd5ae61e9d2af55bf8dbe31&chksm=c2ee43a3f599cab51958aab1e07186f5b79fe9644ccf25fd8f93c44b7d152342b16a3fd5a705#rd",
    "date": "2026-11-18T22:13:33+08:00",
-   "summary": "",
+   "summary": "年初，Stanley Druckenmiller 还在做多股票和铜。几个月后接受访谈时，他的 股票净敞口已接近零，铜也转成了空头 。谈到这次降仓，他说： “这段休整可能持续两天，也可能持续六个月。我不知道。” 仓位降了，他对 AI 的研究却",
    "source": "wechat-llmquant",
    "source_name": "LLMQuant",
    "kind": "公众号",
-   "family": "wechat-llmquant"
+   "family": "wechat-llmquant",
+   "manual": true,
+   "mid": "2247494091"
   },
   {
    "title": "为什么大模型量化论文难复现",
@@ -582,16 +594,6 @@ window.SITE_FEED = {
    "kind": "公众号",
    "manual": true,
    "mid": "2247484890"
-  },
-  {
-   "title": "rolling-panda-san/notebooks",
-   "url": "https://github.com/rolling-panda-san/notebooks",
-   "date": "2026-11-15T08:27:48+08:00",
-   "summary": "Analysis on systematic trading strategies (e.g., trend-following, carry and mean-reversion). The result is regularly updated.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
   },
   {
    "title": "facioquo/stock-indicators-dotnet",
@@ -1213,5 +1215,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "f3a986eeae78251d9f09fb30d159c37b"
+ "signature": "4e8e630e85b7224e21066c6ec2bbe133"
 };
