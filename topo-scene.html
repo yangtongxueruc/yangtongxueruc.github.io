@@ -11,7 +11,7 @@
   <!-- 参数来源：已发布值 data/topo.js + 内置兜底 topo-defaults.js，
        两者统一由 topo-store.js 解析（预览里还会叠控制台草稿）。
        单独打开这个页面调试时也走同一套，行为跟嵌进页头时一致。 -->
-  <script src="data/topo.js?v=4"></script>
+  <script src="data/topo.js?v=5"></script>
   <script src="assets/js/topo-defaults.js?v=135"></script>
   <script src="assets/js/topo-store.js?v=135"></script>
   <!-- 不引外部字体：Google Fonts 在国内会卡住首屏，标签又只是几个短词 -->
@@ -1218,7 +1218,14 @@ for (int i = 0; i < 12; i++) {
       antialias: true,
       powerPreference: 'high-performance',
       alpha: TRANSPARENT,
-      premultipliedAlpha: false
+      /* 必须是预乘（默认值），不能写 premultipliedAlpha: false。
+         Chrome 会老实按"直通 alpha"合成，Firefox / Safari(WebKit) 与部分
+         安卓 WebView 会忽略这个标志、一律按预乘解释缓冲区 —— 于是片元里的
+         原始 RGB 被原样贴到页面上、alpha 形同虚设，整块画布变成一张不透明
+         的深色卡片（实测：Chrome 框内 5 / WebKit 框内 10.1，而框外都是 5）。
+         改成预乘之后，片元输出 col*a 并按 a 合成，浏览器怎么解释都对，
+         Chrome 下的观感与改之前逐像素一致。 */
+      premultipliedAlpha: true
     });
     renderer.setPixelRatio(pixelRatio);
     renderer.setSize(VIEW.w, VIEW.h);
@@ -1719,7 +1726,11 @@ for (int i = 0; i < 12; i++) {
               smoothstep(0.0, 0.10, vUv.x) * smoothstep(1.0, 0.90, vUv.x) *
               smoothstep(0.0, 0.10, vUv.y) * smoothstep(1.0, 0.90, vUv.y);
             a *= edgeFade;
-            gl_FragColor = vec4(col, a);
+            /* 预乘输出（配合 renderer 的 premultipliedAlpha: true）：
+               缓冲区里存 col*a。alpha 归零的暗部 RGB 也一并归零，所以即使
+               某个浏览器不认 premultipliedAlpha、按预乘硬解释，暗部依然是
+               "黑 + 全透明"，不会在页面上留下那块矩形底色。 */
+            gl_FragColor = vec4(col * a, a);
           } else {
             col = mix(uBgColor * 0.72, col, 0.78 + 0.22 * vig);
             col += grain;
@@ -3137,14 +3148,25 @@ for (int i = 0; i < 12; i++) {
       if (elVerts) elVerts.textContent = `${(TOTAL_PARTICLES + DUST_COUNT).toLocaleString()} PTS / ${segCount} SEG`;
 
       // Render through Fullscreen Optical Bokeh & Bloom Post-Processing or Direct
+      /* 画布清屏色在透明模式下必须是「黑 + 全透明」。
+         预乘合成是 src + dst*(1-a)：缓冲区里只要留下非零 RGB，它就会被原样
+         加到页面上。预设底色（#0f0f11 之类）清出的画布看着"几乎黑"，实则
+         是一块比页面底色亮十几级的矩形 —— 这正是那块莫名底色的另一半来源。
+         FBO 仍用预设底色清屏：那是地形「地面」的基准色调，换掉会改观感。 */
+      const canvasClearColor = TRANSPARENT ? 0x000000 : new THREE.Color(PRESETS[state.preset].bgHex);
+      const canvasClearAlpha = TRANSPARENT ? 0 : 1;
       if (state.postFxEnabled) {
+        renderer.setClearColor(new THREE.Color(PRESETS[state.preset].bgHex), TRANSPARENT ? 0.0 : 1.0);
         renderer.setRenderTarget(renderTarget);
         renderer.clear();
         renderer.render(scene, camera);
         renderer.setRenderTarget(null);
+        renderer.setClearColor(canvasClearColor, canvasClearAlpha);
         renderer.render(postScene, postCamera);
       } else {
         renderer.setRenderTarget(null);
+        renderer.setClearColor(canvasClearColor, canvasClearAlpha);
+        renderer.clear();
         renderer.render(scene, camera);
       }
     }

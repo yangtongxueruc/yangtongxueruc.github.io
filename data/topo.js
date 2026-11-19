@@ -4,8 +4,8 @@
    version 决定 data/topo.js?v= 与 topo-scene.html?v= 两处缓存戳
    ============================================================ */
 window.V2_TOPO = {
-  "version": 4,
-  "updatedAt": "2026-11-18",
+  "version": 5,
+  "updatedAt": "2026-11-19",
   "params": {
     "boxW": 564,
     "boxH": 404,
@@ -143,6 +143,42 @@ window.V2_TOPO = {
         "autorotate": true,
         "postfx": true,
         "autoBeatCut": true,
+        "ripple": true,
+        "rippleHz": 3.8
+      }
+    },
+    {
+      "version": 4,
+      "updatedAt": "2026-11-18",
+      "params": {
+        "boxW": 564,
+        "boxH": 404,
+        "dx": 0,
+        "dy": 52,
+        "preset": "mono",
+        "levels": 10,
+        "amp": 1.34,
+        "speed": 0.18,
+        "orbit": 0.36,
+        "pitchDeg": 32,
+        "dist": 13.5,
+        "dof": 0.55,
+        "bloom": 0.08,
+        "cyanPct": 10,
+        "fontSize": 14,
+        "labels": [
+          "最新动态",
+          "比赛",
+          "练习",
+          "信息库"
+        ],
+        "contours": true,
+        "voxels": true,
+        "dust": true,
+        "frame": false,
+        "autorotate": false,
+        "postfx": true,
+        "autoBeatCut": false,
         "ripple": true,
         "rippleHz": 3.8
       }
