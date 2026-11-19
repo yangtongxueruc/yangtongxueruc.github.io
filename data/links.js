@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-19T04:35:26+08:00",
- "generated_at_human": "2026-11-19 04:35",
+ "generated_at": "2026-11-19T09:33:11+08:00",
+ "generated_at_human": "2026-11-19 09:33",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -18,8 +18,8 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 110,
-  "items_added": 3,
+  "items": 112,
+  "items_added": 0,
   "archive_max": 3000
  },
  "sources": [
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 923,
+   "ms": 821,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1371,
+   "ms": 528,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 684,
+   "ms": 533,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 576,
+   "ms": 493,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 385,
+   "ms": 255,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 841,
+   "ms": 964,
    "http": 200
   }
  ],
@@ -148,12 +148,93 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
+   "title": "Blave-TW/blave-agent",
+   "url": "https://github.com/Blave-TW/blave-agent",
+   "date": "2026-11-19T09:02:16+08:00",
+   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "JerBouma/FinanceToolkit",
+   "url": "https://github.com/JerBouma/FinanceToolkit",
+   "date": "2026-11-19T08:49:42+08:00",
+   "summary": "Transparent and Efficient Financial Analysis",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "qusong0627/QuantMind",
+   "url": "https://github.com/qusong0627/QuantMind",
+   "date": "2026-11-19T08:35:48+08:00",
+   "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
    "title": "questdb/questdb",
    "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-19T04:31:29+08:00",
+   "date": "2026-11-19T08:12:29+08:00",
    "summary": "QuestDB is a high performance, open-source, time-series database",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Jane Street：LLM 如何改变机构交易询价",
+   "url": "https://mp.weixin.qq.com/s/uPcYLWaYQPyolru9qO7C3A",
+   "date": "2026-11-19T08:00:00+08:00",
+   "summary": "访谈来源：Jane Street 主持人：Ron Minsky 嘉宾：Chloe Casale，Jane Street 销售交易技术团队负责人，曾任 Palantir 前线部署工程师 Chloe Casale 曾在 Palantir 担任前",
+   "source": "wechat-manual",
+   "source_name": "狄奥尼索斯之歌",
+   "kind": "公众号",
+   "manual": true,
+   "mid": "2247484938"
+  },
+  {
+   "title": "Lumiwealth/lumibot",
+   "url": "https://github.com/Lumiwealth/lumibot",
+   "date": "2026-11-19T07:56:53+08:00",
+   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "man-group/ArcticDB",
+   "url": "https://github.com/man-group/ArcticDB",
+   "date": "2026-11-19T07:28:13+08:00",
+   "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "openbq-org/OpenBB",
+   "url": "https://github.com/openbq-org/OpenBB",
+   "date": "2026-11-19T06:42:00+08:00",
+   "summary": "Open Data Platform for analysts, quants and AI agents.",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZhuLinsen/alphasift",
+   "url": "https://github.com/ZhuLinsen/alphasift",
+   "date": "2026-11-19T06:35:41+08:00",
+   "summary": "Full-market stock discovery for AI agents: A-shares plus US/HK/JP/KR/TW/IN, auditable YAML strategies, optional LLM ranking, sector-diversified picks, and tr…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -164,16 +245,6 @@ window.SITE_FEED = {
    "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "Lumiwealth/lumibot",
-   "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-19T03:46:56+08:00",
-   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
    "kind": "开源",
    "family": "github"
   },
@@ -208,26 +279,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "man-group/ArcticDB",
-   "url": "https://github.com/man-group/ArcticDB",
-   "date": "2026-11-19T01:28:47+08:00",
-   "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "openbq-org/OpenBB",
-   "url": "https://github.com/openbq-org/OpenBB",
-   "date": "2026-11-19T00:49:13+08:00",
-   "summary": "Open Data Platform for analysts, quants and AI agents.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "ZhuLinsen/daily_stock_analysis",
    "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
    "date": "2026-11-18T23:38:50+08:00",
@@ -256,6 +307,17 @@ window.SITE_FEED = {
    "source_name": "QuantML · 论文",
    "kind": "公众号",
    "family": "wechat-19884288"
+  },
+  {
+   "title": "Stan Druckenmiller：AI、市场与未来十年",
+   "url": "https://mp.weixin.qq.com/s/5Z88Dlw04RimY3p2mj4AbA",
+   "date": "2026-11-18T19:02:53+08:00",
+   "summary": "访谈来源：TomorrowX Summit 主持人：Iliana Bouzali， Morgan Stanley 嘉宾：Stan Druckenmiller，Duquesne Family Office 首席执行官 Stan Drucken",
+   "source": "wechat-manual",
+   "source_name": "狄奥尼索斯之歌",
+   "kind": "公众号",
+   "manual": true,
+   "mid": "2247484943"
   },
   {
    "title": "jundizhou/easy-stock",
@@ -304,16 +366,6 @@ window.SITE_FEED = {
    "summary": "FinceptTerminal is a modern finance application offering advanced market analytics, investment research, and economic data tools, designed for interactive ex…",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "qusong0627/QuantMind",
-   "url": "https://github.com/qusong0627/QuantMind",
-   "date": "2026-11-18T14:27:39+08:00",
-   "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -400,16 +452,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "JerBouma/FinanceToolkit",
-   "url": "https://github.com/JerBouma/FinanceToolkit",
-   "date": "2026-11-17T15:49:29+08:00",
-   "summary": "Transparent and Efficient Financial Analysis",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "Barca0412/Introduction-to-Quantitative-Finance",
    "url": "https://github.com/Barca0412/Introduction-to-Quantitative-Finance",
    "date": "2026-11-17T14:13:08+08:00",
@@ -420,30 +462,10 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "Blave-TW/blave-agent",
-   "url": "https://github.com/Blave-TW/blave-agent",
-   "date": "2026-11-17T10:10:59+08:00",
-   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "austin-starks/Public-Portfolio-Challenge",
    "url": "https://github.com/austin-starks/Public-Portfolio-Challenge",
    "date": "2026-11-17T06:51:25+08:00",
    "summary": "4 AI agents. One runbook. Real $25K, live and verifiable. Currently +22.85%.",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "ZhuLinsen/alphasift",
-   "url": "https://github.com/ZhuLinsen/alphasift",
-   "date": "2026-11-17T06:35:38+08:00",
-   "summary": "Full-market stock discovery for AI agents: A-shares plus US/HK/JP/KR/TW/IN, auditable YAML strategies, optional LLM ranking, sector-diversified picks, and tr…",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
    "kind": "开源",
@@ -1191,5 +1213,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "b8e06584716ff622c079d19bccf0e552"
+ "signature": "f3a986eeae78251d9f09fb30d159c37b"
 };
