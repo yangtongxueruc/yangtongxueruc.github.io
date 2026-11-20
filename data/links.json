@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-20T15:20:29+08:00",
-  "generated_at_human": "2026-11-20 15:20",
+  "generated_at": "2026-11-21T04:24:39+08:00",
+  "generated_at_human": "2026-11-21 04:24",
   "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
   "families": {
     "wechat-llmquant": "wechat-llmquant",
@@ -18,7 +18,7 @@
     "sources_failed": 0,
     "failed_sources": [],
     "items": 123,
-    "items_added": 4,
+    "items_added": 0,
     "archive_max": 3000
   },
   "sources": [
@@ -31,7 +31,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 1005,
+      "ms": 1247,
       "http": 200
     },
     {
@@ -43,7 +43,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 296,
+      "ms": 372,
       "http": 200
     },
     {
@@ -51,11 +51,11 @@
       "name": "GitHub 量化开源",
       "type": "json",
       "kind": "开源",
-      "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-21&sort=updated&order=desc&per_page=10",
+      "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-22&sort=updated&order=desc&per_page=10",
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 597,
+      "ms": 547,
       "http": 200
     },
     {
@@ -63,11 +63,11 @@
       "name": "GitHub 新项目",
       "type": "json",
       "kind": "开源",
-      "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-20+stars%3A%3E50&sort=updated&order=desc&per_page=10",
+      "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-21+stars%3A%3E50&sort=updated&order=desc&per_page=10",
       "ok": true,
       "count": 4,
       "error": null,
-      "ms": 571,
+      "ms": 639,
       "http": 200
     },
     {
@@ -79,7 +79,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 301,
+      "ms": 290,
       "http": 200
     },
     {
@@ -91,7 +91,7 @@
       "ok": true,
       "count": 20,
       "error": null,
-      "ms": 709,
+      "ms": 817,
       "http": 200
     }
   ],
@@ -145,6 +145,86 @@
       "source_name": "Codeforces",
       "kind": "算法竞赛",
       "family": "codeforces"
+    },
+    {
+      "title": "ZhuLinsen/daily_stock_analysis",
+      "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
+      "date": "2026-11-21T04:24:08+08:00",
+      "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "TNT-Likely/PanWatch",
+      "url": "https://github.com/TNT-Likely/PanWatch",
+      "date": "2026-11-21T03:29:52+08:00",
+      "summary": "PanWatch — AI stock monitoring for A-shares, HK & US markets, powered by TradingAgents. Portfolio insights, real-time alerts & automated reports.｜盯盘侠：覆盖 A股/港…",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "man-group/ArcticDB",
+      "url": "https://github.com/man-group/ArcticDB",
+      "date": "2026-11-21T03:13:58+08:00",
+      "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "questdb/questdb",
+      "url": "https://github.com/questdb/questdb",
+      "date": "2026-11-21T03:02:26+08:00",
+      "summary": "QuestDB is a high performance, open-source, time-series database",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "lballabio/QuantLib",
+      "url": "https://github.com/lballabio/QuantLib",
+      "date": "2026-11-21T02:57:21+08:00",
+      "summary": "The QuantLib C++ library",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ZeekCursos/metaid-file-system",
+      "url": "https://github.com/ZeekCursos/metaid-file-system",
+      "date": "2026-11-21T02:20:21+08:00",
+      "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "akfamily/akquant",
+      "url": "https://github.com/akfamily/akquant",
+      "date": "2026-11-21T01:11:19+08:00",
+      "summary": "AKQuant is a high-performance quantitative research and trading framework built on Rust and Python! 开源量化回测框架",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ArturSepp/QuantInvestStrats",
+      "url": "https://github.com/ArturSepp/QuantInvestStrats",
+      "date": "2026-11-21T00:32:56+08:00",
+      "summary": "Performance analytics, portfolio backtesting, risk analysis, and factsheet reporting in Python",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
     },
     {
       "title": "Loopera-ai/loopera",
@@ -227,16 +307,6 @@
       "family": "github"
     },
     {
-      "title": "questdb/questdb",
-      "url": "https://github.com/questdb/questdb",
-      "date": "2026-11-20T08:58:56+08:00",
-      "summary": "QuestDB is a high performance, open-source, time-series database",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "rolling-panda-san/notebooks",
       "url": "https://github.com/rolling-panda-san/notebooks",
       "date": "2026-11-20T08:19:31+08:00",
@@ -251,26 +321,6 @@
       "url": "https://github.com/OpenByteInc/QuantDinger",
       "date": "2026-11-20T04:24:16+08:00",
       "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "ZeekCursos/metaid-file-system",
-      "url": "https://github.com/ZeekCursos/metaid-file-system",
-      "date": "2026-11-20T02:52:34+08:00",
-      "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "lballabio/QuantLib",
-      "url": "https://github.com/lballabio/QuantLib",
-      "date": "2026-11-20T02:12:09+08:00",
-      "summary": "The QuantLib C++ library",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源",
@@ -368,16 +418,6 @@
       "mid": "2247484938"
     },
     {
-      "title": "man-group/ArcticDB",
-      "url": "https://github.com/man-group/ArcticDB",
-      "date": "2026-11-19T07:28:13+08:00",
-      "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "openbq-org/OpenBB",
       "url": "https://github.com/openbq-org/OpenBB",
       "date": "2026-11-19T06:42:00+08:00",
@@ -436,16 +476,6 @@
       "source_name": "arXiv q-fin",
       "kind": "研究",
       "family": "arxiv-qfin"
-    },
-    {
-      "title": "ZhuLinsen/daily_stock_analysis",
-      "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
-      "date": "2026-11-18T23:38:50+08:00",
-      "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
     },
     {
       "title": "Druckenmiller罕见发出谨慎信号：股票净敞口接近零，AI投资下一站看向哪里？",
@@ -552,16 +582,6 @@
       "mid": "2247484769"
     },
     {
-      "title": "TNT-Likely/PanWatch",
-      "url": "https://github.com/TNT-Likely/PanWatch",
-      "date": "2026-11-17T22:18:12+08:00",
-      "summary": "PanWatch — AI stock monitoring for A-shares, HK & US markets, powered by TradingAgents. Portfolio insights, real-time alerts & automated reports.｜盯盘侠：覆盖 A股/港…",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "Citadel气象专家加盟 HRT，高薪组建天气分析团队",
       "url": "https://mp.weixin.qq.com/s/njD7spUt_SLCyM2fsKOaig",
       "date": "2026-11-17T21:55:28+08:00",
@@ -571,16 +591,6 @@
       "kind": "公众号",
       "manual": true,
       "mid": "2247484765"
-    },
-    {
-      "title": "akfamily/akquant",
-      "url": "https://github.com/akfamily/akquant",
-      "date": "2026-11-17T21:30:54+08:00",
-      "summary": "AKQuant is a high-performance quantitative research and trading framework built on Rust and Python! 开源量化回测框架",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
     },
     {
       "title": "0xethanq/astra-quant-agent",
@@ -733,16 +743,6 @@
       "source_name": "QuantML · 论文",
       "kind": "公众号",
       "family": "wechat-19884288"
-    },
-    {
-      "title": "ArturSepp/QuantInvestStrats",
-      "url": "https://github.com/ArturSepp/QuantInvestStrats",
-      "date": "2026-11-14T13:56:29+08:00",
-      "summary": "Performance analytics, portfolio backtesting, risk analysis, and factsheet reporting in Python",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
     },
     {
       "title": "pengpengyi92/dsh-quant",
@@ -1324,5 +1324,5 @@
       "kind": "公众号"
     }
   ],
-  "signature": "acf11d9c45b7934ca389be38bceda82d"
+  "signature": "aedbe19a5722b1ac25d50daa46a82c80"
 }
