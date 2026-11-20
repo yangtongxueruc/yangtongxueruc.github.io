@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-20T04:40:40+08:00",
-  "generated_at_human": "2026-11-20 04:40",
+  "generated_at": "2026-11-20T15:20:29+08:00",
+  "generated_at_human": "2026-11-20 15:20",
   "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
   "families": {
     "wechat-llmquant": "wechat-llmquant",
@@ -17,8 +17,8 @@
     "sources_ok": 6,
     "sources_failed": 0,
     "failed_sources": [],
-    "items": 119,
-    "items_added": 3,
+    "items": 123,
+    "items_added": 4,
     "archive_max": 3000
   },
   "sources": [
@@ -31,7 +31,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 813,
+      "ms": 1005,
       "http": 200
     },
     {
@@ -43,7 +43,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 271,
+      "ms": 296,
       "http": 200
     },
     {
@@ -55,7 +55,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 814,
+      "ms": 597,
       "http": 200
     },
     {
@@ -67,7 +67,7 @@
       "ok": true,
       "count": 4,
       "error": null,
-      "ms": 766,
+      "ms": 571,
       "http": 200
     },
     {
@@ -79,7 +79,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 458,
+      "ms": 301,
       "http": 200
     },
     {
@@ -91,7 +91,7 @@
       "ok": true,
       "count": 20,
       "error": null,
-      "ms": 820,
+      "ms": 709,
       "http": 200
     }
   ],
@@ -147,10 +147,100 @@
       "family": "codeforces"
     },
     {
+      "title": "Loopera-ai/loopera",
+      "url": "https://github.com/Loopera-ai/loopera",
+      "date": "2026-11-20T15:17:10+08:00",
+      "summary": "面向基本面因子研究的智能体-A hypothesis-driven AI agent for fundamental factor research, with evidence-gated validation and research memory.",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "HKUDS/Vibe-Trading",
+      "url": "https://github.com/HKUDS/Vibe-Trading",
+      "date": "2026-11-20T15:07:31+08:00",
+      "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "AllenPan-Git/SimpleQuant",
+      "url": "https://github.com/AllenPan-Git/SimpleQuant",
+      "date": "2026-11-20T14:51:05+08:00",
+      "summary": "低代码的 A 股量化回测工具 · Low-code quant backtesting for China A-shares",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "qusong0627/QuantMind",
+      "url": "https://github.com/qusong0627/QuantMind",
+      "date": "2026-11-20T14:41:11+08:00",
+      "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "Blave-TW/blave-agent",
+      "url": "https://github.com/Blave-TW/blave-agent",
+      "date": "2026-11-20T13:23:23+08:00",
+      "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "3.8 万 Star 背后：为什么 Vibe Trading 远比 Vibe Coding 更难",
+      "url": "https://mp.weixin.qq.com/s?__biz=Mzg2MzAwNzM0NQ==&mid=2247494919&idx=1&sn=1d207ab65eb23c28a59aefdb4e2fae46&chksm=ce7d8a19f90a030f791c966d5058579ac5781426bf3217962ea0f505dd60822dd00fe90d2ce1#rd",
+      "date": "2026-11-20T12:21:59+08:00",
+      "summary": "",
+      "source": "wechat-19884288",
+      "source_name": "QuantML · 论文",
+      "kind": "公众号",
+      "family": "wechat-19884288"
+    },
+    {
+      "title": "skfolio/skfolio",
+      "url": "https://github.com/skfolio/skfolio",
+      "date": "2026-11-20T09:04:43+08:00",
+      "summary": "Python library for portfolio optimization, factor model construction, and risk management built on scikit-learn",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "wilsonfreitas/awesome-quant",
+      "url": "https://github.com/wilsonfreitas/awesome-quant",
+      "date": "2026-11-20T09:01:52+08:00",
+      "summary": "A curated list of insanely awesome libraries, packages and resources for Quants (Quantitative Finance)",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
       "title": "questdb/questdb",
       "url": "https://github.com/questdb/questdb",
-      "date": "2026-11-20T04:26:04+08:00",
+      "date": "2026-11-20T08:58:56+08:00",
       "summary": "QuestDB is a high performance, open-source, time-series database",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "rolling-panda-san/notebooks",
+      "url": "https://github.com/rolling-panda-san/notebooks",
+      "date": "2026-11-20T08:19:31+08:00",
+      "summary": "Analysis on systematic trading strategies (e.g., trend-following, carry and mean-reversion). The result is regularly updated.",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源",
@@ -187,16 +277,6 @@
       "family": "github"
     },
     {
-      "title": "skfolio/skfolio",
-      "url": "https://github.com/skfolio/skfolio",
-      "date": "2026-11-20T01:54:39+08:00",
-      "summary": "Python library for portfolio optimization, factor model construction, and risk management built on scikit-learn",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "StockSharp/StockSharp",
       "url": "https://github.com/StockSharp/StockSharp",
       "date": "2026-11-20T01:10:26+08:00",
@@ -227,14 +307,14 @@
       "family": "github"
     },
     {
-      "title": "Blave-TW/blave-agent",
-      "url": "https://github.com/Blave-TW/blave-agent",
-      "date": "2026-11-19T15:28:17+08:00",
-      "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
+      "title": "Trading Before a Committed Rebalance",
+      "url": "https://arxiv.org/abs/2611.25762v1",
+      "date": "2026-11-19T17:02:34+08:00",
+      "summary": "An institution must complete a portfolio adjustment, but traders who prepare inventory for it can choose whether to participate. We study how public forecasts affect the institution's cost in a Bayesi",
+      "source": "arxiv-qfin",
+      "source_name": "arXiv q-fin",
+      "kind": "研究",
+      "family": "arxiv-qfin"
     },
     {
       "title": "JerBouma/FinanceToolkit",
@@ -267,42 +347,12 @@
       "family": "github"
     },
     {
-      "title": "HKUDS/Vibe-Trading",
-      "url": "https://github.com/HKUDS/Vibe-Trading",
-      "date": "2026-11-19T12:43:49+08:00",
-      "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "Lumiwealth/lumibot",
       "url": "https://github.com/Lumiwealth/lumibot",
       "date": "2026-11-19T12:18:49+08:00",
       "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "rolling-panda-san/notebooks",
-      "url": "https://github.com/rolling-panda-san/notebooks",
-      "date": "2026-11-19T08:53:06+08:00",
-      "summary": "Analysis on systematic trading strategies (e.g., trend-following, carry and mean-reversion). The result is regularly updated.",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "qusong0627/QuantMind",
-      "url": "https://github.com/qusong0627/QuantMind",
-      "date": "2026-11-19T08:35:48+08:00",
-      "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
       "kind": "开源",
       "family": "github"
     },
@@ -577,16 +627,6 @@
       "url": "https://github.com/banbox/banbot",
       "date": "2026-11-16T12:37:54+08:00",
       "summary": "a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading bot",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "wilsonfreitas/awesome-quant",
-      "url": "https://github.com/wilsonfreitas/awesome-quant",
-      "date": "2026-11-16T09:04:25+08:00",
-      "summary": "A curated list of insanely awesome libraries, packages and resources for Quants (Quantitative Finance)",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源",
@@ -1284,5 +1324,5 @@
       "kind": "公众号"
     }
   ],
-  "signature": "a4e1d4231bd91ed149d2d8e12518c6b7"
+  "signature": "acf11d9c45b7934ca389be38bceda82d"
 }
