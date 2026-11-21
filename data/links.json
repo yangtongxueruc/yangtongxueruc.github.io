@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-21T15:13:30+08:00",
-  "generated_at_human": "2026-11-21 15:13",
+  "generated_at": "2026-11-22T03:19:30+08:00",
+  "generated_at_human": "2026-11-22 03:19",
   "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
   "families": {
     "wechat-llmquant": "wechat-llmquant",
@@ -17,8 +17,8 @@
     "sources_ok": 6,
     "sources_failed": 0,
     "failed_sources": [],
-    "items": 124,
-    "items_added": 1,
+    "items": 126,
+    "items_added": 2,
     "archive_max": 3000
   },
   "sources": [
@@ -31,7 +31,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 892,
+      "ms": 724,
       "http": 200
     },
     {
@@ -43,7 +43,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 285,
+      "ms": 320,
       "http": 200
     },
     {
@@ -51,11 +51,11 @@
       "name": "GitHub 量化开源",
       "type": "json",
       "kind": "开源",
-      "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-22&sort=updated&order=desc&per_page=10",
+      "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-23&sort=updated&order=desc&per_page=10",
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 566,
+      "ms": 473,
       "http": 200
     },
     {
@@ -63,11 +63,11 @@
       "name": "GitHub 新项目",
       "type": "json",
       "kind": "开源",
-      "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-21+stars%3A%3E50&sort=updated&order=desc&per_page=10",
+      "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-22+stars%3A%3E50&sort=updated&order=desc&per_page=10",
       "ok": true,
       "count": 4,
       "error": null,
-      "ms": 493,
+      "ms": 404,
       "http": 200
     },
     {
@@ -77,9 +77,9 @@
       "kind": "算法竞赛",
       "url": "https://codeforces.com/api/contest.list",
       "ok": true,
-      "count": 5,
+      "count": 4,
       "error": null,
-      "ms": 365,
+      "ms": 363,
       "http": 200
     },
     {
@@ -91,7 +91,7 @@
       "ok": true,
       "count": 20,
       "error": null,
-      "ms": 760,
+      "ms": 720,
       "http": 200
     }
   ],
@@ -100,6 +100,16 @@
       "title": "Kotlin Heroes: Episode 15",
       "url": "https://codeforces.com/contest/2282",
       "date": "2026-12-08T22:35:00+08:00",
+      "summary": "",
+      "source": "codeforces",
+      "source_name": "Codeforces",
+      "kind": "算法竞赛",
+      "family": "codeforces"
+    },
+    {
+      "title": "ICPC 2026 Online Challenge 2 powered by Huawei",
+      "url": "https://codeforces.com/contest/2291",
+      "date": "2026-12-08T19:00:00+08:00",
       "summary": "",
       "source": "codeforces",
       "source_name": "Codeforces",
@@ -125,6 +135,76 @@
       "source_name": "Codeforces",
       "kind": "算法竞赛",
       "family": "codeforces"
+    },
+    {
+      "title": "TNT-Likely/PanWatch",
+      "url": "https://github.com/TNT-Likely/PanWatch",
+      "date": "2026-11-22T02:04:14+08:00",
+      "summary": "PanWatch — AI stock monitoring for A-shares, HK & US markets, powered by TradingAgents. Portfolio insights, real-time alerts & automated reports.｜盯盘侠：覆盖 A股/港…",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "G-OTW/OpenTraderWorld",
+      "url": "https://github.com/G-OTW/OpenTraderWorld",
+      "date": "2026-11-22T01:56:55+08:00",
+      "summary": "Free and source-available, self-hostable trading workspace: data, backtest, trading journal, news aggregator, rich-doc editor, portfolio, 20+ modules with a …",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ZhuLinsen/daily_stock_analysis",
+      "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
+      "date": "2026-11-22T01:45:27+08:00",
+      "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "questdb/questdb",
+      "url": "https://github.com/questdb/questdb",
+      "date": "2026-11-22T01:21:59+08:00",
+      "summary": "QuestDB is a high performance, open-source, time-series database",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ZhuLinsen/alphasift",
+      "url": "https://github.com/ZhuLinsen/alphasift",
+      "date": "2026-11-22T01:01:33+08:00",
+      "summary": "开源 AI 量化选股引擎：A股/美股/港股/日韩台印全市场筛选、250日实证形态雷达、公告排雷AI复核、公开T+N验证与1行12通道推送 | Open-source AI stock screener, YAML quant strategies, pattern radar & T+N benchmark fo…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "OpenByteInc/QuantDinger",
+      "url": "https://github.com/OpenByteInc/QuantDinger",
+      "date": "2026-11-22T00:58:06+08:00",
+      "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "stefan-jansen/machine-learning-for-trading",
+      "url": "https://github.com/stefan-jansen/machine-learning-for-trading",
+      "date": "2026-11-21T23:27:09+08:00",
+      "summary": "Code for Machine Learning for Trading, 3rd edition — from data sourcing to live execution.",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
     },
     {
       "title": "Codeforces Round 1136 (Div. 1)",
@@ -167,26 +247,6 @@
       "family": "github"
     },
     {
-      "title": "ZhuLinsen/daily_stock_analysis",
-      "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
-      "date": "2026-11-21T14:40:45+08:00",
-      "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "OpenByteInc/QuantDinger",
-      "url": "https://github.com/OpenByteInc/QuantDinger",
-      "date": "2026-11-21T14:35:00+08:00",
-      "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "TA-Lib/ta-lib-python",
       "url": "https://github.com/TA-Lib/ta-lib-python",
       "date": "2026-11-21T13:55:53+08:00",
@@ -217,30 +277,10 @@
       "family": "github"
     },
     {
-      "title": "TNT-Likely/PanWatch",
-      "url": "https://github.com/TNT-Likely/PanWatch",
-      "date": "2026-11-21T03:29:52+08:00",
-      "summary": "PanWatch — AI stock monitoring for A-shares, HK & US markets, powered by TradingAgents. Portfolio insights, real-time alerts & automated reports.｜盯盘侠：覆盖 A股/港…",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "man-group/ArcticDB",
       "url": "https://github.com/man-group/ArcticDB",
       "date": "2026-11-21T03:13:58+08:00",
       "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "questdb/questdb",
-      "url": "https://github.com/questdb/questdb",
-      "date": "2026-11-21T03:02:26+08:00",
-      "summary": "QuestDB is a high performance, open-source, time-series database",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源",
@@ -417,16 +457,6 @@
       "family": "github"
     },
     {
-      "title": "G-OTW/OpenTraderWorld",
-      "url": "https://github.com/G-OTW/OpenTraderWorld",
-      "date": "2026-11-19T13:55:44+08:00",
-      "summary": "Free and source-available, self-hostable trading workspace: data, backtest, trading journal, news aggregator, rich-doc editor, portfolio, 20+ modules with a …",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "Jane Street：LLM 如何改变机构交易询价",
       "url": "https://mp.weixin.qq.com/s/uPcYLWaYQPyolru9qO7C3A",
       "date": "2026-11-19T08:00:00+08:00",
@@ -444,16 +474,6 @@
       "summary": "Open Data Platform for analysts, quants and AI agents.",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "ZhuLinsen/alphasift",
-      "url": "https://github.com/ZhuLinsen/alphasift",
-      "date": "2026-11-19T06:35:41+08:00",
-      "summary": "Full-market stock discovery for AI agents: A-shares plus US/HK/JP/KR/TW/IN, auditable YAML strategies, optional LLM ranking, sector-diversified picks, and tr…",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
       "kind": "开源",
       "family": "github"
     },
@@ -1334,5 +1354,5 @@
       "kind": "公众号"
     }
   ],
-  "signature": "9508f55401e465bb2c63092d54eca950"
+  "signature": "8e78f1fa58bb30ec9d42e6593758a5e8"
 }
