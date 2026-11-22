@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-22T03:19:30+08:00",
-  "generated_at_human": "2026-11-22 03:19",
+  "generated_at": "2026-11-22T14:54:02+08:00",
+  "generated_at_human": "2026-11-22 14:54",
   "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
   "families": {
     "wechat-llmquant": "wechat-llmquant",
@@ -17,8 +17,8 @@
     "sources_ok": 6,
     "sources_failed": 0,
     "failed_sources": [],
-    "items": 126,
-    "items_added": 2,
+    "items": 127,
+    "items_added": 1,
     "archive_max": 3000
   },
   "sources": [
@@ -31,7 +31,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 724,
+      "ms": 1099,
       "http": 200
     },
     {
@@ -43,7 +43,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 320,
+      "ms": 271,
       "http": 200
     },
     {
@@ -55,7 +55,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 473,
+      "ms": 469,
       "http": 200
     },
     {
@@ -67,7 +67,7 @@
       "ok": true,
       "count": 4,
       "error": null,
-      "ms": 404,
+      "ms": 430,
       "http": 200
     },
     {
@@ -79,7 +79,7 @@
       "ok": true,
       "count": 4,
       "error": null,
-      "ms": 363,
+      "ms": 334,
       "http": 200
     },
     {
@@ -91,7 +91,7 @@
       "ok": true,
       "count": 20,
       "error": null,
-      "ms": 720,
+      "ms": 919,
       "http": 200
     }
   ],
@@ -137,12 +137,72 @@
       "family": "codeforces"
     },
     {
+      "title": "JerBouma/FinanceToolkit",
+      "url": "https://github.com/JerBouma/FinanceToolkit",
+      "date": "2026-11-22T14:52:11+08:00",
+      "summary": "Transparent and Efficient Financial Analysis",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "OpenByteInc/QuantDinger",
+      "url": "https://github.com/OpenByteInc/QuantDinger",
+      "date": "2026-11-22T14:46:10+08:00",
+      "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ZhuLinsen/alphaevo",
+      "url": "https://github.com/ZhuLinsen/alphaevo",
+      "date": "2026-11-22T14:23:20+08:00",
+      "summary": "An Self-Evolving Stock Strategy Research Agent 策略回测和自我进化",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ZhuLinsen/alphasift",
+      "url": "https://github.com/ZhuLinsen/alphasift",
+      "date": "2026-11-22T14:00:06+08:00",
+      "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
       "title": "TNT-Likely/PanWatch",
       "url": "https://github.com/TNT-Likely/PanWatch",
-      "date": "2026-11-22T02:04:14+08:00",
+      "date": "2026-11-22T12:42:03+08:00",
       "summary": "PanWatch — AI stock monitoring for A-shares, HK & US markets, powered by TradingAgents. Portfolio insights, real-time alerts & automated reports.｜盯盘侠：覆盖 A股/港…",
       "source": "github-quant-new",
       "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ZhuLinsen/daily_stock_analysis",
+      "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
+      "date": "2026-11-22T11:22:02+08:00",
+      "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "banbox/banbot",
+      "url": "https://github.com/banbox/banbot",
+      "date": "2026-11-22T10:42:15+08:00",
+      "summary": "a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading bot",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
       "kind": "开源",
       "family": "github"
     },
@@ -157,40 +217,10 @@
       "family": "github"
     },
     {
-      "title": "ZhuLinsen/daily_stock_analysis",
-      "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
-      "date": "2026-11-22T01:45:27+08:00",
-      "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "questdb/questdb",
       "url": "https://github.com/questdb/questdb",
       "date": "2026-11-22T01:21:59+08:00",
       "summary": "QuestDB is a high performance, open-source, time-series database",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "ZhuLinsen/alphasift",
-      "url": "https://github.com/ZhuLinsen/alphasift",
-      "date": "2026-11-22T01:01:33+08:00",
-      "summary": "开源 AI 量化选股引擎：A股/美股/港股/日韩台印全市场筛选、250日实证形态雷达、公告排雷AI复核、公开T+N验证与1行12通道推送 | Open-source AI stock screener, YAML quant strategies, pattern radar & T+N benchmark fo…",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "OpenByteInc/QuantDinger",
-      "url": "https://github.com/OpenByteInc/QuantDinger",
-      "date": "2026-11-22T00:58:06+08:00",
-      "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源",
@@ -437,16 +467,6 @@
       "family": "arxiv-qfin"
     },
     {
-      "title": "JerBouma/FinanceToolkit",
-      "url": "https://github.com/JerBouma/FinanceToolkit",
-      "date": "2026-11-19T15:27:42+08:00",
-      "summary": "Transparent and Efficient Financial Analysis",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "Fincept-Corporation/FinceptTerminal",
       "url": "https://github.com/Fincept-Corporation/FinceptTerminal",
       "date": "2026-11-19T14:37:53+08:00",
@@ -657,16 +677,6 @@
       "url": "https://github.com/coding-kitties/investing-algorithm-framework",
       "date": "2026-11-17T05:07:04+08:00",
       "summary": "Framework for quantitative trading. Complete framework for development, backtesting, and deploying automated trading algorithms and trading bots.",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "banbox/banbot",
-      "url": "https://github.com/banbox/banbot",
-      "date": "2026-11-16T12:37:54+08:00",
-      "summary": "a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading bot",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源",
@@ -1354,5 +1364,5 @@
       "kind": "公众号"
     }
   ],
-  "signature": "8e78f1fa58bb30ec9d42e6593758a5e8"
+  "signature": "6620b268e9bbfe75cdb530f7a056bad5"
 }
