@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-22T14:54:02+08:00",
- "generated_at_human": "2026-11-22 14:54",
+ "generated_at": "2026-11-23T03:43:46+08:00",
+ "generated_at_human": "2026-11-23 03:43",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -18,7 +18,7 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 127,
+  "items": 128,
   "items_added": 1,
   "archive_max": 3000
  },
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1099,
+   "ms": 1127,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 271,
+   "ms": 324,
    "http": 200
   },
   {
@@ -52,11 +52,11 @@ window.SITE_FEED = {
    "name": "GitHub 量化开源",
    "type": "json",
    "kind": "开源",
-   "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-23&sort=updated&order=desc&per_page=10",
+   "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-24&sort=updated&order=desc&per_page=10",
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 469,
+   "ms": 462,
    "http": 200
   },
   {
@@ -64,11 +64,11 @@ window.SITE_FEED = {
    "name": "GitHub 新项目",
    "type": "json",
    "kind": "开源",
-   "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-22+stars%3A%3E50&sort=updated&order=desc&per_page=10",
+   "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-23+stars%3A%3E50&sort=updated&order=desc&per_page=10",
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 430,
+   "ms": 395,
    "http": 200
   },
   {
@@ -78,9 +78,9 @@ window.SITE_FEED = {
    "kind": "算法竞赛",
    "url": "https://codeforces.com/api/contest.list",
    "ok": true,
-   "count": 4,
+   "count": 3,
    "error": null,
-   "ms": 334,
+   "ms": 225,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 919,
+   "ms": 830,
    "http": 200
   }
  ],
@@ -128,6 +128,96 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
+   "title": "OpenByteInc/QuantDinger",
+   "url": "https://github.com/OpenByteInc/QuantDinger",
+   "date": "2026-11-23T03:38:46+08:00",
+   "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "JerBouma/FinanceToolkit",
+   "url": "https://github.com/JerBouma/FinanceToolkit",
+   "date": "2026-11-23T03:15:13+08:00",
+   "summary": "Transparent and Efficient Financial Analysis",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "questdb/questdb",
+   "url": "https://github.com/questdb/questdb",
+   "date": "2026-11-23T02:41:19+08:00",
+   "summary": "QuestDB is a high performance, open-source, time-series database",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZeekCursos/metaid-file-system",
+   "url": "https://github.com/ZeekCursos/metaid-file-system",
+   "date": "2026-11-23T02:14:19+08:00",
+   "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "shy3130/tick-stock-panel",
+   "url": "https://github.com/shy3130/tick-stock-panel",
+   "date": "2026-11-23T02:03:44+08:00",
+   "summary": "TSP自托管、零运维的 A 股「自建策略 + 监控 + 回测」量化工作台  | LLM能力驱使策略定制+个股分析+复盘 | 自由接入第三方数据源与个性化扩展数据 | 个人开源",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "StockSharp/StockSharp",
+   "url": "https://github.com/StockSharp/StockSharp",
+   "date": "2026-11-23T01:59:45+08:00",
+   "summary": "Algorithmic trading and quantitative trading open source platform to develop trading robots (stock markets, forex, crypto, bitcoins, and options).",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "HKUDS/Vibe-Trading",
+   "url": "https://github.com/HKUDS/Vibe-Trading",
+   "date": "2026-11-23T00:34:10+08:00",
+   "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "jundizhou/easy-stock",
+   "url": "https://github.com/jundizhou/easy-stock",
+   "date": "2026-11-22T23:51:14+08:00",
+   "summary": "A股 AI 投研",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "对话Operon 创始人 | 卖方分析师如何用 AI 重建投研机构",
+   "url": "https://mp.weixin.qq.com/s?__biz=Mzg2MzAwNzM0NQ==&mid=2247494924&idx=1&sn=882cf4526c39d658c0ddcbcae43d04cb&chksm=ce7d8a12f90a030477518c039bd1b4c511fbb0516b1834b03664e2d1234d7dfd3431746fa1ca#rd",
+   "date": "2026-11-22T18:10:13+08:00",
+   "summary": "",
+   "source": "wechat-19884288",
+   "source_name": "QuantML · 论文",
+   "kind": "公众号",
+   "family": "wechat-19884288"
+  },
+  {
    "title": "Codeforces Round 1137 (Div. 2)",
    "url": "https://codeforces.com/contest/2289",
    "date": "2026-11-22T17:05:00+08:00",
@@ -136,26 +226,6 @@ window.SITE_FEED = {
    "source_name": "Codeforces",
    "kind": "算法竞赛",
    "family": "codeforces"
-  },
-  {
-   "title": "JerBouma/FinanceToolkit",
-   "url": "https://github.com/JerBouma/FinanceToolkit",
-   "date": "2026-11-22T14:52:11+08:00",
-   "summary": "Transparent and Efficient Financial Analysis",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "OpenByteInc/QuantDinger",
-   "url": "https://github.com/OpenByteInc/QuantDinger",
-   "date": "2026-11-22T14:46:10+08:00",
-   "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
   },
   {
    "title": "ZhuLinsen/alphaevo",
@@ -214,16 +284,6 @@ window.SITE_FEED = {
    "summary": "Free and source-available, self-hostable trading workspace: data, backtest, trading journal, news aggregator, rich-doc editor, portfolio, 20+ modules with a …",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "questdb/questdb",
-   "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-22T01:21:59+08:00",
-   "summary": "QuestDB is a high performance, open-source, time-series database",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
    "kind": "开源",
    "family": "github"
   },
@@ -298,16 +358,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "HKUDS/Vibe-Trading",
-   "url": "https://github.com/HKUDS/Vibe-Trading",
-   "date": "2026-11-21T13:10:44+08:00",
-   "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "man-group/ArcticDB",
    "url": "https://github.com/man-group/ArcticDB",
    "date": "2026-11-21T03:13:58+08:00",
@@ -324,16 +374,6 @@ window.SITE_FEED = {
    "summary": "The QuantLib C++ library",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "ZeekCursos/metaid-file-system",
-   "url": "https://github.com/ZeekCursos/metaid-file-system",
-   "date": "2026-11-21T02:20:21+08:00",
-   "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -422,16 +462,6 @@ window.SITE_FEED = {
    "url": "https://github.com/rolling-panda-san/notebooks",
    "date": "2026-11-20T08:19:31+08:00",
    "summary": "Analysis on systematic trading strategies (e.g., trend-following, carry and mean-reversion). The result is regularly updated.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "StockSharp/StockSharp",
-   "url": "https://github.com/StockSharp/StockSharp",
-   "date": "2026-11-20T01:10:26+08:00",
-   "summary": "Algorithmic trading and quantitative trading open source platform to develop trading robots (stock markets, forex, crypto, bitcoins, and options).",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -580,26 +610,6 @@ window.SITE_FEED = {
    "source_name": "arXiv q-fin",
    "kind": "研究",
    "family": "arxiv-qfin"
-  },
-  {
-   "title": "jundizhou/easy-stock",
-   "url": "https://github.com/jundizhou/easy-stock",
-   "date": "2026-11-18T15:32:28+08:00",
-   "summary": "A股 AI 投研",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "shy3130/tick-stock-panel",
-   "url": "https://github.com/shy3130/tick-stock-panel",
-   "date": "2026-11-18T15:18:29+08:00",
-   "summary": "TSP自托管、零运维的 A 股「自建策略 + 监控 + 回测」量化工作台  | LLM能力驱使策略定制+个股分析+复盘 | 自由接入第三方数据源与个性化扩展数据 | 个人开源",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
   },
   {
    "title": "akfamily/akhub",
@@ -1365,5 +1375,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "6620b268e9bbfe75cdb530f7a056bad5"
+ "signature": "2d8519b61f97db8ba833c9d189123d85"
 };
