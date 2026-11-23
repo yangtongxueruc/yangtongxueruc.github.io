@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-23T03:43:46+08:00",
- "generated_at_human": "2026-11-23 03:43",
+ "generated_at": "2026-11-23T15:43:06+08:00",
+ "generated_at_human": "2026-11-23 15:43",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -19,7 +19,7 @@ window.SITE_FEED = {
   "sources_failed": 0,
   "failed_sources": [],
   "items": 128,
-  "items_added": 1,
+  "items_added": 0,
   "archive_max": 3000
  },
  "sources": [
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1127,
+   "ms": 851,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 324,
+   "ms": 1711,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 462,
+   "ms": 511,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 395,
+   "ms": 511,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 3,
    "error": null,
-   "ms": 225,
+   "ms": 248,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 830,
+   "ms": 963,
    "http": 200
   }
  ],
@@ -128,10 +128,20 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
-   "title": "OpenByteInc/QuantDinger",
-   "url": "https://github.com/OpenByteInc/QuantDinger",
-   "date": "2026-11-23T03:38:46+08:00",
-   "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
+   "title": "shy3130/tick-stock-panel",
+   "url": "https://github.com/shy3130/tick-stock-panel",
+   "date": "2026-11-23T15:39:02+08:00",
+   "summary": "TSP自托管、零运维的 A 股「自建策略 + 监控 + 回测」量化工作台  | LLM能力驱使策略定制+个股分析+复盘 | 自由接入第三方数据源与个性化扩展数据",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "man-group/ArcticDB",
+   "url": "https://github.com/man-group/ArcticDB",
+   "date": "2026-11-23T15:33:12+08:00",
+   "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -140,8 +150,68 @@ window.SITE_FEED = {
   {
    "title": "JerBouma/FinanceToolkit",
    "url": "https://github.com/JerBouma/FinanceToolkit",
-   "date": "2026-11-23T03:15:13+08:00",
+   "date": "2026-11-23T15:22:35+08:00",
    "summary": "Transparent and Efficient Financial Analysis",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZeekCursos/metaid-file-system",
+   "url": "https://github.com/ZeekCursos/metaid-file-system",
+   "date": "2026-11-23T15:19:53+08:00",
+   "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZhuLinsen/daily_stock_analysis",
+   "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
+   "date": "2026-11-23T15:06:09+08:00",
+   "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "qusong0627/QuantMind",
+   "url": "https://github.com/qusong0627/QuantMind",
+   "date": "2026-11-23T15:01:31+08:00",
+   "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Lumiwealth/lumibot",
+   "url": "https://github.com/Lumiwealth/lumibot",
+   "date": "2026-11-23T12:40:00+08:00",
+   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "jundizhou/easy-stock",
+   "url": "https://github.com/jundizhou/easy-stock",
+   "date": "2026-11-23T11:37:09+08:00",
+   "summary": "A股 AI 投研",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "OpenByteInc/QuantDinger",
+   "url": "https://github.com/OpenByteInc/QuantDinger",
+   "date": "2026-11-23T03:38:46+08:00",
+   "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -154,26 +224,6 @@ window.SITE_FEED = {
    "summary": "QuestDB is a high performance, open-source, time-series database",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "ZeekCursos/metaid-file-system",
-   "url": "https://github.com/ZeekCursos/metaid-file-system",
-   "date": "2026-11-23T02:14:19+08:00",
-   "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "shy3130/tick-stock-panel",
-   "url": "https://github.com/shy3130/tick-stock-panel",
-   "date": "2026-11-23T02:03:44+08:00",
-   "summary": "TSP自托管、零运维的 A 股「自建策略 + 监控 + 回测」量化工作台  | LLM能力驱使策略定制+个股分析+复盘 | 自由接入第三方数据源与个性化扩展数据 | 个人开源",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -194,16 +244,6 @@ window.SITE_FEED = {
    "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "jundizhou/easy-stock",
-   "url": "https://github.com/jundizhou/easy-stock",
-   "date": "2026-11-22T23:51:14+08:00",
-   "summary": "A股 AI 投研",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -254,16 +294,6 @@ window.SITE_FEED = {
    "summary": "PanWatch — AI stock monitoring for A-shares, HK & US markets, powered by TradingAgents. Portfolio insights, real-time alerts & automated reports.｜盯盘侠：覆盖 A股/港…",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "ZhuLinsen/daily_stock_analysis",
-   "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
-   "date": "2026-11-22T11:22:02+08:00",
-   "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
    "kind": "开源",
    "family": "github"
   },
@@ -328,16 +358,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "Lumiwealth/lumibot",
-   "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-21T15:08:06+08:00",
-   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "TA-Lib/ta-lib-python",
    "url": "https://github.com/TA-Lib/ta-lib-python",
    "date": "2026-11-21T13:55:53+08:00",
@@ -354,16 +374,6 @@ window.SITE_FEED = {
    "summary": "结合多大模型分析与确定性代码风控的自主量化交易系统 ｜ Autonomous crypto trading system with multi-LLM analysis, deterministic Python risk control & OKX execution.",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "man-group/ArcticDB",
-   "url": "https://github.com/man-group/ArcticDB",
-   "date": "2026-11-21T03:13:58+08:00",
-   "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
    "kind": "开源",
    "family": "github"
   },
@@ -402,16 +412,6 @@ window.SITE_FEED = {
    "url": "https://github.com/AllenPan-Git/SimpleQuant",
    "date": "2026-11-20T14:51:05+08:00",
    "summary": "低代码的 A 股量化回测工具 · Low-code quant backtesting for China A-shares",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "qusong0627/QuantMind",
-   "url": "https://github.com/qusong0627/QuantMind",
-   "date": "2026-11-20T14:41:11+08:00",
-   "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
    "kind": "开源",
@@ -1375,5 +1375,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "2d8519b61f97db8ba833c9d189123d85"
+ "signature": "8322a1dde469d5d15908a50a16836872"
 };
