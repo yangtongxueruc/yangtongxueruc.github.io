@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-23T15:43:06+08:00",
- "generated_at_human": "2026-11-23 15:43",
+ "generated_at": "2026-11-24T07:56:14+08:00",
+ "generated_at_human": "2026-11-24 07:56",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -18,8 +18,8 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 128,
-  "items_added": 0,
+  "items": 132,
+  "items_added": 4,
   "archive_max": 3000
  },
  "sources": [
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 851,
+   "ms": 808,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1711,
+   "ms": 307,
    "http": 200
   },
   {
@@ -52,11 +52,11 @@ window.SITE_FEED = {
    "name": "GitHub 量化开源",
    "type": "json",
    "kind": "开源",
-   "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-24&sort=updated&order=desc&per_page=10",
+   "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-25&sort=updated&order=desc&per_page=10",
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 511,
+   "ms": 541,
    "http": 200
   },
   {
@@ -64,11 +64,11 @@ window.SITE_FEED = {
    "name": "GitHub 新项目",
    "type": "json",
    "kind": "开源",
-   "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-23+stars%3A%3E50&sort=updated&order=desc&per_page=10",
+   "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-24+stars%3A%3E50&sort=updated&order=desc&per_page=10",
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 511,
+   "ms": 481,
    "http": 200
   },
   {
@@ -78,9 +78,9 @@ window.SITE_FEED = {
    "kind": "算法竞赛",
    "url": "https://codeforces.com/api/contest.list",
    "ok": true,
-   "count": 3,
+   "count": 4,
    "error": null,
-   "ms": 248,
+   "ms": 413,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 963,
+   "ms": 660,
    "http": 200
   }
  ],
@@ -128,6 +128,106 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
+   "title": "Codeforces Round (Div. 3)",
+   "url": "https://codeforces.com/contest/2292",
+   "date": "2026-11-27T22:35:00+08:00",
+   "summary": "",
+   "source": "codeforces",
+   "source_name": "Codeforces",
+   "kind": "算法竞赛",
+   "family": "codeforces"
+  },
+  {
+   "title": "questdb/questdb",
+   "url": "https://github.com/questdb/questdb",
+   "date": "2026-11-24T07:56:08+08:00",
+   "summary": "QuestDB is a high performance, open-source, time-series database",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "rootSunc/CNEquity",
+   "url": "https://github.com/rootSunc/CNEquity",
+   "date": "2026-11-24T07:48:05+08:00",
+   "summary": "开源中国股市（A股）本地数据湖：沪深股票行情、A股股票数据与金融数据，面向量化研究、量化交易与回测，含财务数据、期货数据、资金流向、公告、指数行业与宏观。86个日更数据集，复权与历史成分内置，行级溯源、PIT，MCP原生。免注册、免 Token，自托管。Open-source China stock market…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "JerBouma/FinanceToolkit",
+   "url": "https://github.com/JerBouma/FinanceToolkit",
+   "date": "2026-11-24T07:37:07+08:00",
+   "summary": "Transparent and Efficient Financial Analysis",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "TNT-Likely/PanWatch",
+   "url": "https://github.com/TNT-Likely/PanWatch",
+   "date": "2026-11-24T07:23:28+08:00",
+   "summary": "PanWatch — AI stock monitoring for A-shares, HK & US markets, powered by TradingAgents. Portfolio insights, real-time alerts & automated reports.｜盯盘侠：覆盖 A股/港…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "skfolio/skfolio",
+   "url": "https://github.com/skfolio/skfolio",
+   "date": "2026-11-24T07:17:25+08:00",
+   "summary": "Python library for portfolio optimization, factor model construction, and risk management built on scikit-learn",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZhuLinsen/alphasift",
+   "url": "https://github.com/ZhuLinsen/alphasift",
+   "date": "2026-11-24T06:35:51+08:00",
+   "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "lballabio/QuantLib",
+   "url": "https://github.com/lballabio/QuantLib",
+   "date": "2026-11-24T06:01:00+08:00",
+   "summary": "The QuantLib C++ library",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "byttrade/free-crypto-trading-bot",
+   "url": "https://github.com/byttrade/free-crypto-trading-bot",
+   "date": "2026-11-24T04:06:18+08:00",
+   "summary": "Free crypto trading bot by BYTtrade: 4 backtested 4h trend-following strategies for perpetual futures, reproducible backtest, web panel, 11 exchanges, AI-age…",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ICDM 2026｜CAST：如何在暴跌的市场控制损失",
+   "url": "https://mp.weixin.qq.com/s?__biz=Mzg2MzAwNzM0NQ==&mid=2247494939&idx=1&sn=df11fd120eabe688eb8f02c562c9b173&chksm=ce7d8a05f90a03136055dc9dcce7b6fd3e9b924270f24812ae0eedc11f2360f93000422a4087#rd",
+   "date": "2026-11-23T17:57:07+08:00",
+   "summary": "",
+   "source": "wechat-19884288",
+   "source_name": "QuantML · 论文",
+   "kind": "公众号",
+   "family": "wechat-19884288"
+  },
+  {
    "title": "shy3130/tick-stock-panel",
    "url": "https://github.com/shy3130/tick-stock-panel",
    "date": "2026-11-23T15:39:02+08:00",
@@ -142,16 +242,6 @@ window.SITE_FEED = {
    "url": "https://github.com/man-group/ArcticDB",
    "date": "2026-11-23T15:33:12+08:00",
    "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "JerBouma/FinanceToolkit",
-   "url": "https://github.com/JerBouma/FinanceToolkit",
-   "date": "2026-11-23T15:22:35+08:00",
-   "summary": "Transparent and Efficient Financial Analysis",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -218,16 +308,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "questdb/questdb",
-   "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-23T02:41:19+08:00",
-   "summary": "QuestDB is a high performance, open-source, time-series database",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "StockSharp/StockSharp",
    "url": "https://github.com/StockSharp/StockSharp",
    "date": "2026-11-23T01:59:45+08:00",
@@ -272,26 +352,6 @@ window.SITE_FEED = {
    "url": "https://github.com/ZhuLinsen/alphaevo",
    "date": "2026-11-22T14:23:20+08:00",
    "summary": "An Self-Evolving Stock Strategy Research Agent 策略回测和自我进化",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "ZhuLinsen/alphasift",
-   "url": "https://github.com/ZhuLinsen/alphasift",
-   "date": "2026-11-22T14:00:06+08:00",
-   "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "TNT-Likely/PanWatch",
-   "url": "https://github.com/TNT-Likely/PanWatch",
-   "date": "2026-11-22T12:42:03+08:00",
-   "summary": "PanWatch — AI stock monitoring for A-shares, HK & US markets, powered by TradingAgents. Portfolio insights, real-time alerts & automated reports.｜盯盘侠：覆盖 A股/港…",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
    "kind": "开源",
@@ -378,16 +438,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "lballabio/QuantLib",
-   "url": "https://github.com/lballabio/QuantLib",
-   "date": "2026-11-21T02:57:21+08:00",
-   "summary": "The QuantLib C++ library",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "ArturSepp/QuantInvestStrats",
    "url": "https://github.com/ArturSepp/QuantInvestStrats",
    "date": "2026-11-21T00:32:56+08:00",
@@ -436,16 +486,6 @@ window.SITE_FEED = {
    "source_name": "QuantML · 论文",
    "kind": "公众号",
    "family": "wechat-19884288"
-  },
-  {
-   "title": "skfolio/skfolio",
-   "url": "https://github.com/skfolio/skfolio",
-   "date": "2026-11-20T09:04:43+08:00",
-   "summary": "Python library for portfolio optimization, factor model construction, and risk management built on scikit-learn",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
   },
   {
    "title": "wilsonfreitas/awesome-quant",
@@ -1375,5 +1415,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "8322a1dde469d5d15908a50a16836872"
+ "signature": "6fa6c0909bbe5c87cd5685950685ba36"
 };
