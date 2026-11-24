@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-24T17:57:23+08:00",
-  "generated_at_human": "2026-11-24 17:57",
+  "generated_at": "2026-11-25T06:29:08+08:00",
+  "generated_at_human": "2026-11-25 06:29",
   "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
   "families": {
     "wechat-llmquant": "wechat-llmquant",
@@ -17,8 +17,8 @@
     "sources_ok": 6,
     "sources_failed": 0,
     "failed_sources": [],
-    "items": 137,
-    "items_added": 5,
+    "items": 138,
+    "items_added": 1,
     "archive_max": 3000
   },
   "sources": [
@@ -31,7 +31,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 1007,
+      "ms": 1222,
       "http": 200
     },
     {
@@ -43,7 +43,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 472,
+      "ms": 260,
       "http": 200
     },
     {
@@ -51,11 +51,11 @@
       "name": "GitHub 量化开源",
       "type": "json",
       "kind": "开源",
-      "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-25&sort=updated&order=desc&per_page=10",
+      "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-26&sort=updated&order=desc&per_page=10",
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 660,
+      "ms": 540,
       "http": 200
     },
     {
@@ -63,11 +63,11 @@
       "name": "GitHub 新项目",
       "type": "json",
       "kind": "开源",
-      "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-24+stars%3A%3E50&sort=updated&order=desc&per_page=10",
+      "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-25+stars%3A%3E50&sort=updated&order=desc&per_page=10",
       "ok": true,
       "count": 4,
       "error": null,
-      "ms": 947,
+      "ms": 448,
       "http": 200
     },
     {
@@ -79,7 +79,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 339,
+      "ms": 299,
       "http": 200
     },
     {
@@ -91,7 +91,7 @@
       "ok": true,
       "count": 20,
       "error": null,
-      "ms": 691,
+      "ms": 1106,
       "http": 200
     }
   ],
@@ -149,10 +149,70 @@
     {
       "title": "Lumiwealth/lumibot",
       "url": "https://github.com/Lumiwealth/lumibot",
-      "date": "2026-11-24T17:48:26+08:00",
+      "date": "2026-11-25T06:28:54+08:00",
       "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ZhuLinsen/alphasift",
+      "url": "https://github.com/ZhuLinsen/alphasift",
+      "date": "2026-11-25T06:28:48+08:00",
+      "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "questdb/questdb",
+      "url": "https://github.com/questdb/questdb",
+      "date": "2026-11-25T05:58:02+08:00",
+      "summary": "QuestDB is a high performance, open-source, time-series database",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "Senpi-ai/senpi-skills",
+      "url": "https://github.com/Senpi-ai/senpi-skills",
+      "date": "2026-11-25T05:55:19+08:00",
+      "summary": "Open-source AI agent skills and 140+ strategy templates for trading Hyperliquid perps across crypto, stocks, commodities and indices. Every Senpi agent runs …",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ZhuLinsen/daily_stock_analysis",
+      "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
+      "date": "2026-11-25T05:54:08+08:00",
+      "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "gnzsnz/ib-gateway-docker",
+      "url": "https://github.com/gnzsnz/ib-gateway-docker",
+      "date": "2026-11-25T04:28:52+08:00",
+      "summary": "Docker image with IB Gateway/TWS and IBC",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "qusong0627/QuantMind",
+      "url": "https://github.com/qusong0627/QuantMind",
+      "date": "2026-11-25T02:33:26+08:00",
+      "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
       "kind": "开源",
       "family": "github"
     },
@@ -171,16 +231,6 @@
       "url": "https://github.com/man-group/ArcticDB",
       "date": "2026-11-24T17:43:37+08:00",
       "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "ZhuLinsen/alphasift",
-      "url": "https://github.com/ZhuLinsen/alphasift",
-      "date": "2026-11-24T17:29:54+08:00",
-      "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源",
@@ -213,26 +263,6 @@
       "summary": "AKQuant is a high-performance quantitative research and trading framework built on Rust and Python! 开源量化回测框架",
       "source": "github-quant-new",
       "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "qusong0627/QuantMind",
-      "url": "https://github.com/qusong0627/QuantMind",
-      "date": "2026-11-24T15:44:07+08:00",
-      "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "questdb/questdb",
-      "url": "https://github.com/questdb/questdb",
-      "date": "2026-11-24T07:56:08+08:00",
-      "summary": "QuestDB is a high performance, open-source, time-series database",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
       "kind": "开源",
       "family": "github"
     },
@@ -333,16 +363,6 @@
       "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
       "source": "github-quant-new",
       "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "ZhuLinsen/daily_stock_analysis",
-      "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
-      "date": "2026-11-23T15:06:09+08:00",
-      "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
       "kind": "开源",
       "family": "github"
     },
@@ -717,16 +737,6 @@
       "summary": "宽宝 QuantBuddy： 一整套面向Agent Invesment投资研究与决策的底层设施与能力的调用skill， 覆盖A股/港股/美股/期货/宏观/ETF的量化分析与计算。支持行情、估值、财务查询、选股筛选、因子计算、策略回测。A complete infrastructure for Agent base…",
       "source": "github-quant-new",
       "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "gnzsnz/ib-gateway-docker",
-      "url": "https://github.com/gnzsnz/ib-gateway-docker",
-      "date": "2026-11-18T03:32:29+08:00",
-      "summary": "Docker image with IB Gateway/TWS and IBC",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
       "kind": "开源",
       "family": "github"
     },
@@ -1464,5 +1474,5 @@
       "kind": "公众号"
     }
   ],
-  "signature": "55ff745101c162f821752fab32b025f7"
+  "signature": "29fb4ab4f1308f9c5b13e5347fe14ac3"
 }
