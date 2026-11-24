@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-24T07:56:14+08:00",
-  "generated_at_human": "2026-11-24 07:56",
+  "generated_at": "2026-11-24T17:57:23+08:00",
+  "generated_at_human": "2026-11-24 17:57",
   "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
   "families": {
     "wechat-llmquant": "wechat-llmquant",
@@ -17,8 +17,8 @@
     "sources_ok": 6,
     "sources_failed": 0,
     "failed_sources": [],
-    "items": 132,
-    "items_added": 4,
+    "items": 137,
+    "items_added": 5,
     "archive_max": 3000
   },
   "sources": [
@@ -31,7 +31,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 808,
+      "ms": 1007,
       "http": 200
     },
     {
@@ -43,7 +43,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 307,
+      "ms": 472,
       "http": 200
     },
     {
@@ -55,7 +55,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 541,
+      "ms": 660,
       "http": 200
     },
     {
@@ -67,7 +67,7 @@
       "ok": true,
       "count": 4,
       "error": null,
-      "ms": 481,
+      "ms": 947,
       "http": 200
     },
     {
@@ -77,9 +77,9 @@
       "kind": "算法竞赛",
       "url": "https://codeforces.com/api/contest.list",
       "ok": true,
-      "count": 4,
+      "count": 5,
       "error": null,
-      "ms": 413,
+      "ms": 339,
       "http": 200
     },
     {
@@ -91,11 +91,21 @@
       "ok": true,
       "count": 20,
       "error": null,
-      "ms": 660,
+      "ms": 691,
       "http": 200
     }
   ],
   "items": [
+    {
+      "title": "Educational Codeforces Round 197 (Rated for Div. 2)",
+      "url": "https://codeforces.com/contest/2293",
+      "date": "2026-12-14T22:35:00+08:00",
+      "summary": "",
+      "source": "codeforces",
+      "source_name": "Codeforces",
+      "kind": "算法竞赛",
+      "family": "codeforces"
+    },
     {
       "title": "Kotlin Heroes: Episode 15",
       "url": "https://codeforces.com/contest/2282",
@@ -127,7 +137,7 @@
       "family": "codeforces"
     },
     {
-      "title": "Codeforces Round (Div. 3)",
+      "title": "Codeforces Round 1138 (Div. 3)",
       "url": "https://codeforces.com/contest/2292",
       "date": "2026-11-27T22:35:00+08:00",
       "summary": "",
@@ -135,6 +145,86 @@
       "source_name": "Codeforces",
       "kind": "算法竞赛",
       "family": "codeforces"
+    },
+    {
+      "title": "Lumiwealth/lumibot",
+      "url": "https://github.com/Lumiwealth/lumibot",
+      "date": "2026-11-24T17:48:26+08:00",
+      "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "HKUDS/Vibe-Trading",
+      "url": "https://github.com/HKUDS/Vibe-Trading",
+      "date": "2026-11-24T17:43:55+08:00",
+      "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "man-group/ArcticDB",
+      "url": "https://github.com/man-group/ArcticDB",
+      "date": "2026-11-24T17:43:37+08:00",
+      "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ZhuLinsen/alphasift",
+      "url": "https://github.com/ZhuLinsen/alphasift",
+      "date": "2026-11-24T17:29:54+08:00",
+      "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "Blave-TW/blave-agent",
+      "url": "https://github.com/Blave-TW/blave-agent",
+      "date": "2026-11-24T17:25:02+08:00",
+      "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "YichengYang-Ethan/oracle3-prediction-market-agent",
+      "url": "https://github.com/YichengYang-Ethan/oracle3-prediction-market-agent",
+      "date": "2026-11-24T17:04:08+08:00",
+      "summary": "Oracle3: open-source trading engine and MCP server for prediction markets. Finds fee-adjusted no-arbitrage violations across related event contracts and trad…",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "akfamily/akquant",
+      "url": "https://github.com/akfamily/akquant",
+      "date": "2026-11-24T16:10:59+08:00",
+      "summary": "AKQuant is a high-performance quantitative research and trading framework built on Rust and Python! 开源量化回测框架",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "qusong0627/QuantMind",
+      "url": "https://github.com/qusong0627/QuantMind",
+      "date": "2026-11-24T15:44:07+08:00",
+      "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
     },
     {
       "title": "questdb/questdb",
@@ -187,16 +277,6 @@
       "family": "github"
     },
     {
-      "title": "ZhuLinsen/alphasift",
-      "url": "https://github.com/ZhuLinsen/alphasift",
-      "date": "2026-11-24T06:35:51+08:00",
-      "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "lballabio/QuantLib",
       "url": "https://github.com/lballabio/QuantLib",
       "date": "2026-11-24T06:01:00+08:00",
@@ -215,6 +295,16 @@
       "source_name": "GitHub 新项目",
       "kind": "开源",
       "family": "github"
+    },
+    {
+      "title": "Do Candlestick Charts Suffice? The Incremental Economic Value of Technical Indicators in Stock Return Prediction",
+      "url": "https://arxiv.org/abs/2611.30584v1",
+      "date": "2026-11-23T20:26:04+08:00",
+      "summary": "Although technical analysis remains widely used in practice, the need for manually constructed indicators is increasingly questioned as deep learning models can extract features directly from OHLC pri",
+      "source": "arxiv-qfin",
+      "source_name": "arXiv q-fin",
+      "kind": "研究",
+      "family": "arxiv-qfin"
     },
     {
       "title": "ICDM 2026｜CAST：如何在暴跌的市场控制损失",
@@ -237,16 +327,6 @@
       "family": "github"
     },
     {
-      "title": "man-group/ArcticDB",
-      "url": "https://github.com/man-group/ArcticDB",
-      "date": "2026-11-23T15:33:12+08:00",
-      "summary": "ArcticDB is a high performance, serverless DataFrame database built for the Python Data Science ecosystem.",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "ZeekCursos/metaid-file-system",
       "url": "https://github.com/ZeekCursos/metaid-file-system",
       "date": "2026-11-23T15:19:53+08:00",
@@ -261,26 +341,6 @@
       "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
       "date": "2026-11-23T15:06:09+08:00",
       "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "qusong0627/QuantMind",
-      "url": "https://github.com/qusong0627/QuantMind",
-      "date": "2026-11-23T15:01:31+08:00",
-      "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "Lumiwealth/lumibot",
-      "url": "https://github.com/Lumiwealth/lumibot",
-      "date": "2026-11-23T12:40:00+08:00",
-      "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源",
@@ -317,14 +377,24 @@
       "family": "github"
     },
     {
-      "title": "HKUDS/Vibe-Trading",
-      "url": "https://github.com/HKUDS/Vibe-Trading",
-      "date": "2026-11-23T00:34:10+08:00",
-      "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
+      "title": "Political Orientation and Participation in Prediction Markets: Large Stakes Converge, Small Stakes Diverge",
+      "url": "https://arxiv.org/abs/2611.29576v1",
+      "date": "2026-11-22T23:55:42+08:00",
+      "summary": "Prediction markets offer a way to study collective expectations and beliefs: people express their views on various events and, by putting money behind their predictions, take on the risks of their jud",
+      "source": "arxiv-qfin",
+      "source_name": "arXiv q-fin",
+      "kind": "研究",
+      "family": "arxiv-qfin"
+    },
+    {
+      "title": "Marked INAR model and the rough Hawkes--Heston limit",
+      "url": "https://arxiv.org/abs/2611.29565v1",
+      "date": "2026-11-22T23:43:19+08:00",
+      "summary": "We develop a discrete-time Monte Carlo algorithm for the rough Hawkes-Heston model based on a nearly unstable marked integer-valued autoregressive (INAR) process. We implement the algorithm with a blo",
+      "source": "arxiv-qfin",
+      "source_name": "arXiv q-fin",
+      "kind": "研究",
+      "family": "arxiv-qfin"
     },
     {
       "title": "对话Operon 创始人 | 卖方分析师如何用 AI 重建投研机构",
@@ -407,16 +477,6 @@
       "family": "codeforces"
     },
     {
-      "title": "akfamily/akquant",
-      "url": "https://github.com/akfamily/akquant",
-      "date": "2026-11-21T15:12:50+08:00",
-      "summary": "AKQuant is a high-performance quantitative research and trading framework built on Rust and Python! 开源量化回测框架",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
       "title": "TA-Lib/ta-lib-python",
       "url": "https://github.com/TA-Lib/ta-lib-python",
       "date": "2026-11-21T13:55:53+08:00",
@@ -461,16 +521,6 @@
       "url": "https://github.com/AllenPan-Git/SimpleQuant",
       "date": "2026-11-20T14:51:05+08:00",
       "summary": "低代码的 A 股量化回测工具 · Low-code quant backtesting for China A-shares",
-      "source": "github-quant-new",
-      "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "Blave-TW/blave-agent",
-      "url": "https://github.com/Blave-TW/blave-agent",
-      "date": "2026-11-20T13:23:23+08:00",
-      "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
       "source": "github-quant-new",
       "source_name": "GitHub 新项目",
       "kind": "开源",
@@ -1414,5 +1464,5 @@
       "kind": "公众号"
     }
   ],
-  "signature": "6fa6c0909bbe5c87cd5685950685ba36"
+  "signature": "55ff745101c162f821752fab32b025f7"
 }
