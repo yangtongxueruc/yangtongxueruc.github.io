@@ -1,10 +1,10 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/19 10:24:33
+   导出时间：2026/11/25 10:08:43
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 136,
-  "updatedAt": "2026-11-19",
+  "version": 137,
+  "updatedAt": "2026-11-25",
   "styles": {
     "blocks": {
       "exp-title-0": {
@@ -1539,13 +1539,23 @@ window.V2_CONTENT = {
                   "url": "https://yangtongxueruc.github.io/yang-daily-news/",
                   "desc": "一些 AI, LLM 和自动驾驶的每日高热度信息",
                   "tag": "信息",
-                  "badge": ""
+                  "badge": "",
+                  "linkText": "yang-daily-news"
                 },
                 {
                   "name": "🐑 的收藏库",
                   "url": "https://yangtongxueruc.github.io/yang-collection/index.html",
                   "desc": "一些我觉得有趣的视频播客的文字整理稿和逐字稿",
                   "tag": "视频整理",
+                  "badge": "",
+                  "linkText": "yang-collection"
+                },
+                {
+                  "name": "🐑的多元宇宙",
+                  "url": "https://yangtongxueruc.github.io/YangMultiverse/",
+                  "linkText": "YangMultiverse",
+                  "desc": "交互式绘本风多元宇宙微缩沙盘，会持续更新，有想法可dd哦！",
+                  "tag": "小游戏",
                   "badge": ""
                 }
               ],
