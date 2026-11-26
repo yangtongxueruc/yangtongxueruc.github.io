@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-26T16:24:52+08:00",
- "generated_at_human": "2026-11-26 16:24",
+ "generated_at": "2026-11-27T05:36:50+08:00",
+ "generated_at_human": "2026-11-27 05:36",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -18,7 +18,7 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 144,
+  "items": 145,
   "items_added": 1,
   "archive_max": 3000
  },
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 907,
+   "ms": 1203,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 272,
+   "ms": 290,
    "http": 200
   },
   {
@@ -52,11 +52,11 @@ window.SITE_FEED = {
    "name": "GitHub 量化开源",
    "type": "json",
    "kind": "开源",
-   "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-27&sort=updated&order=desc&per_page=10",
+   "url": "https://api.github.com/search/repositories?q=topic%3Aquantitative-finance+stars%3A%3E500+pushed%3A%3E2026-10-28&sort=updated&order=desc&per_page=10",
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 506,
+   "ms": 544,
    "http": 200
   },
   {
@@ -64,11 +64,11 @@ window.SITE_FEED = {
    "name": "GitHub 新项目",
    "type": "json",
    "kind": "开源",
-   "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-26+stars%3A%3E50&sort=updated&order=desc&per_page=10",
+   "url": "https://api.github.com/search/repositories?q=topic%3Aquant+created%3A%3E2025-11-27+stars%3A%3E50&sort=updated&order=desc&per_page=10",
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 463,
+   "ms": 517,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 324,
+   "ms": 344,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 969,
+   "ms": 1206,
    "http": 200
   }
  ],
@@ -148,6 +148,86 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
+   "title": "questdb/questdb",
+   "url": "https://github.com/questdb/questdb",
+   "date": "2026-11-27T05:17:55+08:00",
+   "summary": "QuestDB is a high performance, open-source, time-series database",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZeekCursos/metaid-file-system",
+   "url": "https://github.com/ZeekCursos/metaid-file-system",
+   "date": "2026-11-27T04:56:55+08:00",
+   "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "lballabio/QuantLib",
+   "url": "https://github.com/lballabio/QuantLib",
+   "date": "2026-11-27T04:43:16+08:00",
+   "summary": "The QuantLib C++ library",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZhuLinsen/alphasift",
+   "url": "https://github.com/ZhuLinsen/alphasift",
+   "date": "2026-11-27T04:41:35+08:00",
+   "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZhuLinsen/daily_stock_analysis",
+   "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
+   "date": "2026-11-27T04:18:25+08:00",
+   "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "facioquo/stock-indicators-dotnet",
+   "url": "https://github.com/facioquo/stock-indicators-dotnet",
+   "date": "2026-11-27T03:52:15+08:00",
+   "summary": "Stock Indicators for .NET is a C# NuGet package that transforms raw equity, commodity, forex, or cryptocurrency financial market price quotes into technical …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Blave-TW/blave-agent",
+   "url": "https://github.com/Blave-TW/blave-agent",
+   "date": "2026-11-27T01:25:54+08:00",
+   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "600亿美元量化巨头Qube进军美国期权市场，剑指Jane Street与Citadel Securities",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkzOTcwNDA3MQ==&mid=2247494129&idx=1&sn=748dfadc67524f2b3b91cb54751c2b72&chksm=c2ee4399f599ca8f54c20c76336be47998fd6a055037dff355ea7e4f1328db8cbde22f0a9010#rd",
+   "date": "2026-11-26T19:52:57+08:00",
+   "summary": "",
+   "source": "wechat-llmquant",
+   "source_name": "LLMQuant",
+   "kind": "公众号",
+   "family": "wechat-llmquant"
+  },
+  {
    "title": "kadoa-org/quant-jobs",
    "url": "https://github.com/kadoa-org/quant-jobs",
    "date": "2026-11-26T16:19:52+08:00",
@@ -158,30 +238,10 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "questdb/questdb",
-   "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-26T16:18:36+08:00",
-   "summary": "QuestDB is a high performance, open-source, time-series database",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "Lumiwealth/lumibot",
    "url": "https://github.com/Lumiwealth/lumibot",
    "date": "2026-11-26T16:14:21+08:00",
    "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "ZhuLinsen/alphasift",
-   "url": "https://github.com/ZhuLinsen/alphasift",
-   "date": "2026-11-26T15:46:40+08:00",
-   "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -202,16 +262,6 @@ window.SITE_FEED = {
    "url": "https://github.com/akfamily/akquant",
    "date": "2026-11-26T15:07:42+08:00",
    "summary": "AKQuant is a high-performance quantitative research and trading framework built on Rust and Python! 开源量化回测框架",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "Blave-TW/blave-agent",
-   "url": "https://github.com/Blave-TW/blave-agent",
-   "date": "2026-11-26T14:42:43+08:00",
-   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
    "source": "github-quant-new",
    "source_name": "GitHub 新项目",
    "kind": "开源",
@@ -254,16 +304,6 @@ window.SITE_FEED = {
    "summary": "Open Data Platform for analysts, quants and AI agents.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "ZeekCursos/metaid-file-system",
-   "url": "https://github.com/ZeekCursos/metaid-file-system",
-   "date": "2026-11-26T03:45:47+08:00",
-   "summary": "MetaID File System: Blockchain-Based Decentralized File Storage and Service Platform",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -359,16 +399,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "ZhuLinsen/daily_stock_analysis",
-   "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
-   "date": "2026-11-25T05:54:08+08:00",
-   "summary": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision das…",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "gnzsnz/ib-gateway-docker",
    "url": "https://github.com/gnzsnz/ib-gateway-docker",
    "date": "2026-11-25T04:28:52+08:00",
@@ -434,16 +464,6 @@ window.SITE_FEED = {
    "url": "https://github.com/skfolio/skfolio",
    "date": "2026-11-24T07:17:25+08:00",
    "summary": "Python library for portfolio optimization, factor model construction, and risk management built on scikit-learn",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "lballabio/QuantLib",
-   "url": "https://github.com/lballabio/QuantLib",
-   "date": "2026-11-24T06:01:00+08:00",
-   "summary": "The QuantLib C++ library",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -937,16 +957,6 @@ window.SITE_FEED = {
    "kind": "公众号",
    "manual": true,
    "mid": "2247484890"
-  },
-  {
-   "title": "facioquo/stock-indicators-dotnet",
-   "url": "https://github.com/facioquo/stock-indicators-dotnet",
-   "date": "2026-11-15T05:49:33+08:00",
-   "summary": "Stock Indicators for .NET is a C# NuGet package that transforms raw equity, commodity, forex, or cryptocurrency financial market price quotes into technical …",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
   },
   {
    "title": "fidetolabs/qanat",
@@ -1539,5 +1549,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "be107ab9db2e89d4ca30b156c6734350"
+ "signature": "c11b2a9e20330975ca0a7ff673e22d7a"
 };
