@@ -1403,6 +1403,15 @@
     return blank;
   }
 
+  /* 照片列表的折叠状态。
+     key 用「字段路径 + 图片路径」而不是序号：排序、删除、撤销之后序号会变，
+     用序号会把「我展开的是第 7 张」错认成别的图。重绘后仍然保持原来那几张。 */
+  var REP_OPEN = {};
+
+  function repOpenKey(abs, item, i) {
+    return abs + "|" + String((item && item.src) || ("#" + i));
+  }
+
   function renderRepeater(field, abs) {
     var box = document.createElement("div");
     box.className = "rep";
@@ -1412,16 +1421,54 @@
     /* 批量上传放在最上面：一次选十几张图，比一张张点「添加一项」再找图快得多 */
     if (field.batch) box.appendChild(batchUploader(field, abs));
 
+    /* 带批量上传的列表（目前只有照片）默认折叠成一行：图片一多，一条一条
+       展开着摆根本找不到想改的那张。折叠态保留缩略图 + 标题 + 排序/删除，
+       点这一行才展开图片预览与标题/地点/说明。 */
+    var collapsible = !!field.batch;
+
     arr.forEach(function (item, i) {
       var node = document.createElement("div");
-      node.className = "rep__item";
+      node.className = "rep__item" + (collapsible ? " rep__item--fold" : "");
 
       var bar = document.createElement("div");
       bar.className = "rep__bar";
 
+      var caret = null;
+      if (collapsible) {
+        caret = document.createElement("button");
+        caret.type = "button";
+        caret.className = "rep__caret";
+        caret.textContent = "▸";
+        caret.setAttribute("aria-expanded", "false");
+        caret.title = "展开 / 收起";
+        bar.appendChild(caret);
+
+        var th = document.createElement("span");
+        th.className = "rep__thumb";
+        var ti = document.createElement("img");
+        ti.alt = "";
+        th.appendChild(ti);
+        var thumbSrc = String((item && item.src) || "");
+        if (thumbSrc) {
+          /* 复用图片预览那套：云端正上传完的图站点上还没构建出来，
+             缩略图同样会 404，直接判失败就会一排都是「无图」。 */
+          loadImageWithRetry(ti, thumbSrc, function (state) {
+            if (state === "fail") th.classList.add("is-empty");
+            if (state === "ok" || state === "local") th.classList.remove("is-empty");
+          });
+        } else {
+          th.classList.add("is-empty");
+        }
+        bar.appendChild(th);
+      }
+
       var nm = document.createElement("span");
       nm.className = "rep__name";
-      nm.textContent = (i + 1) + ". " + itemName(item, i);
+      /* 折叠行前面已经有序号了，标题兜底再写「第 N 项」就成了「1. 第 1 项」。
+         照片列表这里改成「未命名照片」，同时也提醒该填个标题。 */
+      nm.textContent = (i + 1) + ". " + (collapsible
+        ? (String((item && (item.title || item.name)) || "").trim() || "未命名照片")
+        : itemName(item, i));
       bar.appendChild(nm);
 
       bar.appendChild(repBtn("↑", "上移", function () {
@@ -1448,6 +1495,33 @@
       body.className = "rep__body";
       renderFields(body, field.fields || [], abs + "." + i);
       node.appendChild(body);
+
+      if (collapsible) {
+        var key = repOpenKey(abs, item, i);
+        /* 空卡片（新建的、还没传图的）直接展开：里面什么都没有，
+           折叠着只剩一行「无图」，看不出这里该填什么。 */
+        var open = !!REP_OPEN[key] || !String((item && item.src) || "");
+        var apply = function (o) {
+          node.classList.toggle("is-open", o);
+          caret.textContent = o ? "▾" : "▸";
+          caret.setAttribute("aria-expanded", o ? "true" : "false");
+        };
+        var toggle = function () {
+          var o = !node.classList.contains("is-open");
+          if (o) REP_OPEN[key] = 1; else delete REP_OPEN[key];
+          apply(o);
+        };
+        apply(open);
+        bar.addEventListener("click", function (e) {
+          /* ↑ ↓ ✕ 在栏里，点它们不该顺带展开这一条 */
+          if (e.target.closest && e.target.closest(".rep__btn")) return;
+          toggle();
+        });
+        caret.addEventListener("click", function (e) {
+          e.stopPropagation();
+          toggle();
+        });
+      }
 
       box.appendChild(node);
     });

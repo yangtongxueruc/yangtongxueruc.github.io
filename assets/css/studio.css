@@ -266,6 +266,64 @@ select.inp { cursor: pointer; }
 .rep__btn:hover { color: var(--text-1); background: var(--surface-3); }
 .rep__btn--del:hover { color: #e0736b; }
 .rep__body { padding: var(--space-12); display: grid; gap: var(--space-12); }
+
+/* 照片列表的折叠行 ---------------------------------------------------------
+   一条一张大卡片时，十几张就要滚半天，想找某张只能靠记序号。折叠后每条只剩
+   一行「缩略图 + 标题」，一屏能扫过十几张；点这一行才展开预览和文字字段。
+   缩略图给 44px（不是更高），是为了让一屏装下足够多的图 —— 这里要的是
+   「快速定位」，看清细节是展开之后的事。 */
+.rep__item--fold .rep__bar {
+  cursor: pointer;
+  padding: var(--space-4);
+  gap: var(--space-8);
+  user-select: none;
+}
+.rep__item--fold .rep__bar:hover { background: var(--surface-3); }
+.rep__item--fold .rep__body { display: none; }
+.rep__item--fold.is-open .rep__body { display: grid; }
+.rep__item--fold.is-open .rep__bar {
+  border-bottom: 1px solid var(--border);
+  cursor: default;
+}
+
+.rep__caret {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--text-3);
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--dur-color) var(--ease), transform var(--dur-color) var(--ease);
+}
+.rep__caret:hover { color: var(--text-1); }
+
+.rep__thumb {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-4);
+  overflow: hidden;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  display: block;
+}
+.rep__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rep__thumb.is-empty {
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  color: var(--text-3);
+  border-style: dashed;
+}
+.rep__thumb.is-empty img { display: none; }
+.rep__thumb.is-empty::after { content: "无图"; }
+
 /* 批量上传条：贴着列表顶部，虚线边框表示它不属于任何一张卡片 */
 .rep__batch {
   display: flex;
