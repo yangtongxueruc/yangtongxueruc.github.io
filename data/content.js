@@ -1,10 +1,10 @@
 /* ============================================================
    CONTENT.JS — v2 的唯一文案来源（由控制台导出）
-   导出时间：2026/11/25 10:08:43
+   导出时间：2026/11/26 14:55:30
    ============================================================ */
 window.V2_CONTENT = {
-  "version": 139,
-  "updatedAt": "2026-11-25",
+  "version": 140,
+  "updatedAt": "2026-11-26",
   "styles": {
     "blocks": {
       "exp-title-0": {
@@ -1707,6 +1707,69 @@ window.V2_CONTENT = {
             },
             {
               "src": "assets/img/gallery/20261110201105-389-2-261110-201143.jpg",
+              "title": "",
+              "place": "",
+              "caption": "",
+              "alt": ""
+            },
+            {
+              "src": "assets/img/gallery/20261126143014-438-2-261126-145438-r5tu.jpg",
+              "title": "",
+              "place": "",
+              "caption": "",
+              "alt": ""
+            },
+            {
+              "src": "assets/img/gallery/20261126143015-439-2-261126-145440-pxkn.jpg",
+              "title": "",
+              "place": "",
+              "caption": "",
+              "alt": ""
+            },
+            {
+              "src": "assets/img/gallery/20261126143016-440-2-261126-145442-nz2t.jpg",
+              "title": "",
+              "place": "",
+              "caption": "",
+              "alt": ""
+            },
+            {
+              "src": "assets/img/gallery/20261126143016-441-2-261126-145444-00to.jpg",
+              "title": "",
+              "place": "",
+              "caption": "",
+              "alt": ""
+            },
+            {
+              "src": "assets/img/gallery/20261126143017-442-2-261126-145446-4d6a.jpg",
+              "title": "",
+              "place": "",
+              "caption": "",
+              "alt": ""
+            },
+            {
+              "src": "assets/img/gallery/20261126143018-443-2-261126-145447-2nmy.jpg",
+              "title": "",
+              "place": "",
+              "caption": "",
+              "alt": ""
+            },
+            {
+              "src": "assets/img/gallery/20261126143018-444-2-261126-145450-oc6d.jpg",
+              "title": "",
+              "place": "",
+              "caption": "",
+              "alt": ""
+            },
+            {
+              "src": "assets/img/gallery/20261126143019-445-2-261126-145451-qfo4.jpg",
+              "title": "",
+              "place": "",
+              "caption": "",
+              "alt": ""
+            },
+            {
+              "src": "assets/img/gallery/20261126143019-446-2-261126-145453-4i1i.jpg",
               "title": "",
               "place": "",
               "caption": "",
