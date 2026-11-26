@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-26T10:15:11+08:00",
- "generated_at_human": "2026-11-26 10:15",
+ "generated_at": "2026-11-26T16:24:52+08:00",
+ "generated_at_human": "2026-11-26 16:24",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -18,8 +18,8 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 143,
-  "items_added": 0,
+  "items": 144,
+  "items_added": 1,
   "archive_max": 3000
  },
  "sources": [
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 982,
+   "ms": 907,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 339,
+   "ms": 272,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 686,
+   "ms": 506,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 583,
+   "ms": 463,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 327,
+   "ms": 324,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 950,
+   "ms": 969,
    "http": 200
   }
  ],
@@ -148,20 +148,20 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
-   "title": "questdb/questdb",
-   "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-26T10:14:56+08:00",
-   "summary": "QuestDB is a high performance, open-source, time-series database",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
+   "title": "kadoa-org/quant-jobs",
+   "url": "https://github.com/kadoa-org/quant-jobs",
+   "date": "2026-11-26T16:19:52+08:00",
+   "summary": "The most comprehensive quant job board. Includes data on jobs, firms, technologies, strategies, and much more.",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
   {
-   "title": "ZhuLinsen/alphasift",
-   "url": "https://github.com/ZhuLinsen/alphasift",
-   "date": "2026-11-26T09:49:02+08:00",
-   "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
+   "title": "questdb/questdb",
+   "url": "https://github.com/questdb/questdb",
+   "date": "2026-11-26T16:18:36+08:00",
+   "summary": "QuestDB is a high performance, open-source, time-series database",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -170,8 +170,58 @@ window.SITE_FEED = {
   {
    "title": "Lumiwealth/lumibot",
    "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-26T09:22:22+08:00",
+   "date": "2026-11-26T16:14:21+08:00",
    "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZhuLinsen/alphasift",
+   "url": "https://github.com/ZhuLinsen/alphasift",
+   "date": "2026-11-26T15:46:40+08:00",
+   "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "hummingbot/hummingbot",
+   "url": "https://github.com/hummingbot/hummingbot",
+   "date": "2026-11-26T15:43:38+08:00",
+   "summary": "Open source software that helps you create and deploy high-frequency crypto trading bots",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "akfamily/akquant",
+   "url": "https://github.com/akfamily/akquant",
+   "date": "2026-11-26T15:07:42+08:00",
+   "summary": "AKQuant is a high-performance quantitative research and trading framework built on Rust and Python! 开源量化回测框架",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Blave-TW/blave-agent",
+   "url": "https://github.com/Blave-TW/blave-agent",
+   "date": "2026-11-26T14:42:43+08:00",
+   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Hithink-Tech-Org/Financial-API",
+   "url": "https://github.com/Hithink-Tech-Org/Financial-API",
+   "date": "2026-11-26T14:13:20+08:00",
+   "summary": "同花顺官方 A股金融数据服务，提供股票实时行情、历史行情、财务报表、指数、板块、涨停等数据，适用于 AI Agent、量化研究和应用开发，支持 API、MCP、CLI 和 Python。Official Tonghuashun (HiThink) A-share financial data service pr…",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -192,16 +242,6 @@ window.SITE_FEED = {
    "url": "https://github.com/rolling-panda-san/notebooks",
    "date": "2026-11-26T08:42:03+08:00",
    "summary": "Analysis on systematic trading strategies (e.g., trend-following, carry and mean-reversion). The result is regularly updated.",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "hummingbot/hummingbot",
-   "url": "https://github.com/hummingbot/hummingbot",
-   "date": "2026-11-26T07:28:33+08:00",
-   "summary": "Open source software that helps you create and deploy high-frequency crypto trading bots",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -244,16 +284,6 @@ window.SITE_FEED = {
    "summary": "Code for Machine Learning for Trading, 3rd edition — from data sourcing to live execution.",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "kadoa-org/quant-jobs",
-   "url": "https://github.com/kadoa-org/quant-jobs",
-   "date": "2026-11-26T01:48:36+08:00",
-   "summary": "The most comprehensive quant job board. Includes data on jobs, firms, technologies, strategies, and much more.",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -370,32 +400,12 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "Blave-TW/blave-agent",
-   "url": "https://github.com/Blave-TW/blave-agent",
-   "date": "2026-11-24T17:25:02+08:00",
-   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "YichengYang-Ethan/oracle3-prediction-market-agent",
    "url": "https://github.com/YichengYang-Ethan/oracle3-prediction-market-agent",
    "date": "2026-11-24T17:04:08+08:00",
    "summary": "Oracle3: open-source trading engine and MCP server for prediction markets. Finds fee-adjusted no-arbitrage violations across related event contracts and trad…",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "akfamily/akquant",
-   "url": "https://github.com/akfamily/akquant",
-   "date": "2026-11-24T16:10:59+08:00",
-   "summary": "AKQuant is a high-performance quantitative research and trading framework built on Rust and Python! 开源量化回测框架",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -1529,5 +1539,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "d5fec44c4e7b0e87fe507cb0a1961c68"
+ "signature": "be107ab9db2e89d4ca30b156c6734350"
 };
