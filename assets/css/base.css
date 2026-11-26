@@ -360,8 +360,15 @@ ul, ol { padding: 0; list-style: none; }
    把下面的板块整体顶下去 —— 实测这一下是 links 页 0.19 的 CLS。
    做法是在「还没有 .feed」的阶段先把容器撑满一屏：此时下方的板块本来就在
    视口外，等行到齐、容器长高，它们仍在视口外，不算位移。
-   :has(.feed) 一旦成立规则自动失效，不需要 JS 配合，也不会残留空白。 */
-body[data-page="links"] .block > .wrap > .status + div:not(:has(.feed)) {
+   :has(.feed) 一旦成立规则自动失效，不需要 JS 配合，也不会残留空白。
+
+   只认「装列表的那个容器本身」，用 data-feed-rows 明确点名。
+   早先这里写的是 `.status + div:not(:has(.feed))`——用「.status 的下一个兄弟
+   且不含 .feed」去猜占位符。归档页后来在 .status 和列表容器之间插了一条
+   .chips 筛选栏，.chips 永远是 .status 的下一个兄弟、也永远不会含 .feed，
+   于是被当成占位符撑到 100vh，整条筛选栏被拉成一根竖条、每个 chip 448px 高。
+   位置关系会随结构变化，标记不会，所以改成按标记选。 */
+body[data-page="links"] .block > .wrap > [data-feed-rows]:not(:has(.feed)) {
   min-height: 100vh;
 }
 

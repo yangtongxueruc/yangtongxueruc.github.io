@@ -1671,7 +1671,7 @@
     chips.style.marginTop = "var(--space-32)";
     wrap.appendChild(chips);
 
-    var body = el("div");
+    var body = el("div", { "data-feed-rows": true });
     body.innerHTML = '<div class="feed__sk" aria-hidden="true"><i class="skeleton"></i><i class="skeleton"></i></div>';
     wrap.appendChild(body);
 

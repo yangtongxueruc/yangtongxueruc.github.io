@@ -32,14 +32,14 @@
     } catch (e) {}
   })();
 </script>
-<link rel="stylesheet" href="assets/css/base.css?v=137">
-<link rel="stylesheet" href="assets/css/pages.css?v=137">
+<link rel="stylesheet" href="assets/css/base.css?v=138">
+<link rel="stylesheet" href="assets/css/pages.css?v=138">
 <!-- 全页排版精修 -->
-<link rel="stylesheet" href="assets/css/refine.css?v=137">
-<link rel="stylesheet" href="assets/css/hero-motes.css?v=137">
-<link rel="stylesheet" href="assets/css/mobile.css?v=137">
+<link rel="stylesheet" href="assets/css/refine.css?v=138">
+<link rel="stylesheet" href="assets/css/hero-motes.css?v=138">
+<link rel="stylesheet" href="assets/css/mobile.css?v=138">
 <!-- 页头右侧地形动效：只在 ≥1080px 生效，规则全包在媒体查询里 -->
-<link rel="stylesheet" href="assets/css/topo-embed.css?v=137">
+<link rel="stylesheet" href="assets/css/topo-embed.css?v=138">
 </head>
 <body data-page="links">
 
@@ -60,18 +60,18 @@
 <footer class="footer" id="footer-root"></footer>
 <nav class="tabbar" id="tab-root" aria-label="页面导航"></nav>
 
-<script src="data/content.js?v=137" defer></script>
+<script src="data/content.js?v=138" defer></script>
 <!-- links.js 不再预加载：render.js 先取 data/links.json（同源、可被 gzip），
      只有 JSON 请求失败 / 超时才动态加载 links.js 兜底，正常访问省一次 40KB 下载。 -->
-<script src="assets/js/render.js?v=137" defer></script>
-<script src="assets/js/hero-fx.js?v=137" defer></script>
+<script src="assets/js/render.js?v=138" defer></script>
+<script src="assets/js/hero-fx.js?v=138" defer></script>
 <!-- 地形动效：默认参数 + 桌面端挂载器（手机端这段一行都不执行，DOM 里也不会多出节点） -->
 <!-- 地形动效：已发布参数（data/topo.js）+ 内置默认值 + 读取层 + 桌面端挂载器。
      四个都是 defer，按顺序执行：topo.js 必须先于 store.js 定义 V2_TOPO。
      手机端这段一行都不执行，DOM 里也不会多出节点。 -->
 <script src="data/topo.js?v=6" defer></script>
-<script src="assets/js/topo-defaults.js?v=137" defer></script>
-<script src="assets/js/topo-store.js?v=137" defer></script>
-<script src="assets/js/topo-embed.js?v=137" defer></script>
+<script src="assets/js/topo-defaults.js?v=138" defer></script>
+<script src="assets/js/topo-store.js?v=138" defer></script>
+<script src="assets/js/topo-embed.js?v=138" defer></script>
 </body>
 </html>
