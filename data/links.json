@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-26T05:44:58+08:00",
-  "generated_at_human": "2026-11-26 05:44",
+  "generated_at": "2026-11-26T09:26:07+08:00",
+  "generated_at_human": "2026-11-26 09:26",
   "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
   "families": {
     "wechat-llmquant": "wechat-llmquant",
@@ -17,7 +17,7 @@
     "sources_ok": 6,
     "sources_failed": 0,
     "failed_sources": [],
-    "items": 139,
+    "items": 141,
     "items_added": 1,
     "archive_max": 3000
   },
@@ -31,7 +31,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 1285,
+      "ms": 826,
       "http": 200
     },
     {
@@ -43,7 +43,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 320,
+      "ms": 141,
       "http": 200
     },
     {
@@ -55,7 +55,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 583,
+      "ms": 397,
       "http": 200
     },
     {
@@ -67,7 +67,7 @@
       "ok": true,
       "count": 4,
       "error": null,
-      "ms": 572,
+      "ms": 417,
       "http": 200
     },
     {
@@ -79,7 +79,7 @@
       "ok": true,
       "count": 5,
       "error": null,
-      "ms": 323,
+      "ms": 345,
       "http": 200
     },
     {
@@ -91,7 +91,7 @@
       "ok": true,
       "count": 20,
       "error": null,
-      "ms": 973,
+      "ms": 883,
       "http": 200
     }
   ],
@@ -147,9 +147,39 @@
       "family": "codeforces"
     },
     {
+      "title": "Lumiwealth/lumibot",
+      "url": "https://github.com/Lumiwealth/lumibot",
+      "date": "2026-11-26T09:22:22+08:00",
+      "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "wickra-lib/wickra",
+      "url": "https://github.com/wickra-lib/wickra",
+      "date": "2026-11-26T09:17:43+08:00",
+      "summary": "Streaming-first technical indicators with a Rust core: native Python, Node.js and WebAssembly bindings plus a C ABI hub for C, C++, C#, Go, Java and R. 514 i…",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
+      "title": "ZhuLinsen/alphasift",
+      "url": "https://github.com/ZhuLinsen/alphasift",
+      "date": "2026-11-26T08:52:40+08:00",
+      "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
+      "source": "github-quant",
+      "source_name": "GitHub 量化开源",
+      "kind": "开源",
+      "family": "github"
+    },
+    {
       "title": "questdb/questdb",
       "url": "https://github.com/questdb/questdb",
-      "date": "2026-11-26T05:27:09+08:00",
+      "date": "2026-11-26T08:39:32+08:00",
       "summary": "QuestDB is a high performance, open-source, time-series database",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
@@ -159,7 +189,7 @@
     {
       "title": "hummingbot/hummingbot",
       "url": "https://github.com/hummingbot/hummingbot",
-      "date": "2026-11-26T05:06:19+08:00",
+      "date": "2026-11-26T07:28:33+08:00",
       "summary": "Open source software that helps you create and deploy high-frequency crypto trading bots",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
@@ -167,10 +197,10 @@
       "family": "github"
     },
     {
-      "title": "ZhuLinsen/alphasift",
-      "url": "https://github.com/ZhuLinsen/alphasift",
-      "date": "2026-11-26T04:50:05+08:00",
-      "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
+      "title": "openbq-org/OpenBB",
+      "url": "https://github.com/openbq-org/OpenBB",
+      "date": "2026-11-26T07:26:06+08:00",
+      "summary": "Open Data Platform for analysts, quants and AI agents.",
       "source": "github-quant",
       "source_name": "GitHub 量化开源",
       "kind": "开源",
@@ -191,8 +221,8 @@
       "url": "https://github.com/OpenByteInc/QuantDinger",
       "date": "2026-11-26T02:35:37+08:00",
       "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
+      "source": "github-quant-new",
+      "source_name": "GitHub 新项目",
       "kind": "开源",
       "family": "github"
     },
@@ -225,6 +255,17 @@
       "source_name": "LLMQuant",
       "kind": "公众号",
       "family": "wechat-llmquant"
+    },
+    {
+      "title": "150亿美元！Citadel Securities提前刷新全年纪录，亚洲新增近100人",
+      "url": "https://mp.weixin.qq.com/s/VNrNBbJYne21Cz6L0RT5eg",
+      "date": "2026-11-25T20:32:43+08:00",
+      "summary": "2026年还未结束，全球头部做市商Citadel Securities已经提前刷新了全年交易收入纪录。 据彭博社11月25日报道，Citadel Securities今年前九个月实现超过150亿美元的净交易收入，超过2025年全年创下的历史",
+      "source": "wechat-manual",
+      "source_name": "公众号",
+      "kind": "公众号",
+      "manual": true,
+      "mid": "2247484778"
     },
     {
       "title": "HKUDS/Vibe-Trading",
@@ -263,16 +304,6 @@
       "summary": "QuantMind（量化大脑）开源版是一款面向个人开发者与投研团队的 AI 原生多市场量化交易平台。深度集成微软 Qlib、RD-Agent 因子演化与 QuantBot全能工作台，提供从 300+ 维因子挖掘、13 种机器学习与深度学习模型工场、Qlib 高性能回测、截面批量推理、7x24 实时舆情情绪分析，到…",
       "source": "github-quant-new",
       "source_name": "GitHub 新项目",
-      "kind": "开源",
-      "family": "github"
-    },
-    {
-      "title": "Lumiwealth/lumibot",
-      "url": "https://github.com/Lumiwealth/lumibot",
-      "date": "2026-11-25T06:28:54+08:00",
-      "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
       "kind": "开源",
       "family": "github"
     },
@@ -656,16 +687,6 @@
       "kind": "公众号",
       "manual": true,
       "mid": "2247484938"
-    },
-    {
-      "title": "openbq-org/OpenBB",
-      "url": "https://github.com/openbq-org/OpenBB",
-      "date": "2026-11-19T06:42:00+08:00",
-      "summary": "Open Data Platform for analysts, quants and AI agents.",
-      "source": "github-quant",
-      "source_name": "GitHub 量化开源",
-      "kind": "开源",
-      "family": "github"
     },
     {
       "title": "Billy1900/Midas",
@@ -1485,5 +1506,5 @@
       "kind": "公众号"
     }
   ],
-  "signature": "4e70ee818485bfeaee6aaddd828327df"
+  "signature": "8b36ab9a66f58c61b3a661e2a2557e96"
 }
