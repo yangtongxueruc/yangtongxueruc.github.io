@@ -18,7 +18,7 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 142,
+  "items": 143,
   "items_added": 1,
   "archive_max": 3000
  },
@@ -337,6 +337,17 @@ window.SITE_FEED = {
    "source_name": "GitHub 量化开源",
    "kind": "开源",
    "family": "github"
+  },
+  {
+   "title": "华尔街量化巨头的 AI 之路：Infra &gt; 数据 &gt; 模型",
+   "url": "https://mp.weixin.qq.com/s/Ixg1gOeGuFJhxzZTakO49Q?scene=1&click_id=2112313818",
+   "date": "2026-11-24T18:46:25+08:00",
+   "summary": "伦敦量化做市商 XTX Markets 只有 200 多名员工，比体量相近的同行少至少一个数量级。可它名下握有大约 25,000 张 GPU。2025 年，这家公司在英国的三家营业主体净收入达到 39.3 亿英镑，约合 52 亿美元。按公开",
+   "source": "wechat-manual",
+   "source_name": "QuantML",
+   "kind": "公众号",
+   "manual": true,
+   "mid": "2247494944"
   },
   {
    "title": "man-group/ArcticDB",
@@ -1518,5 +1529,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "fe9551dde26b28543d5248bc82e6f1ef"
+ "signature": "0d6cf1fdab59e305507ab38e9ede5f2e"
 };
