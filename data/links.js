@@ -18,7 +18,7 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 141,
+  "items": 142,
   "items_added": 1,
   "archive_max": 3000
  },
@@ -487,6 +487,17 @@ window.SITE_FEED = {
    "source_name": "arXiv q-fin",
    "kind": "研究",
    "family": "arxiv-qfin"
+  },
+  {
+   "title": "Citadel Securities任命新CTO，竟然来自Uber？",
+   "url": "https://mp.weixin.qq.com/s/CMdz_2ov0i1uTEzIyWCnLA",
+   "date": "2026-11-22T22:10:45+08:00",
+   "summary": "11月18日，彭博社报道，全球领先做市商 Citadel Securities 任命前 Uber 高管 Danny Guo 为新任首席技术官（CTO）。 这次高管任命最值得关注的地方，在于新任 CTO 并非来自传统金融机构，而是一位拥有近1",
+   "source": "wechat-manual",
+   "source_name": "公众号",
+   "kind": "公众号",
+   "manual": true,
+   "mid": "2247484774"
   },
   {
    "title": "对话Operon 创始人 | 卖方分析师如何用 AI 重建投研机构",
@@ -1507,5 +1518,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "8b36ab9a66f58c61b3a661e2a2557e96"
+ "signature": "fe9551dde26b28543d5248bc82e6f1ef"
 };
