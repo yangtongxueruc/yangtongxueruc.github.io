@@ -302,7 +302,11 @@
     var repoPath = "assets/img/" + sub + "/" + fname;
     var b64 = String(dataUrl).slice(String(dataUrl).indexOf(",") + 1);
     return gh(token, "PUT", "/repos/" + GH.repo + "/contents/" + repoPath, {
-      message: "image: 上传 " + fname,
+      /* 带 [skip actions]：一张图 = 一个提交，而 publish.yml 又把 assets/** 列为
+         触发路径，批量传十九张就是十九次构建 —— concurrency 是 cancel-in-progress，
+         前面的全被掐掉，最后一张还可能卡在队列里，页面上表现成「图一直加载不出来」。
+         图片只有在被内容引用之后才有意义，构建统一交给「发布」那次 v2/** 提交。 */
+      message: "image: 上传 " + fname + " [skip actions]",
       content: b64,
       branch: GH.branch
     }).then(function () {
@@ -448,7 +452,13 @@
           }
           if (CLOUD) {
             cloudUploadImage(file.name, out.data, out.w, out.h, "logos")
-              .then(function (d) { d.origBytes = file.size; d.logoH = out.logoH; resolve(d); })
+              .then(function (d) {
+                d.origBytes = file.size;
+                d.logoH = out.logoH;
+                d.preview = out.data;
+                rememberPreview(d.path, out.data);
+                resolve(d);
+              })
               .catch(function (e) { reject(new Error((e && e.message) || "上传失败")); });
             return;
           }
@@ -460,6 +470,8 @@
               d.picW = out.w;
               d.picH = out.h;
               d.logoH = out.logoH;
+              d.preview = out.data;
+              rememberPreview(d.path, out.data);
               resolve(d);
             })
             .catch(function (e) {
@@ -474,6 +486,51 @@
       };
       fr.readAsDataURL(file);
     });
+  }
+
+  /* ---------------- 图片预览：本地缓存 + 退避重试 ----------------
+     云端上传的图先进仓库，站点要等一次构建才真的有这个文件（约 1–2 分钟）。
+     原来是把仓库路径直接塞给 <img>，一次 error 就判「路径可能失效，建议重新上传」。
+     批量传十几张时几乎每张都撞在这个窗口里，看起来像整批上传失败，其实全都进了
+     仓库 —— 用户被这句话引导去重新上传，才会真的传重复。分三步处理：
+
+       1. 刚上传的图先用本地压缩结果（data URL）预览，不等站点；
+       2. 刷新页面后走真实路径，失败就退避重试（构建可能还在跑、CDN 可能还缓存着 404）；
+       3. 重试用完才报错，并且把话说清楚：文件在仓库，点「发布」后约一分钟可见。 */
+  var LOCAL_PREVIEW = {};
+  var IMG_RETRY_DELAYS = [1200, 2600, 5200];
+
+  function previewKey(src) { return String(src || "").replace(/^\.\.\//, ""); }
+
+  function rememberPreview(repoPath, dataUrl) {
+    if (repoPath && dataUrl) LOCAL_PREVIEW[previewKey(repoPath)] = String(dataUrl);
+  }
+
+  function loadImageWithRetry(img, src, onState) {
+    var s = String(src || "");
+    var notify = onState || function () {};
+    if (!s) return;
+    var local = LOCAL_PREVIEW[previewKey(s)];
+    if (local) {
+      img.src = local;
+      notify("local");
+      return;
+    }
+    var i = 0;
+    function attempt() {
+      img.onload = function () { notify("ok"); };
+      img.onerror = function () {
+        if (i >= IMG_RETRY_DELAYS.length) { notify("fail"); return; }
+        var wait = IMG_RETRY_DELAYS[i++];
+        notify("retry", wait);
+        setTimeout(attempt, wait);
+      };
+      /* 加一个时间戳参数：构建刚跑完时，CDN 可能还缓存着那一次 404。 */
+      img.src = /^data:/i.test(s)
+        ? s
+        : s + (s.indexOf("?") >= 0 ? "&" : "?") + "_r=" + Date.now();
+    }
+    attempt();
   }
 
   /* 读文件 → 压缩 → 上传，返回 {path, repo, bytes} */
@@ -500,11 +557,22 @@
             reject(new Error("压缩失败：" + (e && e.message ? e.message : e)));
             return;
           }
+          /* 原图本身就是优化过的 JPEG 时，再按 0.85 编一次反而更大（实测
+             197 KB → 207 KB，用户看到「越压越大」会以为哪里坏了）。长边没被
+             缩过、编码结果又没变小，就直接用原文件。 */
+          var outBytes = Math.round(String(out.data).length * 3 / 4);
+          if (outBytes > file.size
+              && out.w === (im.naturalWidth || im.width)
+              && out.h === (im.naturalHeight || im.height)) {
+            out.data = String(fr.result);
+          }
           /* 云端没有磁盘可落，直接进仓库；本机走服务端落盘，发布时再读回。 */
           if (CLOUD) {
             cloudUploadImage(file.name, out.data, out.w, out.h)
               .then(function (d) {
                 d.origBytes = file.size;
+                d.preview = out.data;
+                rememberPreview(d.path, out.data);
                 resolve(d);
               })
               .catch(function (e) {
@@ -519,6 +587,8 @@
               d.origBytes = file.size;
               d.picW = out.w;
               d.picH = out.h;
+              d.preview = out.data;
+              rememberPreview(d.path, out.data);
               resolve(d);
             })
             .catch(function (e) {
@@ -712,26 +782,38 @@
       box.classList.toggle("is-busy", !!busy);
       pick.disabled = !!busy;
     }
+    function baseStatus(s) {
+      var repo = repoOf(s);
+      return s ? (isPending(repo) ? "已上传 · 待发布" : "已上传") : "还没上传照片";
+    }
     function show(src, statusText, metaText) {
       var s = String(src || "");
-      if (s) {
-        pv.src = s;
-        thumb.classList.remove("is-empty");
-      } else {
-        pv.removeAttribute("src");
-        thumb.classList.add("is-empty");
-      }
       var repo = repoOf(s);
-      say(statusText || (s ? (isPending(repo) ? "已上传 · 待发布" : "已上传") : "还没上传照片"), false, false);
       mt.textContent = metaText
         || (s ? repo + (isPending(repo) ? " · 点「发布」后上线" : "") : "支持 JPG / PNG / WebP");
       rm.disabled = !s;
       pick.textContent = s ? "替换照片" : "上传照片";
+      if (!s) {
+        pv.removeAttribute("src");
+        thumb.classList.add("is-empty");
+        say(statusText || baseStatus(""), false, false);
+        return;
+      }
+      thumb.classList.remove("is-empty");
+      loadImageWithRetry(pv, s, function (state) {
+        if (state === "retry") {
+          say("正在等站点更新这张图 …（刚上传的要等一次构建）", false, true);
+          return;
+        }
+        if (state === "fail") {
+          thumb.classList.add("is-empty");
+          say("站点上还没有这张图：文件已在仓库，点「发布」后约 1 分钟可见；已发布就稍等再刷新",
+            true, false);
+          return;
+        }
+        say(statusText || baseStatus(s), false, false);
+      });
     }
-    pv.addEventListener("error", function () {
-      thumb.classList.add("is-empty");
-      say("这张图加载不出来，路径可能失效了，建议重新上传", true, false);
-    });
 
     pick.addEventListener("click", function () { picker.click(); });
     rm.addEventListener("click", function () {
@@ -875,21 +957,41 @@
       box.classList.toggle("is-busy", !!busy);
       pick.disabled = !!busy;
     }
+    function baseStatus(s) {
+      var repo = repoOf(s);
+      return s ? (isPending(repo) ? "已上传 · 待发布" : "已上传") : "还没上传 logo";
+    }
     function show(src, statusText, metaText) {
       var s = String(src || "");
-      if (s) {
-        a.src = s; b.src = s;
-        pair.classList.remove("is-empty");
-      } else {
-        a.removeAttribute("src"); b.removeAttribute("src");
-        pair.classList.add("is-empty");
-      }
       var repo = repoOf(s);
-      say(statusText || (s ? (isPending(repo) ? "已上传 · 待发布" : "已上传") : "还没上传 logo"), false, false);
-      mt.textContent = metaText || (s ? repo + (isPending(repo) ? " · 点「发布」后上线" : "") : "PNG 透明底 · 内容高度 ≥ 128px");
+      mt.textContent = metaText
+        || (s ? repo + (isPending(repo) ? " · 点「发布」后上线" : "") : "PNG 透明底 · 内容高度 ≥ 128px");
       rm.disabled = !s;
       pick.textContent = s ? "替换 logo" : "上传 logo";
       syncH();
+      if (!s) {
+        a.removeAttribute("src"); b.removeAttribute("src");
+        pair.classList.add("is-empty");
+        say(statusText || baseStatus(""), false, false);
+        return;
+      }
+      pair.classList.remove("is-empty");
+      /* 两套主题的小样用同一张图：主图加载成功再把它同步给第二张，
+         重试只跑一份，避免两个 <img> 各自退避、状态互相覆盖。 */
+      loadImageWithRetry(a, s, function (state) {
+        if (state === "retry") {
+          say("正在等站点更新这张图 …（刚上传的要等一次构建）", false, true);
+          return;
+        }
+        if (state === "fail") {
+          pair.classList.add("is-empty");
+          say("站点上还没有这张图：文件已在仓库，点「发布」后约 1 分钟可见；已发布就稍等再刷新",
+            true, false);
+          return;
+        }
+        b.src = a.src;
+        say(statusText || baseStatus(s), false, false);
+      });
     }
     /* 缩放只在有图的时候可用；读的是数据里的 logoH，没有就按兜底 20 起步 */
     function readH() {
@@ -905,11 +1007,6 @@
       hMinus.disabled = !on || v <= MIN_H;
       hPlus.disabled = !on || v >= MAX_H;
     }
-    a.addEventListener("error", function () {
-      pair.classList.add("is-empty");
-      say("这张图加载不出来，路径可能失效了，建议重新上传", true, false);
-    });
-
     /* logoH 和路径是一对：前者决定这张图显示多高，删掉路径时得一起清，
        否则换图后会沿用上一张的高度，大小又对不齐了。 */
     var hAbs = abs.replace(/\.logo$/, ".logoH") === abs ? "" : abs.replace(/\.logo$/, ".logoH");
@@ -1434,6 +1531,10 @@
           alt: ""
         });
         markUpload(r.up.repo);
+        /* 卡片渲染时走的是 show() → 真实路径，而站点此刻还没构建好这张图。
+           把刚压缩出来的 data URL 记进预览缓存，这一轮渲染直接显示本地结果，
+           不会闪一下"加载不出来"。 */
+        rememberPreview(r.up.path, r.up.preview);
       });
       afterStructureChange();
       toast("已上传 " + done.length + " 张" + (fails.length ? "，" + fails.length + " 张失败" : "")
