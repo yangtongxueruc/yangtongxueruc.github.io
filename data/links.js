@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-27T05:36:50+08:00",
- "generated_at_human": "2026-11-27 05:36",
+ "generated_at": "2026-11-27T16:39:22+08:00",
+ "generated_at_human": "2026-11-27 16:39",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -18,7 +18,7 @@ window.SITE_FEED = {
   "sources_ok": 6,
   "sources_failed": 0,
   "failed_sources": [],
-  "items": 145,
+  "items": 146,
   "items_added": 1,
   "archive_max": 3000
  },
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1203,
+   "ms": 1316,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 290,
+   "ms": 207,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 544,
+   "ms": 597,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 517,
+   "ms": 587,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 344,
+   "ms": 305,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 1206,
+   "ms": 1106,
    "http": 200
   }
  ],
@@ -148,6 +148,96 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
+   "title": "0xethanq/astra-quant-agent",
+   "url": "https://github.com/0xethanq/astra-quant-agent",
+   "date": "2026-11-27T16:34:04+08:00",
+   "summary": "AstraQuant | Autonomous crypto trading system with multi-LLM council, deterministic Python risk gates & OKX execution · 多大模型与确定性代码风控量化交易系统",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "shy3130/tick-stock-panel",
+   "url": "https://github.com/shy3130/tick-stock-panel",
+   "date": "2026-11-27T16:23:13+08:00",
+   "summary": "TSP自托管、零运维的 A 股「自建策略 + 监控 + 回测」量化工作台  | LLM能力驱使策略定制+个股分析+复盘 | 自由接入第三方数据源与个性化扩展数据",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "OpenByteInc/QuantDinger",
+   "url": "https://github.com/OpenByteInc/QuantDinger",
+   "date": "2026-11-27T16:18:11+08:00",
+   "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Blave-TW/blave-agent",
+   "url": "https://github.com/Blave-TW/blave-agent",
+   "date": "2026-11-27T16:14:49+08:00",
+   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "lballabio/QuantLib",
+   "url": "https://github.com/lballabio/QuantLib",
+   "date": "2026-11-27T16:00:30+08:00",
+   "summary": "The QuantLib C++ library",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "ZhuLinsen/alphasift",
+   "url": "https://github.com/ZhuLinsen/alphasift",
+   "date": "2026-11-27T15:42:16+08:00",
+   "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "JerBouma/FinanceToolkit",
+   "url": "https://github.com/JerBouma/FinanceToolkit",
+   "date": "2026-11-27T15:40:18+08:00",
+   "summary": "Transparent and Efficient Financial Analysis",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "banbox/banbot",
+   "url": "https://github.com/banbox/banbot",
+   "date": "2026-11-27T15:23:05+08:00",
+   "summary": "a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading bot",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "新闻因子，收益来自预期差吗",
+   "url": "https://mp.weixin.qq.com/s?__biz=Mzg2MzAwNzM0NQ==&mid=2247494949&idx=1&sn=c1ca8de588da93b5c98ad9d8ac974f04&chksm=ce7d8a3bf90a032dfe7d6898ad92c98c59831b6f5ca6e54b06064585ac69d6ce0b53370bbcac#rd",
+   "date": "2026-11-27T07:30:00+08:00",
+   "summary": "",
+   "source": "wechat-19884288",
+   "source_name": "QuantML · 论文",
+   "kind": "公众号",
+   "family": "wechat-19884288"
+  },
+  {
    "title": "questdb/questdb",
    "url": "https://github.com/questdb/questdb",
    "date": "2026-11-27T05:17:55+08:00",
@@ -168,26 +258,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "lballabio/QuantLib",
-   "url": "https://github.com/lballabio/QuantLib",
-   "date": "2026-11-27T04:43:16+08:00",
-   "summary": "The QuantLib C++ library",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "ZhuLinsen/alphasift",
-   "url": "https://github.com/ZhuLinsen/alphasift",
-   "date": "2026-11-27T04:41:35+08:00",
-   "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "ZhuLinsen/daily_stock_analysis",
    "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
    "date": "2026-11-27T04:18:25+08:00",
@@ -204,16 +274,6 @@ window.SITE_FEED = {
    "summary": "Stock Indicators for .NET is a C# NuGet package that transforms raw equity, commodity, forex, or cryptocurrency financial market price quotes into technical …",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "Blave-TW/blave-agent",
-   "url": "https://github.com/Blave-TW/blave-agent",
-   "date": "2026-11-27T01:25:54+08:00",
-   "summary": "Quant infrastructure for AI agents — a free, open-source desktop workspace for macOS and Windows where your Claude Code or Codex turns a trading idea into a …",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -308,16 +368,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "OpenByteInc/QuantDinger",
-   "url": "https://github.com/OpenByteInc/QuantDinger",
-   "date": "2026-11-26T02:35:37+08:00",
-   "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "stefan-jansen/machine-learning-for-trading",
    "url": "https://github.com/stefan-jansen/machine-learning-for-trading",
    "date": "2026-11-26T02:05:23+08:00",
@@ -353,26 +403,6 @@ window.SITE_FEED = {
    "url": "https://github.com/HKUDS/Vibe-Trading",
    "date": "2026-11-25T15:59:39+08:00",
    "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "shy3130/tick-stock-panel",
-   "url": "https://github.com/shy3130/tick-stock-panel",
-   "date": "2026-11-25T15:57:51+08:00",
-   "summary": "TSP自托管、零运维的 A 股「自建策略 + 监控 + 回测」量化工作台  | LLM能力驱使策略定制+个股分析+复盘 | 自由接入第三方数据源与个性化扩展数据",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "JerBouma/FinanceToolkit",
-   "url": "https://github.com/JerBouma/FinanceToolkit",
-   "date": "2026-11-25T15:48:56+08:00",
-   "summary": "Transparent and Efficient Financial Analysis",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -581,16 +611,6 @@ window.SITE_FEED = {
    "family": "github"
   },
   {
-   "title": "banbox/banbot",
-   "url": "https://github.com/banbox/banbot",
-   "date": "2026-11-22T10:42:15+08:00",
-   "summary": "a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading bot",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "G-OTW/OpenTraderWorld",
    "url": "https://github.com/G-OTW/OpenTraderWorld",
    "date": "2026-11-22T01:56:55+08:00",
@@ -627,16 +647,6 @@ window.SITE_FEED = {
    "summary": "Python wrapper for TA-Lib (http://ta-lib.org/).",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "0xethanq/astra-quant-agent",
-   "url": "https://github.com/0xethanq/astra-quant-agent",
-   "date": "2026-11-21T13:12:39+08:00",
-   "summary": "结合多大模型分析与确定性代码风控的自主量化交易系统 ｜ Autonomous crypto trading system with multi-LLM analysis, deterministic Python risk control & OKX execution.",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
    "kind": "开源",
    "family": "github"
   },
@@ -1549,5 +1559,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "c11b2a9e20330975ca0a7ff673e22d7a"
+ "signature": "fa03ccbb4c933a878dcfbcf6e11237c3"
 };
