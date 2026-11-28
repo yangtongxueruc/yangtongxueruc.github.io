@@ -1,7 +1,7 @@
 /* 自动生成，请勿手改。源文件 data/links.json */
 window.SITE_FEED = {
- "generated_at": "2026-11-28T05:21:07+08:00",
- "generated_at_human": "2026-11-28 05:21",
+ "generated_at": "2026-11-28T15:53:22+08:00",
+ "generated_at_human": "2026-11-28 15:53",
  "next_run_hint": "每 6 小时（GitHub Actions 定时任务）",
  "families": {
   "wechat-llmquant": "wechat-llmquant",
@@ -32,7 +32,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 1333,
+   "ms": 1119,
    "http": 200
   },
   {
@@ -44,7 +44,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 389,
+   "ms": 250,
    "http": 200
   },
   {
@@ -56,7 +56,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 5,
    "error": null,
-   "ms": 614,
+   "ms": 445,
    "http": 200
   },
   {
@@ -68,7 +68,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 617,
+   "ms": 464,
    "http": 200
   },
   {
@@ -80,7 +80,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 4,
    "error": null,
-   "ms": 412,
+   "ms": 255,
    "http": 200
   },
   {
@@ -92,7 +92,7 @@ window.SITE_FEED = {
    "ok": true,
    "count": 20,
    "error": null,
-   "ms": 981,
+   "ms": 1111,
    "http": 200
   }
  ],
@@ -138,20 +138,30 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
-   "title": "OpenByteInc/QuantDinger",
-   "url": "https://github.com/OpenByteInc/QuantDinger",
-   "date": "2026-11-28T05:15:24+08:00",
-   "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
+   "title": "shy3130/tick-stock-panel",
+   "url": "https://github.com/shy3130/tick-stock-panel",
+   "date": "2026-11-28T15:52:00+08:00",
+   "summary": "TSP自托管、零运维的 A 股「自建策略 + 监控 + 回测」量化工作台  | LLM能力驱使策略定制+个股分析+复盘 | 自由接入第三方数据源与个性化扩展数据",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "Lumiwealth/lumibot",
+   "url": "https://github.com/Lumiwealth/lumibot",
+   "date": "2026-11-28T15:51:44+08:00",
+   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
    "family": "github"
   },
   {
-   "title": "questdb/questdb",
-   "url": "https://github.com/questdb/questdb",
-   "date": "2026-11-28T04:55:53+08:00",
-   "summary": "QuestDB is a high performance, open-source, time-series database",
+   "title": "JerBouma/FinanceToolkit",
+   "url": "https://github.com/JerBouma/FinanceToolkit",
+   "date": "2026-11-28T15:50:11+08:00",
+   "summary": "Transparent and Efficient Financial Analysis",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -160,8 +170,48 @@ window.SITE_FEED = {
   {
    "title": "ZhuLinsen/alphasift",
    "url": "https://github.com/ZhuLinsen/alphasift",
-   "date": "2026-11-28T04:41:11+08:00",
+   "date": "2026-11-28T15:41:24+08:00",
    "summary": "AI 量化选股系统：A股/美股/港股等7市场每日自动选股、公告排雷与公开胜率验证，零成本运行 | AI stock screener (7 markets): red-flag filter, live T+N track record & free daily runs",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "OpenByteInc/QuantDinger",
+   "url": "https://github.com/OpenByteInc/QuantDinger",
+   "date": "2026-11-28T15:15:53+08:00",
+   "summary": "The most complete open-source, self-hosted Agentic Trading OS—AI research, Python strategies, factor discovery, backtesting, optimization, paper/live multi-a…",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "HKUDS/Vibe-Trading",
+   "url": "https://github.com/HKUDS/Vibe-Trading",
+   "date": "2026-11-28T15:02:59+08:00",
+   "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
+   "source": "github-quant",
+   "source_name": "GitHub 量化开源",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "0xethanq/astra-quant-agent",
+   "url": "https://github.com/0xethanq/astra-quant-agent",
+   "date": "2026-11-28T14:26:39+08:00",
+   "summary": "AstraQuant | Autonomous crypto trading system with multi-LLM council, deterministic Python risk gates & OKX execution · 多大模型与确定性代码风控量化交易系统",
+   "source": "github-quant-new",
+   "source_name": "GitHub 新项目",
+   "kind": "开源",
+   "family": "github"
+  },
+  {
+   "title": "questdb/questdb",
+   "url": "https://github.com/questdb/questdb",
+   "date": "2026-11-28T04:55:53+08:00",
+   "summary": "QuestDB is a high performance, open-source, time-series database",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -218,26 +268,6 @@ window.SITE_FEED = {
    "family": "codeforces"
   },
   {
-   "title": "0xethanq/astra-quant-agent",
-   "url": "https://github.com/0xethanq/astra-quant-agent",
-   "date": "2026-11-27T16:34:04+08:00",
-   "summary": "AstraQuant | Autonomous crypto trading system with multi-LLM council, deterministic Python risk gates & OKX execution · 多大模型与确定性代码风控量化交易系统",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "shy3130/tick-stock-panel",
-   "url": "https://github.com/shy3130/tick-stock-panel",
-   "date": "2026-11-27T16:23:13+08:00",
-   "summary": "TSP自托管、零运维的 A 股「自建策略 + 监控 + 回测」量化工作台  | LLM能力驱使策略定制+个股分析+复盘 | 自由接入第三方数据源与个性化扩展数据",
-   "source": "github-quant-new",
-   "source_name": "GitHub 新项目",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
    "title": "Blave-TW/blave-agent",
    "url": "https://github.com/Blave-TW/blave-agent",
    "date": "2026-11-27T16:14:49+08:00",
@@ -252,16 +282,6 @@ window.SITE_FEED = {
    "url": "https://github.com/lballabio/QuantLib",
    "date": "2026-11-27T16:00:30+08:00",
    "summary": "The QuantLib C++ library",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
-  },
-  {
-   "title": "JerBouma/FinanceToolkit",
-   "url": "https://github.com/JerBouma/FinanceToolkit",
-   "date": "2026-11-27T15:40:18+08:00",
-   "summary": "Transparent and Efficient Financial Analysis",
    "source": "github-quant",
    "source_name": "GitHub 量化开源",
    "kind": "开源",
@@ -326,16 +346,6 @@ window.SITE_FEED = {
    "source_name": "LLMQuant",
    "kind": "公众号",
    "family": "wechat-llmquant"
-  },
-  {
-   "title": "Lumiwealth/lumibot",
-   "url": "https://github.com/Lumiwealth/lumibot",
-   "date": "2026-11-26T16:14:21+08:00",
-   "summary": "Python trading framework with AI agents that actually place the trade. Backtest, paper and live trade on 12 brokers: stocks, options, futures, forex, crypto …",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
   },
   {
    "title": "hummingbot/hummingbot",
@@ -417,16 +427,6 @@ window.SITE_FEED = {
    "kind": "公众号",
    "manual": true,
    "mid": "2247484778"
-  },
-  {
-   "title": "HKUDS/Vibe-Trading",
-   "url": "https://github.com/HKUDS/Vibe-Trading",
-   "date": "2026-11-25T15:59:39+08:00",
-   "summary": "\"Vibe-Trading: Your Personal Trading Agent\"",
-   "source": "github-quant",
-   "source_name": "GitHub 量化开源",
-   "kind": "开源",
-   "family": "github"
   },
   {
    "title": "qusong0627/QuantMind",
@@ -1559,5 +1559,5 @@ window.SITE_FEED = {
    "kind": "公众号"
   }
  ],
- "signature": "5a54259b73457137fac4ab1d79789bf0"
+ "signature": "09a208a9b5f8e6cacc6150262aea1d29"
 };
